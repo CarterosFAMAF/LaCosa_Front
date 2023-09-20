@@ -1,0 +1,10 @@
+.mano {
+    position: flex;
+    margin-top: 27%;
+    justify-content: center;
+    text-align: center;
+}
+.mano li {
+    display: inline;
+    margin-right: 10px;
+}

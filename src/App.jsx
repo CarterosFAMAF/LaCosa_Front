@@ -1,34 +1,24 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+// Componentes
+import Mano from './componentes/mano/Mano'
 
+// Cartas png Hardcodeado
+// FALTA: hacer petición al back.
+import Lanzallamas from '/Lanzallamas.png?url'
+import Dorso1 from '/Dorso.png?url'
+import Dorso2 from '/Dorso.png?url'
+import Dorso3 from '/Dorso.png?url'
+import Dorso4 from '/Dorso.png?url'
+
+//NOTA: Los nombres deben ser diferentes.
+const imagenes_importadas = [Lanzallamas, Dorso1 , Dorso2, Dorso3, Dorso4]
+
+function App() {
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <Mano imagenes_cartas={imagenes_importadas}></Mano>
+    </div>
   )
 }
 
