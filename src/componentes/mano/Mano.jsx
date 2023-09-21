@@ -1,6 +1,6 @@
 import './Mano.css'
 
-import JugarCarta from '../jugar/JugarCarta';
+import JugarCarta from './jugar/JugarCarta';
 import Carta from "../carta/Carta";
 import { useState } from 'react';
 
@@ -29,9 +29,11 @@ function Mano({cartas}) {
     });
 
     return (
-        <div className='mano'>
+        <div>
             {mostrarJugarCarta && <JugarCarta id_carta={seleccion}/>}
-            {output}
+            <div className='mano'>
+                {output}
+            </div>
         </div>
     )
 }
