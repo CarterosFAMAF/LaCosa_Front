@@ -7,29 +7,22 @@ const Home = ({nombre}) => {
 
         <header className="titulo">
           <h1>La Cosa Web</h1>
-          <h2>¡Bienvenido {nombre}!</h2>
+          <h2>¡Bienvenido!</h2>
         </header>
 
         <div className="clearFix"></div>
         
         <section className="crearPartida"> 
           <aside>
-            <h3>Crear partida</h3>
-            <form>
-              <input type="submit" value="Crear partida"/>
-            </form>
+            <h3>Crear partida componente</h3>
           </aside>
         </section>
 
         <div className="clearFix"></div>
-        
+
         <section className="unirsePartida"> 
           <aside>
-            <h3>Unirse a partida</h3>
-            <form>
-              <input type="text" placeholder="id de partida"/>
-              <input type="submit" value="Unirse"/>
-            </form>
+            <h3>Unirse a partida componente</h3>
           </aside>
         </section>
 
