@@ -1,34 +1,15 @@
 *{
-    padding: 0px;
     margin: 0px;
-    font-family: 'Roboto', sans-serif;
 }
 
 .container{
-    background: linear-gradient(to bottom, #2e48be, #000000);
+    height: 100vh;
+    background: linear-gradient(to bottom, #2e48be, #778ece);
 }
 
 .titulo{
-    height: 100px;
-    width: 100%;
     text-align: center;
     border-bottom: 3px solid;
     color: whitesmoke;
-}
-
-.crearPartida{
-    height: 300px;
-    text-align: center;
-    border-bottom: 3px solid;
-    color: whitesmoke;
-}
-
-.unirsePartida{
-    height: 300px;
-    text-align: center;
-    color: whitesmoke;
-}
-
-.clearFix{
-    clear: both;
+    font-family: 'Roboto', sans-serif;
 }
