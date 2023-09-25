@@ -16,5 +16,5 @@ Para levantar el Front seguir los siguientes pasos:
     ```
 4. Levantar el Front.
     ```sh
-    $ npm run dev
+    $ npx vite
     ```
