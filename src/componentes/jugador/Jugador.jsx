@@ -1,5 +1,5 @@
 // Componentes
-import Mano from '../mano/Mano'
+import Mano from './mano/Mano'
 
 // Petición al Back
 import Lanzallamas from '/Lanzallamas.png?url'
@@ -15,7 +15,7 @@ const cartas = [
 
 function Jugador() {
     return (
-        <div className='jugador'>
+        <div>
             <Mano
                 cartas={cartas}>
             </Mano>

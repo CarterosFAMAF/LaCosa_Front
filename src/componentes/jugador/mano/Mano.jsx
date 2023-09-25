@@ -1,6 +1,6 @@
 import './Mano.css'
 
-import JugarCarta from './jugar/JugarCarta';
+import JugarCarta from '../jugar/JugarCarta';
 import Carta from "../carta/Carta";
 import { useState } from 'react';
 
@@ -13,7 +13,7 @@ function Mano({cartas}) {
     const select_card = (id_card) => {
         setSeleccion(id_card);
         setMostrarJugarCarta(true);
-    } 
+    }
 
     cartas.forEach(carta => {
         output.push(
