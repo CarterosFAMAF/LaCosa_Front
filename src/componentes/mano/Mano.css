@@ -1,6 +1,9 @@
 .mano {
-    position: flex;
-    margin-top: 26%;
+    position: absolute;
+    width: 100%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, 10%);
     justify-content: center;
     text-align: center;
 }
