@@ -1,0 +1,29 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+
+.container{
+    width: 1250px;
+    height: 600px;
+    background: linear-gradient(to bottom, #b6940c, #131212);
+}
+
+.titulo{
+    height: 200px;
+    width: 100%;
+    text-align: center;
+}
+
+.crearPartida{
+    height: 100px;
+    width: 100%;
+}
+.unirsePartida{
+    height: 100px;
+    width: 100%;
+}
+
+.clearFix{
+    clear: both;
+}
