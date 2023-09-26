@@ -1,10 +1,25 @@
 import './Mano.css'
 
-import JugarCarta from '../jugar/JugarCarta';
-import Carta from "../carta/Carta";
 import { useState } from 'react';
 
-function Mano({cartas}) {
+import Carta from "../carta/Carta";
+import JugarCarta from '../jugar/JugarCarta';
+
+// Petición al Back simulado 
+import Lanzallamas from '/Lanzallamas.png?url'
+import Dorso1 from '/Dorso.png?url'
+import Dorso2 from '/Dorso.png?url'
+import Dorso3 from '/Dorso.png?url'
+import Lanzallamas2 from '/Lanzallamas.png?url'
+
+const cartas = [
+    {id: 0, imagen: Lanzallamas},
+    {id: 1, imagen: Dorso1},
+    {id: 2, imagen: Dorso2},
+    {id: 3, imagen: Dorso3},
+    {id: 4, imagen: Lanzallamas2}]
+
+function Mano({setEsTurno}) {
     const output = [];
 
     const [seleccion, setSeleccion] = useState(-1)
@@ -30,7 +45,7 @@ function Mano({cartas}) {
 
     return (
         <div>
-            {mostrarJugarCarta && <JugarCarta id_carta={seleccion}/>}
+            {mostrarJugarCarta && <JugarCarta id_carta={seleccion} setEsTurno={setEsTurno}/>}
             <div className='mano'>
                 {output}
             </div>
