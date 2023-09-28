@@ -1,4 +1,5 @@
 import "./Home.css"
+import Unir_Jugador from "./Unir_Jugador/unir_jugador"
 
 function Home () {
   return(
@@ -11,7 +12,7 @@ function Home () {
         
       <h3>Crear partida componente</h3>
             
-      <h3>Unirse a partida componente</h3>
+      <Unir_Jugador />
       
     </div>
   )
