@@ -1,5 +1,5 @@
 import "./Home.css"
-import Unir_Jugador from "./Unir_Jugador/unir_jugador"
+import Unir_Jugador from "../Unir_Jugador/unir_jugador"
 
 function Home () {
   return(

@@ -1,23 +1,28 @@
 import React, { useState } from 'react';
 import './unir_jugador.css';
-
 import{
     Container,
     TextField,
-    Button
+    Button,
+    Modal,
+    Box,
+    Typography
 } from '@mui/material';
 
 const Unir_Jugador = () => {
 
   const [name, setName] = useState("");
-
   const [partida, setPartida] = useState("");
+  const [open, setOpen] = React.useState(false);
+  const handleClose = () => setOpen(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async event => {
     event.preventDefault();
     
     if (partida && name){
       alert(`Te uniste a la partida ${partida}`);
+      setOpen(true)
+      console.log(partida, name);
     } else{
       alert('Es necesario que ingrese nombre de partida y jugador');
     }
@@ -49,6 +54,21 @@ const Unir_Jugador = () => {
       className="boton_unir"> 
       Unirse a Partida 
       </Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="modal">
+          <Typography className="tituloLobby" component="h2">
+            Lobby de: {partida}
+          </Typography>
+          <Typography sx={{ mt: 5 }}>
+            Acá componente de iniciar partida !
+          </Typography>
+        </Box>
+      </Modal>
     </Container>
   );
 }
