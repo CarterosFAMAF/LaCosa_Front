@@ -25,19 +25,15 @@ function Crear_partida (){
 
     const handleSubmit = (event) => {
 
-      const prueba = {
-        "player_name": "string",
-        "match_name": "string",
-        "min_players": 4,
-        "max_players": 12
+      if (partida.nombre_jugador === '' || partida.nombre_partida === '' || partida.nro_min_jug > 3 || partida.nro_max_jug < 13) {
+        alert("All fields are required");
+        return
       }
-
       const url = 'http://127.0.0.1:8000/matchs'
       axios.post(url, partida)
       .then(function (response) {
-        //handle 
         console.log(response);
-        alert(`Se creo la partida con exito. Su ID de usuario es, ${response.data.owner_id} y su ID de partida ${response.data.match_id}, ${response.data.match_name}` );
+        alert(`Se creo la partida con exito. Su ID de usuario es: ${response.data.owner_id}. Su ID de partida: ${response.data.match_id}, con nombre: ${response.data.match_name}` );
       })
       .catch(function (response) {
         //handle error
@@ -49,13 +45,13 @@ function Crear_partida (){
     <Container>
         <TextField className="nombrepartida"
             label= "Nombre de partida"
-            name = 'Nombre de partida'
+            name = 'match_name'
             value = {partida.match_name}
             required
             fullWidth
             variant="outlined"
             type = "Text"
-            onChange={handleChange}/>
+            onChange={(event) => handleChange(event)}/>
         {/* Contraseña
         <TextField
             label= "Contraseña"
@@ -67,7 +63,7 @@ function Crear_partida (){
         */}
         <TextField
             label="Nombre de jugador"
-            name="Nombre de jugador"
+            name="player_name"
             value={partida.player_name}
             required
             fullWidth
@@ -75,7 +71,7 @@ function Crear_partida (){
             onChange={handleChange}/>
         <Select
             label="Minimo de jugadores"
-            name="Minimo de jugadores"
+            name="min_players"
             value={partida.min_players}
             fullWidth
             required
@@ -90,7 +86,7 @@ function Crear_partida (){
           <Select
             className="maxjugadores"
             label="Maximo de jugadores"
-            name="Maximo de jugadores"
+            name="max_players"
             value={partida.max_players}
             fullWidth
             required
