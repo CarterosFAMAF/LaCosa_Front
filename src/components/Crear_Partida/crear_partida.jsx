@@ -10,9 +10,7 @@ import {
 import "./crear_partida.css";
 
 // import
-const Crear_partida = () => {
-
-    const [name, setName] = useState("");
+function Crear_partida (){
 
     const [partida, setPartida] = useState({
       nombre_jugador : '',
@@ -27,16 +25,24 @@ const Crear_partida = () => {
     };
 
     const handleSubmit = (event) => {
-      var bodyFormData = new FormData();
 
-      if (partida.nombre_jugador === '' || partida.nombre_partida === '' || partida.nro_min_jug === '' || partida.nro_max_jug === '') {
+      if (partida.nombre_jugador === '' || partida.nombre_partida === ''){ //partida.nro_min_jug > 3 || partida.nro_max_jug < 13) {
         alert("All fields are required");
+        return
       }
-
+      /*
+      const prueba = {
+        "player_name": "string",
+        "match_name": "string",
+        "min_players": 4,
+        "max_players": 12
+      }
+      */
+      var bodyFormData = new FormData();
       bodyFormData.append('player_name', partida.nombre_jugador);
       bodyFormData.append('match_name', partida.nombre_partida);
-      bodyFormData.append('min_players', partida.nro_min_jug);
       bodyFormData.append('max_players', partida.nro_max_jug);
+      bodyFormData.append('min_players', partida.nro_min_jug);
       
       /*
       if(partida.contra != ''){
@@ -44,13 +50,13 @@ const Crear_partida = () => {
       }
       */
 
-      axios({
-        method: 'post',
-        url:  'http://127.0.0.1:8000/matchs',
-        data: bodyFormData,
-        headers: { "Content-Type": "multipart/form-data" },
+      const config = {     
+        headers: { 'content-type': 'multipart/form-data' }
+      }
+      console.log(bodyFormData)
 
-      })
+      const url = 'http://127.0.0.1:8000/matchs'
+      axios.post(url, bodyFormData, config)
       .then(function (response) {
         //handle success
         console.log(response);
