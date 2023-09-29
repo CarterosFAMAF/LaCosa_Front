@@ -31,8 +31,8 @@ function UnirJugador () {
   };
 
   return (
-    <Container>
-      <h2>Unir Jugador</h2>
+    <Container className="unir_jugador">
+      <h2>Unirse a Partida</h2>
       <TextField className="nombrepartida"
       label= "Nombre de partida"
       name = 'nombre_partida'

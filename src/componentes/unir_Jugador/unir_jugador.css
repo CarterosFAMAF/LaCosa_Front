@@ -1,3 +1,11 @@
+.unir_jugador {
+    background-color: white;
+    border-radius: 5px;
+    margin: 5px;
+    padding: 5px;
+    border: solid 2px black;
+}
+
 .boton_unir {
     position: relative;
     height: 5%;

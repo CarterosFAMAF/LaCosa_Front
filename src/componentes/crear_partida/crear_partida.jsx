@@ -42,7 +42,8 @@ function CrearPartida (){
     };
 
     return ( 
-    <Container>
+    <Container className="crear_partida">
+      <h2>Crear Partida</h2>
         <TextField className="nombrepartida"
             label= "Nombre de partida"
             name = 'match_name'

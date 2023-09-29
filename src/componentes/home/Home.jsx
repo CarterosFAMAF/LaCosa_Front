@@ -1,5 +1,6 @@
 import "./Home.css"
-import Unir_Jugador from "../unir_Jugador/unir_jugador"
+import UnirJugador from "../unir_Jugador/unir_jugador"
+import CrearPartida from "../crear_partida/crear_partida"
 
 function Home () {
   return(
@@ -9,10 +10,10 @@ function Home () {
         <h1>La Cosa Web</h1>
         <h2>¡Bienvenido!</h2>
       </header>
-        
-      <h3>Crear partida componente</h3>
-            
-      <Unir_Jugador />
+      
+      <CrearPartida/>
+
+      <UnirJugador />
       
     </div>
   )
