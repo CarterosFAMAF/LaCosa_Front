@@ -10,7 +10,7 @@ import {
   MenuItem
 } from "@mui/material";
 
-function Crear_partida (){
+function CrearPartida (){
 
     const [partida, setPartida] = useState({
       player_name : '',
@@ -103,5 +103,5 @@ function Crear_partida (){
     );
   }
 
-export default Crear_partida;
+export default CrearPartida;
           
