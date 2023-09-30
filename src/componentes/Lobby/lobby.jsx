@@ -28,8 +28,8 @@ function Lobby ({partida, id_jugador, creador}) {
 */  const output = [];
     jugadores.forEach(jugadores => {
       output.push(
-        <li key={jugadores.id}>  
-          <Typography className="tituloLobby" component="h2"> {jugadores} </Typography>
+        <li key={jugadores.id} className='listajugadores'>  
+          <Typography> {jugadores} </Typography>
         </li>
       );
       })
@@ -37,19 +37,18 @@ function Lobby ({partida, id_jugador, creador}) {
     return(
         <Container>
           <Typography className="tituloLobby" component="h2">
-            Lobby: {partida}
+            Lobby: {partida} 
           </Typography>
-
-          <Typography>Jugadores: </Typography>
-          {output}
-
+          <br/>
+          <br/>
+          <Typography> Jugadores ({cantJugadores}): {output}</Typography>
           <Button 
             variant="contained" 
             onClick={handleSubmit}
             disabled={!creador || (cantJugadores < 4)}
             className="boton_iniciar"> 
             Iniciar Partida
-          </Button>
+          </Button>          
         </Container>
     );
 }
