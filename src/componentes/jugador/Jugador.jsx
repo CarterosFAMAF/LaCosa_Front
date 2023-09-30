@@ -17,15 +17,24 @@ const cartas_import = [
     {id: 2, imagen: Dorso2},
     {id: 3, imagen: Dorso3}]
 
+const nombre_import = "MiNombre"
+const turno_jugador_import = 1 
+const jugador_id_import = 1
+const turno_partida_import = 1
+
 function Jugador() {
+    const [jugadorID, setJugadorID] = useState(jugador_id_import)
+    const [nombre, setNombre] = useState(nombre_import)
+    const [turno, setTurno] = useState(turno_jugador_import)    
     const [cartas, setCartas] = useState(cartas_import)
-    const [esTurno, setEsTurno] = useState(true)
+
+    const [seleccion, setSeleccion] = useState()
+
     const [faseRobo, setFaseRobo] = useState(true)
-    const [seleccion, setSeleccion] = useState(-1)
 
     return (
         <div>
-            {esTurno?
+            {turno===turno_partida_import?
                 <div>
                     <Mano
                         cartas={cartas}
@@ -36,10 +45,12 @@ function Jugador() {
                             setFaseRobo={setFaseRobo}
                             setCartas={setCartas}/>
                         : <div>
-                            {(seleccion !== -1)?
+                            {(seleccion != null)?
                                 <JugarCarta
+                                    mi_id={jugadorID}
+                                    mi_turno={turno}
                                     id_carta={seleccion}
-                                    setEsTurno={setEsTurno}
+                                    setTurno={setTurno}
                                     setCartas={setCartas}/>
                                 : null
                             }
