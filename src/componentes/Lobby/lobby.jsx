@@ -9,7 +9,7 @@ import{
 } from '@mui/material';
 import "./lobby.css";
 
-function Lobby ({partida, jugador}) {
+function Lobby ({partida, creador}) {
     const handleSubmit = async event => {
         event.preventDefault();
         
@@ -34,7 +34,7 @@ function Lobby ({partida, jugador}) {
           <Button 
             variant="contained" 
             onClick={handleSubmit}
-            disabled={false}
+            disabled={!creador}
             className="boton_iniciar"> 
             Iniciar Partida
           </Button>

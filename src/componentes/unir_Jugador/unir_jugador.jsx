@@ -64,7 +64,7 @@ function UnirJugador () {
         aria-describedby="modal-modal-description"
       >
         <Box className="modal">
-          <Lobby partidaID={partida} jugador={name} />
+          <Lobby partida={partida} creador={false} />
         </Box>
       </Modal>
     </Container>

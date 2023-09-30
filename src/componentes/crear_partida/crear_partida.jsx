@@ -1,5 +1,5 @@
 import "./crear_partida.css";
-
+import Lobby from "../Lobby/lobby"
 import { useState } from 'react';
 import axios from "axios";
 import {
@@ -7,7 +7,9 @@ import {
   Button,
   Container,
   Select,
-  MenuItem
+  MenuItem,
+  Modal,
+  Box
 } from "@mui/material";
 
 function CrearPartida (){
@@ -18,6 +20,10 @@ function CrearPartida (){
       min_players : 4,
       max_players : 12,
     });
+
+    const [open, setOpen] = useState(false);
+    const handleClose = () => setOpen(false);
+
 
     const handleChange = (event) => {
       setPartida({ ...partida, [event.target.name]: event.target.value });
@@ -109,6 +115,16 @@ function CrearPartida (){
           ))}
           </Select>        
         <Button variant="contained" onClick={handleSubmit} className="miboton"> Crear Partida </Button>
+        <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="modal">
+          <Lobby partida={"xd"} creador={true} />
+        </Box>
+      </Modal>
     </Container>
     );
   }
