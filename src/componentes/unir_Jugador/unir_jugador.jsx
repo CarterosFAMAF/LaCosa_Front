@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useWebSocket  } from 'react';
 import './unir_jugador.css';
+import Lobby from "../Lobby/lobby"
 import{
     Container,
     TextField,
@@ -34,13 +35,13 @@ function UnirJugador () {
     <Container className="unir_jugador">
       <h2>Unirse a Partida</h2>
       <TextField className="nombrepartida"
-      label= "Nombre de partida"
-      name = 'nombre_partida'
+      label= "ID de partida"
+      name = 'ID_partida'
       value = {partida}
       required
       fullWidth
       variant="outlined"
-      type = "Text"
+      type = "Number"
       onChange={(e) => setPartida(e.target.value)}/>
       <TextField
       label= "Nombre de jugador"
@@ -63,12 +64,7 @@ function UnirJugador () {
         aria-describedby="modal-modal-description"
       >
         <Box className="modal">
-          <Typography className="tituloLobby" component="h2">
-            Lobby de: {partida}
-          </Typography>
-          <Typography sx={{ mt: 5 }}>
-            Acá componente de iniciar partida !
-          </Typography>
+          <Lobby partidaID={partida} jugador={name} />
         </Box>
       </Modal>
     </Container>

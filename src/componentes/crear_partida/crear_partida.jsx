@@ -33,8 +33,17 @@ function CrearPartida (){
       axios.post(url, partida)
       .then(function (response) {
         console.log(response);
-        alert(`Se creo la partida con exito. Su ID de usuario es: ${response.data.owner_id}. Su ID de partida: ${response.data.match_id}, con nombre: ${response.data.match_name}` );
-      })
+        alert(`Se creo la partida con exito. Su ID de usuario es: ${response.data.owner_id}. Su ID de partida: ${response.data.match_id}, 
+        con nombre: ${response.data.match_name}` );
+
+        setCreador(true)
+      /*
+        const ws = new WebSocket(`http://127.0.0.1:8000/ws/matchs/${response.data.match_id}`)
+        ws.onopen = () => {
+          console.log('Web socket has been created created')} 
+      */
+        })
+
       .catch(function (response) {
         //handle error
         alert(`error: ${response.message}`);
