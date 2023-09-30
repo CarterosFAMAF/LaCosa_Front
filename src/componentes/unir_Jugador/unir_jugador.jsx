@@ -64,11 +64,11 @@ function UnirJugador () {
         aria-describedby="modal-modal-description"
       >
         <Box className="modal">
-          <Lobby partida={partida} creador={false} />
+          <Lobby partida={13} id_jugador={0} creador={false} />
         </Box>
       </Modal>
     </Container>
   );
 }
-
+// partida es el id
 export default UnirJugador;

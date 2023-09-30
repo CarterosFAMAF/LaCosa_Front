@@ -29,12 +29,13 @@ function CrearPartida (){
       setPartida({ ...partida, [event.target.name]: event.target.value });
     };
 
-    const handleSubmit = (event) => {
-
+    const handleSubmit = async event => {
+      event.preventDefault();
       if (partida.nombre_jugador === '' || partida.nombre_partida === '' || partida.nro_min_jug > 3 || partida.nro_max_jug < 13) {
         alert("All fields are required");
         return
       }
+      /*
       const url = 'http://127.0.0.1:8000/matchs'
       axios.post(url, partida)
       .then(function (response) {
@@ -43,17 +44,17 @@ function CrearPartida (){
         con nombre: ${response.data.match_name}` );
 
         setCreador(true)
-      /*
+      
         const ws = new WebSocket(`http://127.0.0.1:8000/ws/matchs/${response.data.match_id}`)
         ws.onopen = () => {
           console.log('Web socket has been created created')} 
-      */
+      
         })
-
       .catch(function (response) {
         //handle error
         alert(`error: ${response.message}`);
-      });
+      });*/
+      setOpen(true);
     };
 
     return ( 
@@ -116,13 +117,13 @@ function CrearPartida (){
           </Select>        
         <Button variant="contained" onClick={handleSubmit} className="miboton"> Crear Partida </Button>
         <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
         <Box className="modal">
-          <Lobby partida={"xd"} creador={true} />
+          <Lobby partida={"123"} id_jugador={"Juancito"} creador={true}/>
         </Box>
       </Modal>
     </Container>
