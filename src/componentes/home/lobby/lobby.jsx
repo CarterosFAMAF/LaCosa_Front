@@ -11,6 +11,15 @@ const import_partida_state = {
     { id: 2, name: "Facu", turn: 0, alive: true },
     { id: 3, name: "Mateo", turn: 0, alive: true },
     { id: 4, name: "Mario", turn: 0, alive: true },
+    { id: 5, name: "Mario", turn: 0, alive: true },
+    { id: 6, name: "Mario", turn: 0, alive: true },
+    { id: 7, name: "Mario", turn: 0, alive: true },
+    { id: 8, name: "Mario", turn: 0, alive: true },
+    { id: 9, name: "Mario", turn: 0, alive: true },
+    { id: 10, name: "Mario", turn: 0, alive: true },
+    { id: 11, name: "Mario", turn: 0, alive: true },
+    { id: 12, name: "Mario", turn: 0, alive: true },
+
   ],
 };
 
@@ -22,8 +31,7 @@ function Lobby({
   open,
   setOpen,
 }) {
-  const [jugadores, setJugadores] = useState([]);
-
+  const [jugadores, setJugadores] = useState(import_partida_state.players);
   const handleSubmit = async (event) => {
     event.preventDefault();
     alert("Iniciar Partida");
@@ -32,7 +40,7 @@ function Lobby({
   };
 
   const ws = useWebSocket(
-    `127.0.0.1:8000/ws/matches/${partidaID}/${jugadorID}`
+    `ws://localhost:8000/ws/matches/${partidaID}/${jugadorID}`
   );
 
   ws.onmessage = (event) => {
@@ -61,18 +69,19 @@ function Lobby({
           <Typography className="tituloLobby" component="h2">
             {partidaNombre}
           </Typography>
-          <br />
-          <br />
+          <hr />
           <Typography> Jugadores ({jugadores.length}): </Typography>
           {output}
+          <br />
           <Button
             variant="contained"
             onClick={handleSubmit}
-            disabled={false}
+            disabled={!creador || jugadores.length < 4}
             className="boton_iniciar"
           >
             Iniciar Partida
           </Button>
+          <br />
           <Button
             variant="contained"
             onClick={() => setOpen(false)}
