@@ -50,7 +50,7 @@ function Lobby({
   return (
     <Modal
       open={open}
-      onClose={() => setOpen(false)}
+      onClose={() => setOpen(true)}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -70,6 +70,13 @@ function Lobby({
             className="boton_iniciar"
           >
             Iniciar Partida
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => setOpen(false)}
+            className="boton_abandonar"
+          >
+            Abandonar Partida
           </Button>
         </Container>
       </Box>
