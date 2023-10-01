@@ -26,7 +26,9 @@ function Lobby({
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    alert("buenas");
+    alert("Iniciar Partida");
+    //Hacer el Put al back para que inicie partida y si responde exitosamente usar:
+    window.location.href = window.location.href + 'jugador';
   };
 
   const ws = useWebSocket(
