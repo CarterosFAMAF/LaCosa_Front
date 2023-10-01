@@ -1,4 +1,5 @@
-import React, { useState, useWebSocket } from 'react';
+import React, { useState } from 'react';
+import useWebSocket from 'react-use-websocket';
 import{
     Container,
     TextField,
@@ -17,19 +18,21 @@ function Lobby ({partida, id_jugador, creador}) {
         
         alert("buenas");
       };
-
-/*
-    const ws = useWebSocket(`http://127.0.0.1:8000/ws/matchs/${partida}/${jugador}`);
+    //console.log(`127.0.0.1:8000/ws/matchs/${partida}/${id_jugador}`)
+    
+    const ws = useWebSocket(`127.0.0.1:8000/ws/matchs/${partida}/${id_jugador}`);
     ws.onmessage = (event) => {
-      setJugadores(JSON.parse(event.data);
-      console.log(jugadores);
-      setCantJugadores(jugadores.length)
+      //setJugadores(JSON.parse(event.data));
+      //console.log(jugadores);
+      //setCantJugadores(jugadores.length)
+      console.log(JSON.parse(event))
     };
-*/  const output = [];
-    jugadores.forEach(jugadores => {
+    
+    const output = [];
+    jugadores.forEach((jugador, index) => {
       output.push(
-        <li key={jugadores.id} className='listajugadores'>  
-          <Typography> {jugadores} </Typography>
+        <li key={index} className='listajugadores'>  
+          <Typography> {jugador} </Typography>
         </li>
       );
       })
@@ -41,7 +44,8 @@ function Lobby ({partida, id_jugador, creador}) {
           </Typography>
           <br/>
           <br/>
-          <Typography> Jugadores ({cantJugadores}): {output}</Typography>
+          <Typography> Jugadores ({cantJugadores}): </Typography>
+          {output}
           <Button 
             variant="contained" 
             onClick={handleSubmit}

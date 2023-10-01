@@ -133,7 +133,7 @@ function CrearPartida (){
           aria-describedby="modal-modal-description"
         >
         <Box className="modal">
-          <Lobby partida={paramlobby.match_name} id_jugador={paramlobby.owner_id} creador={true}/>
+          <Lobby partida={paramlobby.match_name} id_jugador={paramlobby.id_jugador} creador={true}/>
         </Box>
       </Modal>
     </Container>
