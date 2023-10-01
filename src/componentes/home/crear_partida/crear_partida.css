@@ -18,13 +18,3 @@
     rgb(20, 78, 117) 100%
   );
 }
-
-.nombrepartida {
-  position: relative;
-  top: 10%;
-}
-
-.maxjugadores {
-  position: relative;
-  bottom: 100%;
-}
