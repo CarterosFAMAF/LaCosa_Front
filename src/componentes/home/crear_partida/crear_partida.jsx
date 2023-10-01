@@ -2,15 +2,7 @@ import "./crear_partida.css";
 import Lobby from "../lobby/lobby";
 import { useState } from "react";
 import axios from "axios";
-import {
-  TextField,
-  Button,
-  Container,
-  Select,
-  MenuItem,
-  Modal,
-  Box,
-} from "@mui/material";
+import { TextField, Button, Container, Select, MenuItem } from "@mui/material";
 
 function CrearPartida() {
   const [open, setOpen] = useState(false);
@@ -130,21 +122,17 @@ function CrearPartida() {
         {" "}
         Crear Partida{" "}
       </Button>
-      <Modal
-        open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box className="modal">
-          <Lobby
-            partidaID={paramlobby.match_id}
-            partidaNombre={partida.match_name}
-            jugadorID={paramlobby.id_jugador}
-            creador={true}
-          />
-        </Box>
-      </Modal>
+
+      {open && (
+        <Lobby
+          partidaID={paramlobby.match_id}
+          partidaNombre={partida.match_name}
+          jugadorID={paramlobby.id_jugador}
+          creador={true}
+          open={open}
+          setOpen={setOpen}
+        />
+      )}
     </Container>
   );
 }

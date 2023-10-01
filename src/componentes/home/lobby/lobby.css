@@ -39,3 +39,19 @@
   position: absolute;
   left: 30%;
 }
+
+.modal {
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  height: 30%;
+  width: 25%;
+  color: rgb(255, 255, 255);
+  background-image: linear-gradient(
+    to right,
+    rgb(77, 22, 179) 0%,
+    rgb(94, 41, 192) 50%,
+    rgb(115, 60, 216) 100%
+  );
+  box-shadow: rgb(0, 0, 0) 5px 5px 15px 5px;
+}

@@ -2,7 +2,7 @@ import "./unir_jugador.css";
 
 import React, { useState } from "react";
 import axios from "axios";
-import { Container, TextField, Button, Modal, Box } from "@mui/material";
+import { Container, TextField, Button } from "@mui/material";
 
 import Lobby from "../lobby/lobby";
 
@@ -72,21 +72,16 @@ function UnirJugador() {
       <Button variant="contained" onClick={handleSubmit} className="boton_unir">
         Unirse a Partida
       </Button>
-      <Modal
-        open={open}
-        onClose={() => setOpen(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box className="modal">
-          <Lobby
-            partidaID={partidaID}
-            partidaNombre={partidaNombre}
-            jugadorID={jugadorID}
-            creador={false}
-          />
-        </Box>
-      </Modal>
+      {open && (
+        <Lobby
+          partidaID={partidaID}
+          partidaNombre={partidaNombre}
+          jugadorID={jugadorID}
+          creador={false}
+          open={open}
+          setOpen={setOpen}
+        />
+      )}
     </Container>
   );
 }
