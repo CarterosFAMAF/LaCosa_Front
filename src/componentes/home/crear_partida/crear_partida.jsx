@@ -138,8 +138,9 @@ function CrearPartida() {
       >
         <Box className="modal">
           <Lobby
-            partida_id={paramlobby.match_id}
-            id_jugador={paramlobby.id_jugador}
+            partidaID={paramlobby.match_id}
+            partidaNombre={partida.match_name}
+            jugadorID={paramlobby.id_jugador}
             creador={true}
           />
         </Box>

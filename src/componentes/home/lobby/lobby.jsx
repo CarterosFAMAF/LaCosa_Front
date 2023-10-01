@@ -3,15 +3,22 @@ import useWebSocket from "react-use-websocket";
 import { Container, Button, Typography } from "@mui/material";
 import "./lobby.css";
 
-function Lobby({partida_id, id_jugador, creador }) {
-  const [jugadores, setJugadores] = useState([])
+const import_partida_state = {
+  started: false,
+  turn_game: 0,
+  players: [{ id: 1, name: "Nay", turn: 0, alive: true }],
+};
 
+function Lobby({ partidaID, partidaNombre, jugadorID, creador }) {
+  const [jugadores, setJugadores] = useState([]);
   const handleSubmit = async (event) => {
     event.preventDefault();
     alert("buenas");
   };
 
-  const ws = useWebSocket(`127.0.0.1:8000/ws/matchs/${partida_id}/${id_jugador}`);
+  const ws = useWebSocket(
+    `127.0.0.1:8000/ws/matches/${partidaID}/${jugadorID}`
+  );
   ws.onmessage = (event) => {
     //setJugadores(JSON.parse(event.data));
     //console.log(jugadores);
@@ -31,7 +38,7 @@ function Lobby({partida_id, id_jugador, creador }) {
   return (
     <Container>
       <Typography className="tituloLobby" component="h2">
-        Lobby: {partida_id}
+        Lobby: {partidaNombre}
       </Typography>
       <br />
       <br />

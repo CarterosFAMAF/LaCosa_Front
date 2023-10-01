@@ -1,30 +1,40 @@
-import React, { useState } from "react";
 import "./unir_jugador.css";
-import Lobby from "../lobby/lobby";
+
+import React, { useState } from "react";
 import axios from "axios";
 import { Container, TextField, Button, Modal, Box } from "@mui/material";
 
+import Lobby from "../lobby/lobby";
+
 function UnirJugador() {
-  const [nombreJugador, setNombreJugador] = useState("");
-  const [partida_id, setPartida] = useState("");
+  const [jugadorID, setJugadorID] = useState(-1);
+  const [jugadorNombre, setJugadorNombre] = useState("");
+
+  const [partidaID, setPartidaID] = useState(-1);
+  const [partidaNombre, setPartidaNombre] = useState("");
+
   const [open, setOpen] = React.useState(false);
 
-  const param_union = {
-    player_name: nombreJugador,
-    match_id: partida_id,
+  const endpoint_params_union = {
+    player_name: jugadorNombre,
+    match_id: partidaID,
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (partida_id && nombreJugador) {
-      const url = `http://127.0.0.1:8000/matches/${partida_id}/join`;
+    if (partidaID && jugadorNombre) {
+      const url = `http://127.0.0.1:8000/matches/${partidaID}/join`;
 
       axios
-        .post(url, param_union)
+        .post(url, endpoint_params_union)
         .then(function (response) {
-          console.log(response);
-          alert(`Te uniste a la partida ${partida_id}`);
+          console.log(response.data);
+          setJugadorID(response.data.player_id);
+          setPartidaNombre(response.data.match_name);
+          alert(
+            `Te uniste a la partida con Nombre: ${partidaNombre}, tu ID de Jugador es: ${jugadorID}`
+          );
           setOpen(true);
         })
         .catch(function (response) {
@@ -43,21 +53,21 @@ function UnirJugador() {
         className="nombrepartida"
         label="ID de partida"
         name="ID_partida"
-        value={partida_id}
+        value={partidaID}
         required
         fullWidth
         variant="outlined"
         type="Number"
-        onChange={(e) => setPartida(e.target.value)}
+        onChange={(e) => setPartidaID(e.target.value)}
       />
       <TextField
         label="Nombre de jugador"
         name="nombre_jugador"
-        value={nombreJugador}
+        value={jugadorNombre}
         required
         fullWidth
         type="Text"
-        onChange={(e) => setNombreJugador(e.target.value)}
+        onChange={(e) => setJugadorNombre(e.target.value)}
       />
       <Button variant="contained" onClick={handleSubmit} className="boton_unir">
         Unirse a Partida
@@ -69,7 +79,12 @@ function UnirJugador() {
         aria-describedby="modal-modal-description"
       >
         <Box className="modal">
-          <Lobby partida_id={partida_id} id_jugador={0} creador={false} />
+          <Lobby
+            partidaID={partidaID}
+            partidaNombre={partidaNombre}
+            jugadorID={jugadorID}
+            creador={false}
+          />
         </Box>
       </Modal>
     </Container>
