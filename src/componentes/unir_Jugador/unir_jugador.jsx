@@ -6,25 +6,25 @@ import { Container, TextField, Button, Modal, Box } from "@mui/material";
 
 function UnirJugador() {
   const [nombreJugador, setNombreJugador] = useState("");
-  const [partida, setPartida] = useState("");
+  const [partida_id, setPartida] = useState("");
   const [open, setOpen] = React.useState(false);
 
   const param_union = {
     player_name: nombreJugador,
-    match_id: partida,
+    match_id: partida_id,
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (partida && nombreJugador) {
-      const url = `http://127.0.0.1:8000/matches/${partida}/join`;
+    if (partida_id && nombreJugador) {
+      const url = `http://127.0.0.1:8000/matches/${partida_id}/join`;
 
       axios
         .post(url, param_union)
         .then(function (response) {
           console.log(response);
-          alert(`Te uniste a la partida ${partida}`);
+          alert(`Te uniste a la partida ${partida_id}`);
           setOpen(true);
         })
         .catch(function (response) {
@@ -43,7 +43,7 @@ function UnirJugador() {
         className="nombrepartida"
         label="ID de partida"
         name="ID_partida"
-        value={partida}
+        value={partida_id}
         required
         fullWidth
         variant="outlined"
@@ -69,7 +69,7 @@ function UnirJugador() {
         aria-describedby="modal-modal-description"
       >
         <Box className="modal">
-          <Lobby partida={partida} id_jugador={0} creador={false} />
+          <Lobby partida_id={partida_id} id_jugador={0} creador={false} />
         </Box>
       </Modal>
     </Container>

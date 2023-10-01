@@ -23,7 +23,7 @@ function CrearPartida() {
   });
 
   const [paramlobby, setParamLobby] = useState({
-    match_name: 0,
+    match_id: 0,
     id_jugador: 0,
   });
 
@@ -50,7 +50,7 @@ function CrearPartida() {
           `Se creo la partida con exito. Su ID de usuario es: ${response.data.owner_id}. Su ID de partida: ${response.data.match_id}`
         );
         setParamLobby({
-          match_name: response.data.match_id, // en el futuro cambiar por el nombre
+          match_id: response.data.match_id, // en el futuro cambiar por el nombre
           id_jugador: response.data.owner_id,
         });
         setOpen(true);
@@ -138,7 +138,7 @@ function CrearPartida() {
       >
         <Box className="modal">
           <Lobby
-            partida={paramlobby.match_name}
+            partida_id={paramlobby.match_id}
             id_jugador={paramlobby.id_jugador}
             creador={true}
           />
