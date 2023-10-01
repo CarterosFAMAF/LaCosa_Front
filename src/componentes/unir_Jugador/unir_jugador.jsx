@@ -1,6 +1,7 @@
 import React, { useState, useWebSocket  } from 'react';
 import './unir_jugador.css';
 import Lobby from "../Lobby/lobby"
+import axios from 'axios';
 import{
     Container,
     TextField,
@@ -12,19 +13,32 @@ import{
 
 function UnirJugador () {
 
-  const [name, setName] = useState("");
+  const [nombreJugador, setNombreJugador] = useState("");
   const [partida, setPartida] = useState("");
   const [open, setOpen] = React.useState(false);
 
   const handleClose = () => setOpen(false);
 
+  const info_back ={
+    "player_name": nombreJugador,
+    "match_id": partida
+  }
+
   const handleSubmit = async event => {
     event.preventDefault();
     
-    if (partida && name){
-      alert(`Te uniste a la partida ${partida}`);
+    if (partida && nombreJugador){
+      const url = `http://127.0.0.1:8000/matches/${partida}/join`
+      axios.post(url, info_back)
+      .then(function (response) {
+        console.log(response);
+        alert(`Te uniste a la partida ${partida}`);
+      })
+      .catch(function (response) {
+        //handle error
+        alert(`error: ${response.message}`);
+      });
       setOpen(true)
-      console.log(partida, name);
     } else{
       alert('Es necesario que ingrese nombre de partida y jugador');
       return
@@ -46,11 +60,11 @@ function UnirJugador () {
       <TextField
       label= "Nombre de jugador"
       name = 'nombre_jugador'
-      value = {name}
+      value = {nombreJugador}
       required
       fullWidth
       type = "Text"
-      onChange = {(e) => setName(e.target.value)} />
+      onChange = {(e) => setNombreJugador(e.target.value)} />
       <Button 
       variant="contained" 
       onClick={handleSubmit} 
