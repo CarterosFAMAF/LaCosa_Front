@@ -2,7 +2,14 @@ import "./crear_partida.css";
 import Lobby from "../lobby/lobby";
 import { useState } from "react";
 import axios from "axios";
-import { TextField, Button, Container, Select, MenuItem, Typography } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Container,
+  Select,
+  MenuItem,
+  Typography,
+} from "@mui/material";
 
 function CrearPartida() {
   const [open, setOpen] = useState(false);
@@ -24,10 +31,7 @@ function CrearPartida() {
   };
 
   const handleSubmit = (event) => {
-    if (
-      partida.player_name === "" ||
-      partida.nombre_partida === ""
-    ) {
+    if (partida.player_name === "" || partida.nombre_partida === "") {
       alert("All fields are required");
       return;
     }
@@ -72,7 +76,7 @@ function CrearPartida() {
         type="Text"
         onChange={handleChange}
       />
-      <Typography > Minimo de jugadores </Typography>
+      <Typography> Minimo de jugadores </Typography>
       <Select
         name="min_players"
         value={partida.min_players}

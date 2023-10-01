@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import useWebSocket from "react-use-websocket";
 import { Container, Button, Typography, Modal, Box } from "@mui/material";
 import "./lobby.css";
 
@@ -11,15 +10,6 @@ const import_partida_state = {
     { id: 2, name: "Facu", turn: 0, alive: true },
     { id: 3, name: "Mateo", turn: 0, alive: true },
     { id: 4, name: "Mario", turn: 0, alive: true },
-    { id: 5, name: "Mario", turn: 0, alive: true },
-    { id: 6, name: "Mario", turn: 0, alive: true },
-    { id: 7, name: "Mario", turn: 0, alive: true },
-    { id: 8, name: "Mario", turn: 0, alive: true },
-    { id: 9, name: "Mario", turn: 0, alive: true },
-    { id: 10, name: "Mario", turn: 0, alive: true },
-    { id: 11, name: "Mario", turn: 0, alive: true },
-    { id: 12, name: "Mario", turn: 0, alive: true },
-
   ],
 };
 
@@ -34,21 +24,32 @@ function Lobby({
   const [jugadores, setJugadores] = useState(import_partida_state.players);
   const handleSubmit = async (event) => {
     event.preventDefault();
-    alert("Iniciar Partida");
+    alert("Iniciar Partida")
     //Hacer el Put al back para que inicie partida y si responde exitosamente usar:
     window.location.href = window.location.href + 'jugador';
   };
 
-  const ws = useWebSocket(
-    `ws://localhost:8000/ws/matches/${partidaID}/${jugadorID}`
-  );
+  const socketUrl = `ws://localhost:8000/ws/matches/${partidaID}/${jugadorID}`;
 
-  ws.onmessage = (event) => {
-    setJugadores(event.data.players);
-    console.log(JSON.parse(event));
-  };
+  // Create WebSocket connection.
+  const socket = new WebSocket(socketUrl);
+
+  // Connection opened
+  socket.addEventListener("open", (event) => {
+    console.log("me abrí")
+  });
+
+  // Listen for messages
+  socket.addEventListener("message", (event) => {
+    console.log("Message from server ", event.data);
+  });
 
   const output = [];
+  
+  const close_connection = () => {
+    setOpen(false)
+    socket.close()
+  }
 
   jugadores.forEach((jugador) => {
     output.push(
@@ -84,7 +85,7 @@ function Lobby({
           <br />
           <Button
             variant="contained"
-            onClick={() => setOpen(false)}
+            onClick={() => close_connection()}
             className="boton_abandonar"
           >
             Abandonar Partida
