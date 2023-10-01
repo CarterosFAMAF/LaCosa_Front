@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./unir_jugador.css";
-import Lobby from "../Lobby/lobby";
+import Lobby from "../lobby/lobby";
 import axios from "axios";
 import { Container, TextField, Button, Modal, Box } from "@mui/material";
 

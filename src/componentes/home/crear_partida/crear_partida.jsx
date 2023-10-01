@@ -1,5 +1,5 @@
 import "./crear_partida.css";
-import Lobby from "../Lobby/lobby";
+import Lobby from "../lobby/lobby";
 import { useState } from "react";
 import axios from "axios";
 import {
