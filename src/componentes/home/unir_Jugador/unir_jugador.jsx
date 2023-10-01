@@ -7,10 +7,10 @@ import { Container, TextField, Button, Modal, Box } from "@mui/material";
 import Lobby from "../lobby/lobby";
 
 function UnirJugador() {
-  const [jugadorID, setJugadorID] = useState(-1);
+  const [jugadorID, setJugadorID] = useState("");
   const [jugadorNombre, setJugadorNombre] = useState("");
 
-  const [partidaID, setPartidaID] = useState(-1);
+  const [partidaID, setPartidaID] = useState("");
   const [partidaNombre, setPartidaNombre] = useState("");
 
   const [open, setOpen] = React.useState(false);
@@ -33,7 +33,7 @@ function UnirJugador() {
           setJugadorID(response.data.player_id);
           setPartidaNombre(response.data.match_name);
           alert(
-            `Te uniste a la partida con Nombre: ${partidaNombre}, tu ID de Jugador es: ${jugadorID}`
+            `Te uniste a la partida con Nombre: ${response.data.match_name}, tu ID de Jugador es: ${response.data.player_id}`
           );
           setOpen(true);
         })
