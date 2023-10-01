@@ -27,6 +27,8 @@ function Lobby({
   const handleSubmit = async (event) => {
     event.preventDefault();
     alert("Iniciar Partida");
+    //Hacer el Put al back para que inicie partida y si responde exitosamente usar:
+    window.location.href = window.location.href + 'jugador';
   };
 
   const ws = useWebSocket(
@@ -66,7 +68,7 @@ function Lobby({
           <Button
             variant="contained"
             onClick={handleSubmit}
-            disabled={!creador || jugadores.length < 4}
+            disabled={false}
             className="boton_iniciar"
           >
             Iniciar Partida

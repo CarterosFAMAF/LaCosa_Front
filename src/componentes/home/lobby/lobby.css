@@ -18,15 +18,15 @@
 
 .tituloLobby {
   position: absolute;
-  left: 30%;
+  left: 40%;
 }
 
 .modal {
   position: relative;
-  top: 38%;
-  left: 38%;
-  height: 30%;
-  width: 25%;
+  top: 30%;
+  left: 25%;
+  height: 50%;
+  width: 50%;
   color: rgb(255, 255, 255);
   background-image: linear-gradient(
     to right,
