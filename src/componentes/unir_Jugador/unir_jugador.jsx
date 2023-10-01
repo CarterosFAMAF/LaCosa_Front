@@ -1,14 +1,13 @@
-import React, { useState, useWebSocket  } from 'react';
+import React, { useState } from 'react';
 import './unir_jugador.css';
 import Lobby from "../Lobby/lobby"
 import axios from 'axios';
 import{
-    Container,
-    TextField,
-    Button,
-    Modal,
-    Box,
-    Typography
+  Container,
+  TextField,
+  Button,
+  Modal,
+  Box
 } from '@mui/material';
 
 function UnirJugador () {
@@ -17,9 +16,7 @@ function UnirJugador () {
   const [partida, setPartida] = useState("");
   const [open, setOpen] = React.useState(false);
 
-  const handleClose = () => setOpen(false);
-
-  const info_back ={
+  const param_union = {
     "player_name": nombreJugador,
     "match_id": partida
   }
@@ -29,16 +26,16 @@ function UnirJugador () {
     
     if (partida && nombreJugador){
       const url = `http://127.0.0.1:8000/matches/${partida}/join`
-      axios.post(url, info_back)
+
+      axios.post(url, param_union)
       .then(function (response) {
         console.log(response);
         alert(`Te uniste a la partida ${partida}`);
+        setOpen(true)
       })
       .catch(function (response) {
-        //handle error
         alert(`error: ${response.message}`);
       });
-      setOpen(true)
     } else{
       alert('Es necesario que ingrese nombre de partida y jugador');
       return
@@ -73,7 +70,7 @@ function UnirJugador () {
       </Button>
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose={() => setOpen(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -84,5 +81,5 @@ function UnirJugador () {
     </Container>
   );
 }
-// partida es el id
+
 export default UnirJugador;

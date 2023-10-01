@@ -1,7 +1,6 @@
 import "./Home.css"
 import UnirJugador from "../unir_Jugador/unir_jugador"
 import CrearPartida from "../crear_partida/crear_partida"
-import { useState } from 'react';
 
 function Home () {
   return(

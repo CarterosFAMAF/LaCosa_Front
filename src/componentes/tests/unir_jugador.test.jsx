@@ -4,9 +4,9 @@ import UnirJugador from '../unir_Jugador/unir_jugador';
 
 describe("Unir Jugador Test", () => {
 
-    test("Renderiza Unir Jugador", () => {
-        const elem = TestRenderer.create(<UnirJugador></UnirJugador>).toJSON()
-        expect(elem).not.toBeNull
-    })
+  test("Renderiza Unir Jugador", () => {
+    const elem = TestRenderer.create(<UnirJugador></UnirJugador>).toJSON()
+    expect(elem).not.toBeNull
+  })
 
 })
