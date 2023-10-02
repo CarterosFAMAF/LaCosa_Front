@@ -19,7 +19,7 @@ function Lobby({
   const socketUrl = `ws://localhost:8000/ws/matches/${partidaID}/${jugadorID}`;
   const urlIniciar = `http://127.0.0.1:8000/partidas/${partidaID}/iniciar`;
 
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const endpoint_params_iniciar = {
     match_id: partidaID,
@@ -58,6 +58,7 @@ function Lobby({
         alert(`error: ${response.message}`);
       });
     */
+    navigate("/jugador");
   };
 
   const output = [];
