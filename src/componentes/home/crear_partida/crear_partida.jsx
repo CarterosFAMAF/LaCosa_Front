@@ -116,6 +116,7 @@ function CrearPartida() {
         <Lobby
           partidaID={paramlobby.match_id}
           partidaNombre={partida.match_name}
+          partidaMin={partida.min_players}
           jugadorID={paramlobby.id_jugador}
           creador={true}
           open={open}

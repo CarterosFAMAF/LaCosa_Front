@@ -7,6 +7,7 @@ import "./lobby.css";
 function Lobby({
   partidaID,
   partidaNombre,
+  partidaMin,
   jugadorID,
   creador,
   open,
@@ -57,6 +58,7 @@ function Lobby({
         alert(`error: ${response.message}`);
       });
     */
+    navigate("/jugador");
   };
 
   const output = [];
@@ -85,7 +87,7 @@ function Lobby({
           <Button
             variant="contained"
             onClick={handleSubmit}
-            disabled={!creador || jugadores.length < 4}
+            disabled={!creador || jugadores.length < partidaMin}
             className="boton_iniciar"
           >
             Iniciar Partida
