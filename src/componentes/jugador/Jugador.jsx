@@ -26,9 +26,10 @@ const jugador_id_import = 1;
 const turno_partida_import = 1;
 
 function Jugador() {
-  // Obtener el Websocket
+  /* Obtener Websocket
   const {state} = useLocation();
   console.log(state)
+  */
   
   const [jugadorID, setJugadorID] = useState(jugador_id_import);
   const [nombre, setNombre] = useState(nombre_import);
