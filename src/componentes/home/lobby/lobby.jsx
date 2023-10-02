@@ -67,8 +67,8 @@ function Lobby({
     >
       <Box className="modal">
         <Container>
-          <Typography className="tituloLobby" component="h2">
-            {partidaNombre}
+          <Typography className="tituloLobby">
+            <h2> {partidaNombre} </h2>
           </Typography>
           <hr />
           <Typography> Jugadores ({jugadores.length}): </Typography>
