@@ -1,17 +1,8 @@
 import React, { useState } from "react";
+import useWebSocket from "react-use-websocket";
+import { useNavigate } from "react-router-dom";
 import { Container, Button, Typography, Modal, Box } from "@mui/material";
 import "./lobby.css";
-
-const import_partida_state = {
-  started: false,
-  turn_game: 0,
-  players: [
-    { id: 1, name: "Nay", turn: 0, alive: true },
-    { id: 2, name: "Facu", turn: 0, alive: true },
-    { id: 3, name: "Mateo", turn: 0, alive: true },
-    { id: 4, name: "Mario", turn: 0, alive: true },
-  ],
-};
 
 function Lobby({
   partidaID,
@@ -21,35 +12,54 @@ function Lobby({
   open,
   setOpen,
 }) {
-  const [jugadores, setJugadores] = useState(import_partida_state.players);
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    alert("Iniciar Partida")
-    //Hacer el Put al back para que inicie partida y si responde exitosamente usar:
-    window.location.href = window.location.href + 'jugador';
-  };
+  const [jugadores, setJugadores] = useState([]);
+  const [connected, setConnected] = useState(true);
 
   const socketUrl = `ws://localhost:8000/ws/matches/${partidaID}/${jugadorID}`;
+  const urlIniciar = `http://127.0.0.1:8000/partidas/${partidaID}/iniciar`;
 
-  // Create WebSocket connection.
-  const socket = new WebSocket(socketUrl);
+  const navigate = useNavigate();
 
-  // Connection opened
-  socket.addEventListener("open", (event) => {
-    console.log("me abrí")
-  });
+  const endpoint_params_iniciar = {
+    match_id: partidaID,
+    player_id: jugadorID,
+  };
 
-  // Listen for messages
-  socket.addEventListener("message", (event) => {
-    console.log("Message from server ", event.data);
-  });
+  useWebSocket(
+    socketUrl,
+    {
+      onOpen: () => {
+        console.log("Connected");
+      },
+      onMessage: () => {
+        const parsedData = JSON.parse(JSON.parse(event.data));
+        setJugadores(parsedData.players);
+      },
+      onClose: () => {
+        setOpen(false);
+        console.log("Closed");
+      },
+    },
+    connected
+  );
+
+  const handleSubmit = async (event) => {
+    /*
+    event.preventDefault();
+    alert("Iniciar Partida");
+    axios
+      .put(urlIniciar, endpoint_params_iniciar)
+      .then(function (response) {
+        console.log(response);
+        navigate("/jugador", { state: websocketref });
+      })
+      .catch(function (response) {
+        alert(`error: ${response.message}`);
+      });
+    */
+  };
 
   const output = [];
-  
-  const close_connection = () => {
-    setOpen(false)
-    socket.close()
-  }
 
   jugadores.forEach((jugador) => {
     output.push(
@@ -67,9 +77,7 @@ function Lobby({
     >
       <Box className="modal">
         <Container>
-          <Typography className="tituloLobby">
-            <h2> {partidaNombre} </h2>
-          </Typography>
+          <Typography className="tituloLobby">{partidaNombre}</Typography>
           <hr />
           <Typography> Jugadores ({jugadores.length}): </Typography>
           {output}
@@ -85,7 +93,7 @@ function Lobby({
           <br />
           <Button
             variant="contained"
-            onClick={() => close_connection()}
+            onClick={() => setConnected(false)}
             className="boton_abandonar"
           >
             Abandonar Partida
@@ -95,5 +103,4 @@ function Lobby({
     </Modal>
   );
 }
-
 export default Lobby;

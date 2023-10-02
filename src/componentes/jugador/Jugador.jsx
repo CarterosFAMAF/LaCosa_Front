@@ -11,6 +11,8 @@ import Dorso1 from "/Dorso.png?url";
 import Dorso2 from "/Dorso.png?url";
 import Dorso3 from "/Dorso.png?url";
 
+import { useLocation } from "react-router-dom";
+
 const cartas_import = [
   { id: 0, imagen: Lanzallamas },
   { id: 1, imagen: Dorso1 },
@@ -24,6 +26,10 @@ const jugador_id_import = 1;
 const turno_partida_import = 1;
 
 function Jugador() {
+  // Obtener el Websocket
+  const {state} = useLocation();
+  console.log(state)
+  
   const [jugadorID, setJugadorID] = useState(jugador_id_import);
   const [nombre, setNombre] = useState(nombre_import);
   const [turno, setTurno] = useState(turno_jugador_import);
