@@ -16,5 +16,16 @@ Para levantar el Front seguir los siguientes pasos:
     ```
 4. Levantar el Front.
     ```sh
-    $ npm run dev
+    $ npx vite
+    ```
+
+Para testear el Front, seguir los siguientes pasos:
+
+1. De ser necesario, instalar las librerías necesarias.
+    ```sh
+    $ npm install
+    ```
+2. Correr los tests.
+    ```sh
+    $ npx vitest
     ```

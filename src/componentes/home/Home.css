@@ -1,0 +1,15 @@
+* {
+  margin: 0px;
+}
+
+.container {
+  height: 100vh;
+  background: linear-gradient(to bottom, #2e48be, #778ece);
+}
+
+.titulo {
+  text-align: center;
+  border-bottom: 3px solid;
+  color: whitesmoke;
+  font-family: "Roboto", sans-serif;
+}

@@ -1,0 +1,19 @@
+.carta {
+  width: 200px;
+  border-radius: 7%;
+}
+
+.robar_carta {
+  position: absolute;
+  width: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -130%);
+  justify-content: center;
+  text-align: center;
+  width: 200px;
+  height: 50px;
+  font-size: large;
+  background-color: rgb(20, 120, 20);
+  border-radius: 5px;
+}
