@@ -38,7 +38,11 @@ function UnirJugador() {
           setOpen(true);
         })
         .catch(function (response) {
-          alert(`error: ${response.message}`);
+          if (response.response.status === 400) {
+            alert(response.response.data.detail);
+          } else {
+            alert(`error: ${response.message}`);
+          }
         });
     } else {
       alert("Es necesario que ingrese nombre de partida y jugador");
