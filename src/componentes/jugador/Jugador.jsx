@@ -1,7 +1,6 @@
-// Componentes
-import Mano from "./mano/Mano";
-
 import { useState } from "react";
+
+import Mano from "./mano/Mano";
 import RobarCarta from "./robar/RobarCarta";
 import JugarCarta from "./jugar/JugarCarta";
 

@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { unirPartida } from "../../../store/jugadorSlice";
+import { lobbyDef } from "../../../store/lobbySlice";
 
 function CrearPartida() {
   const url = "http://127.0.0.1:8000/matches";
@@ -51,10 +52,15 @@ function CrearPartida() {
           partidaNombre: partidaInput.match_name,
           unido: true,
           creador: true,
+        };
+
+        const formatoLobby = {
+          maxJugadores: partidaInput.max_players,
           minJugadores: partidaInput.min_players,
         };
 
         dispatch(unirPartida(formatoJugador));
+        dispatch(lobbyDef(formatoLobby));
       })
       .catch(function (response) {
         alert(`error: ${response.message}`);

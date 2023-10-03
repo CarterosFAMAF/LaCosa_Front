@@ -42,7 +42,6 @@ function UnirJugador() {
           partidaNombre: response.data.match_name,
           unido: true,
           creador: false,
-          minJugadores: 4,
         };
 
         dispatch(unirPartida(formatoJugador));

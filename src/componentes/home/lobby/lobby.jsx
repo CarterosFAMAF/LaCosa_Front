@@ -1,41 +1,20 @@
 import "./lobby.css";
-import React, { useState } from "react";
-import useWebSocket from "react-use-websocket";
-import { redirect } from "react-router-dom";
+import React from "react";
 import { Container, Button, Typography, Modal, Box } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { salirPartida } from "../../../store/jugadorSlice";
 
 function Lobby() {
   const jugador = useSelector((state) => state.jugador);
+  const lobbyData = useSelector((state) => state.lobby);
   const dispatch = useDispatch();
 
-  const socketUrl = `ws://localhost:8000/ws/matches/${jugador.partidaId}/${jugador.id}`;
   const urlIniciar = `http://127.0.0.1:8000/partidas/${jugador.partidaId}/iniciar`;
-
-  const [jugadores, setJugadores] = useState([]);
 
   const endpoint_params_iniciar = {
     match_id: jugador.partidaId,
     player_id: jugador.id,
   };
-
-  useWebSocket(
-    socketUrl,
-    {
-      onOpen: () => {
-        console.log("Connected");
-      },
-      onMessage: (event) => {
-        const parsedData = JSON.parse(JSON.parse(event.data));
-        setJugadores(parsedData.players);
-      },
-      onClose: () => {
-        console.log("Closed");
-      },
-    },
-    jugador.unido
-  );
 
   const handleSubmit = async (event) => {
     /*
@@ -51,12 +30,11 @@ function Lobby() {
         alert(`error: ${response.message}`);
       });
     */
-    redirect("/jugador");
   };
 
   const output = [];
 
-  jugadores.forEach((jugadorElem) => {
+  lobbyData.jugadores.forEach((jugadorElem) => {
     output.push(
       <li key={jugadorElem.id} className="listajugadores">
         <Typography> {jugadorElem.name} </Typography>
@@ -78,14 +56,14 @@ function Lobby() {
             {jugador.partidaNombre}
           </Typography>
           <hr />
-          <Typography> Jugadores ({jugadores.length}): </Typography>
+          <Typography> Jugadores ({lobbyData.jugadores.length}): </Typography>
           {output}
           <br />
           <Button
             variant="contained"
             onClick={handleSubmit}
             disabled={
-              !jugador.creador || jugadores.length < jugador.minJugadores
+              !jugador.creador || lobbyData.jugadores.length < lobbyData.minJugadores
             }
             className="boton_iniciar"
           >
