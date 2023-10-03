@@ -2,12 +2,14 @@ import "./lobby.css";
 import React from "react";
 import { Container, Button, Typography, Modal, Box } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
 import { salirPartida } from "../../../store/jugadorSlice";
 
 function Lobby() {
   const jugador = useSelector((state) => state.jugador);
   const lobbyData = useSelector((state) => state.lobby);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const urlIniciar = `http://127.0.0.1:8000/partidas/${jugador.partidaId}/iniciar`;
 
@@ -30,6 +32,7 @@ function Lobby() {
         alert(`error: ${response.message}`);
       });
     */
+    navigate("/jugador");
   };
 
   const output = [];
@@ -63,7 +66,8 @@ function Lobby() {
             variant="contained"
             onClick={handleSubmit}
             disabled={
-              !jugador.creador || lobbyData.jugadores.length < lobbyData.minJugadores
+              !jugador.creador ||
+              lobbyData.jugadores.length < lobbyData.minJugadores
             }
             className="boton_iniciar"
           >
