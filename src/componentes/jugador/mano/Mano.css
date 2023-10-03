@@ -1,0 +1,13 @@
+.mano {
+  position: absolute;
+  width: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, 10%);
+  justify-content: center;
+  text-align: center;
+}
+.mano li {
+  display: inline;
+  margin-right: 10px;
+}
