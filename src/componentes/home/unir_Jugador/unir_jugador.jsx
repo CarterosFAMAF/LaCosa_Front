@@ -1,91 +1,80 @@
 import "./unir_jugador.css";
-
 import React, { useState } from "react";
 import axios from "axios";
 import { Container, TextField, Button } from "@mui/material";
-
-import Lobby from "../lobby/lobby";
+import { useDispatch } from "react-redux";
+import { unirPartida } from "../../../store/jugadorSlice";
 
 function UnirJugador() {
-  const [jugadorID, setJugadorID] = useState("");
-  const [jugadorNombre, setJugadorNombre] = useState("");
+  const dispatch = useDispatch();
 
-  const [partidaID, setPartidaID] = useState("");
-  const [partidaNombre, setPartidaNombre] = useState("");
+  const [partidaInput, setPartidaInput] = useState({
+    player_name: "",
+    match_id: "",
+  });
 
-  const [open, setOpen] = React.useState(false);
-
-  const endpoint_params_union = {
-    player_name: jugadorNombre,
-    match_id: partidaID,
+  const handleChange = (event) => {
+    setPartidaInput({
+      ...partidaInput,
+      [event.target.name]: event.target.value,
+    });
   };
 
   const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    if (partidaID && jugadorNombre) {
-      const url = `http://127.0.0.1:8000/matches/${partidaID}/join`;
-
-      axios
-        .post(url, endpoint_params_union)
-        .then(function (response) {
-          console.log(response.data);
-          setJugadorID(response.data.player_id);
-          setPartidaNombre(response.data.match_name);
-          alert(
-            `Te uniste a la partida con Nombre: ${response.data.match_name}, tu ID de Jugador es: ${response.data.player_id}`
-          );
-          setOpen(true);
-        })
-        .catch(function (response) {
-          if (response.response.status === 400) {
-            alert(response.response.data.detail);
-          } else {
-            alert(`error: ${response.message}`);
-          }
-        });
-    } else {
-      alert("Es necesario que ingrese nombre de partida y jugador");
+    if (partidaInput.player_name === "" || partidaInput.match_id === "") {
+      alert("Todos los campos son necesarios!");
       return;
     }
+
+    const url = `http://127.0.0.1:8000/matches/${partidaInput.match_id}/join`;
+
+    axios
+      .post(url, partidaInput)
+      .then(function (response) {
+        alert(
+          `Te uniste a la partida con Nombre: ${response.data.match_name}, tu ID de Jugador es: ${response.data.player_id}`
+        );
+
+        const formatoJugador = {
+          id: response.data.player_id,
+          nombre: partidaInput.player_name,
+          partidaId: partidaInput.match_id,
+          partidaNombre: response.data.match_name,
+          unido: true,
+          creador: false,
+        };
+
+        dispatch(unirPartida(formatoJugador));
+      })
+      .catch(function (error) {
+        alert(`error: ${error}`);
+      });
   };
 
   return (
     <Container className="unir_jugador">
       <h2>Unirse a Partida</h2>
       <TextField
-        className="nombrepartida"
         label="ID de partida"
-        name="ID_partida"
-        value={partidaID}
+        name="match_id"
+        value={partidaInput.match_id}
         required
         fullWidth
-        variant="outlined"
         type="Number"
-        onChange={(e) => setPartidaID(e.target.value)}
+        onChange={(event) => handleChange(event)}
       />
       <TextField
         label="Nombre de jugador"
-        name="nombre_jugador"
-        value={jugadorNombre}
+        name="player_name"
+        value={partidaInput.player_name}
         required
         fullWidth
         type="Text"
-        onChange={(e) => setJugadorNombre(e.target.value)}
+        onChange={(event) => handleChange(event)}
       />
       <Button variant="contained" onClick={handleSubmit} className="boton_unir">
         Unirse a Partida
       </Button>
-      {open && (
-        <Lobby
-          partidaID={partidaID}
-          partidaNombre={partidaNombre}
-          jugadorID={jugadorID}
-          creador={false}
-          open={open}
-          setOpen={setOpen}
-        />
-      )}
     </Container>
   );
 }

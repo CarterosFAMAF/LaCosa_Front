@@ -1,48 +1,22 @@
-import React, { useState } from "react";
-import useWebSocket from "react-use-websocket";
-import { useNavigate } from "react-router-dom";
-import { Container, Button, Typography, Modal, Box } from "@mui/material";
 import "./lobby.css";
+import React from "react";
+import { Container, Button, Typography, Modal, Box } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router";
+import { salirPartida } from "../../../store/jugadorSlice";
 
-function Lobby({
-  partidaID,
-  partidaNombre,
-  partidaMin,
-  jugadorID,
-  creador,
-  open,
-  setOpen,
-}) {
-  const [jugadores, setJugadores] = useState([]);
-  const [connected, setConnected] = useState(true);
-
-  const socketUrl = `ws://localhost:8000/ws/matches/${partidaID}/${jugadorID}`;
-  const urlIniciar = `http://127.0.0.1:8000/partidas/${partidaID}/iniciar`;
-
+function Lobby() {
+  const jugador = useSelector((state) => state.jugador);
+  const lobbyData = useSelector((state) => state.lobby);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const endpoint_params_iniciar = {
-    match_id: partidaID,
-    player_id: jugadorID,
-  };
+  const urlIniciar = `http://127.0.0.1:8000/partidas/${jugador.partidaId}/iniciar`;
 
-  useWebSocket(
-    socketUrl,
-    {
-      onOpen: () => {
-        console.log("Connected");
-      },
-      onMessage: () => {
-        const parsedData = JSON.parse(JSON.parse(event.data));
-        setJugadores(parsedData.players);
-      },
-      onClose: () => {
-        setOpen(false);
-        console.log("Closed");
-      },
-    },
-    connected
-  );
+  const endpoint_params_iniciar = {
+    match_id: jugador.partidaId,
+    player_id: jugador.id,
+  };
 
   const handleSubmit = async (event) => {
     /*
@@ -63,31 +37,38 @@ function Lobby({
 
   const output = [];
 
-  jugadores.forEach((jugador) => {
+  lobbyData.jugadores.forEach((jugadorElem) => {
     output.push(
-      <li key={jugador.id} className="listajugadores">
-        <Typography> {jugador.name} </Typography>
+      <li key={jugadorElem.id} className="listajugadores">
+        <Typography> {jugadorElem.name} </Typography>
       </li>
     );
   });
+
   return (
     <Modal
-      open={open}
-      onClose={() => setOpen(true)}
+      open={true}
+      backdrop="static"
+      keyboard="false"
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
       <Box className="modal">
         <Container>
-          <Typography className="tituloLobby">{partidaNombre}</Typography>
+          <Typography className="tituloLobby">
+            {jugador.partidaNombre}
+          </Typography>
           <hr />
-          <Typography> Jugadores ({jugadores.length}): </Typography>
+          <Typography> Jugadores ({lobbyData.jugadores.length}): </Typography>
           {output}
           <br />
           <Button
             variant="contained"
             onClick={handleSubmit}
-            disabled={!creador || jugadores.length < partidaMin}
+            disabled={
+              !jugador.creador ||
+              lobbyData.jugadores.length < lobbyData.minJugadores
+            }
             className="boton_iniciar"
           >
             Iniciar Partida
@@ -95,7 +76,7 @@ function Lobby({
           <br />
           <Button
             variant="contained"
-            onClick={() => setConnected(false)}
+            onClick={() => dispatch(salirPartida())}
             className="boton_abandonar"
           >
             Abandonar Partida

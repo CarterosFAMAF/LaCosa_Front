@@ -1,7 +1,6 @@
-// Componentes
-import Mano from "./mano/Mano";
-
 import { useState } from "react";
+
+import Mano from "./mano/Mano";
 import RobarCarta from "./robar/RobarCarta";
 import JugarCarta from "./jugar/JugarCarta";
 
@@ -12,6 +11,7 @@ import Dorso2 from "/Dorso.png?url";
 import Dorso3 from "/Dorso.png?url";
 
 import { useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 
 const cartas_import = [
   { id: 0, imagen: Lanzallamas },
@@ -26,11 +26,13 @@ const jugador_id_import = 1;
 const turno_partida_import = 1;
 
 function Jugador() {
+  const jugador = useSelector((state) => state.jugador);
+  console.log(jugador);
   /* Obtener Websocket
   const {state} = useLocation();
   console.log(state)
   */
-  
+
   const [jugadorID, setJugadorID] = useState(jugador_id_import);
   const [nombre, setNombre] = useState(nombre_import);
   const [turno, setTurno] = useState(turno_jugador_import);
