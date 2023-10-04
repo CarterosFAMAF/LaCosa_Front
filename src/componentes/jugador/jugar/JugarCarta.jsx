@@ -1,44 +1,30 @@
 import "./JugarCarta.css";
-import Lanzallamas from "../lanzallamas/Lanzallamas";
-import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { tirarCarta } from "../../../store/jugadorSlice";
 
-function JugarCarta({ mi_id, mi_turno, id_carta, setTurno, setCartas }) {
-  const [jugoCarta, setJugoCarta] = useState(false);
+function JugarCarta() {
+  const jugador = useSelector((state) => state.jugador);
+  const dispatch = useDispatch();
 
-  const jugar_carta = (id_carta) => {
-    console.log(`Hacer petición al back de jugar la carta ${id_carta}`);
-    setJugoCarta(true);
+  const jugar_carta = () => {
+    console.log(`Hacer petición al back de jugar la carta ${jugador.seleccion}`);
+    dispatch(tirarCarta(jugador.seleccion))
   };
 
-  const descartar_carta = (id_carta) => {
-    console.log(`Hacer petición al back de descartar la carta ${id_carta}`);
-    setCartas((oldArray) => oldArray.filter((item) => item.id !== id_carta));
-    setTurno((turnoViejo) => turnoViejo + 1);
+  const descartar_carta = () => {
+    console.log(`Hacer petición al back de descartar la carta ${jugador.seleccion}`);
+    dispatch(tirarCarta(jugador.seleccion))
   };
 
   return (
     <div className="botones_juego">
-      {!jugoCarta ? (
-        <div>
-          <button
-            className="descartar"
-            onClick={() => descartar_carta(id_carta)}
-          >
-            Descartar
-          </button>
-          <button className="jugar" onClick={() => jugar_carta(id_carta)}>
-            Jugar
-          </button>
-        </div>
-      ) : (
-        <Lanzallamas
-          mi_id={mi_id}
-          mi_turno={mi_turno}
-          carta_id={id_carta}
-          setTurno={setTurno}
-          setCartas={setCartas}
-        />
-      )}
+      <button
+        className="descartar" onClick={() => descartar_carta()}>
+        Descartar
+      </button>
+      <button className="jugar" onClick={() => jugar_carta()}>
+        Jugar
+      </button>
     </div>
   );
 }

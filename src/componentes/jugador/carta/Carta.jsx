@@ -1,14 +1,20 @@
 import "./Carta.css";
+import { useSelector, useDispatch } from "react-redux";
+import { seleccionar } from "../../../store/jugadorSlice";
 
-function Carta({ id, imagen, brillo, setSeleccion }) {
+function Carta({ id, imagen }) {
+  const jugador = useSelector((state) => state.jugador);
+  const dispatch = useDispatch();
+
   const brillo_style =
-    brillo === 1 ? { border: `6px solid rgba(0, 60, 0, 0.6)` } : {};
+    (id === jugador.seleccion) ? { border: `6px solid rgba(0, 60, 0, 0.6)` } : {};
+
   return (
     <img
       className="carta"
       style={brillo_style}
       src={imagen}
-      onClick={() => setSeleccion(id)}
+      onClick={() => dispatch(seleccionar(id))}
     />
   );
 }

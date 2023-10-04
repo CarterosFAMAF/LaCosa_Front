@@ -1,18 +1,22 @@
 import "./RobarCarta.css";
+import { useDispatch } from "react-redux";
+import { robarCarta } from "../../../store/jugadorSlice";
 
 //Petición al Back simulada.
 import Lanzallamas2 from "/Lanzallamas.png?url";
-const carta_nueva = { id: 4, imagen: Lanzallamas2 };
+const carta_nueva = { id: 5, imagen: Lanzallamas2 };
+// Back
 
-function RobarCarta({ setFaseRobo, setCartas }) {
-  const carta_robo = () => {
+function RobarCarta() {
+  const dispatch = useDispatch();
+
+  const robar_carta = () => {
     console.log(`Hacer petición al back de robar carta`);
-    setCartas((oldArray) => [...oldArray, carta_nueva]);
-    setFaseRobo(false);
+    dispatch(robarCarta(carta_nueva));
   };
 
   return (
-    <button className="robar_carta" onClick={() => carta_robo()}>
+    <button className="robar_carta" onClick={() => robar_carta()}>
       Robar
     </button>
   );

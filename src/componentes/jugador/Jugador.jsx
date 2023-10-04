@@ -1,68 +1,54 @@
-import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { inicioPartida } from "../../store/jugadorSlice";
 
+// Petición al Back simulado
 import Mano from "./mano/Mano";
 import RobarCarta from "./robar/RobarCarta";
 import JugarCarta from "./jugar/JugarCarta";
-
-// Petición al Back simulado
 import Lanzallamas from "/Lanzallamas.png?url";
+
 import Dorso1 from "/Dorso.png?url";
 import Dorso2 from "/Dorso.png?url";
 import Dorso3 from "/Dorso.png?url";
-
-import { useLocation } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 const cartas_import = [
-  { id: 0, imagen: Lanzallamas },
-  { id: 1, imagen: Dorso1 },
-  { id: 2, imagen: Dorso2 },
-  { id: 3, imagen: Dorso3 },
+  { id: 1, imagen: Lanzallamas },
+  { id: 2, imagen: Dorso1 },
+  { id: 3, imagen: Dorso2 },
+  { id: 4, imagen: Dorso3 },
 ];
 
-const nombre_import = "MiNombre";
-const turno_jugador_import = 1;
-const jugador_id_import = 1;
-const turno_partida_import = 1;
+const formato_inicio_partida = {
+  turno: 1,
+  cartas: cartas_import,
+  turnoPartida: 1,
+}
+// Back
+
+
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
-  console.log(jugador);
-  /* Obtener Websocket
-  const {state} = useLocation();
-  console.log(state)
-  */
+  const dispatch = useDispatch();
 
-  const [jugadorID, setJugadorID] = useState(jugador_id_import);
-  const [nombre, setNombre] = useState(nombre_import);
-  const [turno, setTurno] = useState(turno_jugador_import);
-  const [cartas, setCartas] = useState(cartas_import);
-
-  const [seleccion, setSeleccion] = useState();
-
-  const [faseRobo, setFaseRobo] = useState(true);
+  useEffect(() => {
+    dispatch(inicioPartida(formato_inicio_partida));
+  }, [])
+  
+  console.log(jugador.cartas);
 
   return (
     <div>
-      {turno === turno_partida_import ? (
+      {(jugador.turnoPartida && (jugador.turno === jugador.turnoPartida)) ? (
         <div>
-          <Mano
-            cartas={cartas}
-            seleccion={seleccion}
-            setSeleccion={setSeleccion}
-          />
-          {faseRobo ? (
-            <RobarCarta setFaseRobo={setFaseRobo} setCartas={setCartas} />
+          <Mano />
+          {(jugador.fase === 0) ? (
+            <RobarCarta />
           ) : (
             <div>
-              {seleccion != null ? (
-                <JugarCarta
-                  mi_id={jugadorID}
-                  mi_turno={turno}
-                  id_carta={seleccion}
-                  setTurno={setTurno}
-                  setCartas={setCartas}
-                />
+              {jugador.seleccion !== 0 ? (
+                <JugarCarta />
               ) : null}
             </div>
           )}
