@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { inicioPartida } from "../../store/jugadorSlice";
+import { pedirReparto } from "../../store/jugadorSlice";
 
 // Petición al Back simulado
 import Mano from "./mano/Mano";
@@ -26,14 +26,15 @@ const formato_inicio_partida = {
 }
 // Back
 
-
-
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
   const dispatch = useDispatch();
 
+  // Los turnos (Jugador y Partida) se modificarán desde el Websocket.
   useEffect(() => {
-    dispatch(inicioPartida(formato_inicio_partida));
+    // Aquí mantener el Pedir Mano por primera vez.
+    console.log(`Hacer pedido de la mano del jugador con ID: ${jugador.id}`)
+    dispatch(pedirReparto(formato_inicio_partida));
   }, [])
   
   console.log(jugador.cartas);

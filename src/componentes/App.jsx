@@ -19,7 +19,21 @@ function App() {
       },
       onMessage: (event) => {
         const parsedData = JSON.parse(JSON.parse(event.data));
+        
+        // Si El Doc viene Iniciado = false:
         dispatch(setJugadores(parsedData.players));
+
+        /*
+        Si El Doc Viene Iniciado = True y jugador.iniciado = false:
+          dispatch(iniciarPartida());
+          navigate("/jugador");
+        
+        Si El Doc Viene Iniciado = True y jugador.iniciado = true:
+          dispatch(setEstadoPartida());
+
+        Si el Doc viene Iniciado = False y jugador.iniciado = true:
+          dispatch(salirPartida());
+        */
       },
       onClose: () => {
         console.log("Closed");
