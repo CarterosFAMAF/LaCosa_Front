@@ -12,10 +12,12 @@ import {
 import { useDispatch } from "react-redux";
 import { unirPartida } from "../../../store/jugadorSlice";
 import { lobbyDef } from "../../../store/lobbySlice";
+import { useSnackbar } from "notistack";
 
 function CrearPartida() {
   const url = "http://127.0.0.1:8000/matches";
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [partidaInput, setPartidaInput] = useState({
     player_name: "",
@@ -33,17 +35,22 @@ function CrearPartida() {
 
   const handleSubmit = (event) => {
     if (partidaInput.player_name === "" || partidaInput.nombre_partida === "") {
-      alert("Todos los campos son necesarios!");
+      enqueueSnackbar("Todos los campos son necesarios!", {
+        variant: "error",
+      });
       return;
     }
 
     axios
       .post(url, partidaInput)
       .then(function (response) {
-        alert(
+        enqueueSnackbar(
           `Se creo la partida con exito. Su ID de usuario es: ${response.data.owner_id}. 
           Su ID de partida: ${response.data.match_id}`
-        );
+        ,{ 
+          variant: "success",
+          
+        });
 
         const formatoJugador = {
           id: response.data.owner_id,

@@ -4,9 +4,11 @@ import axios from "axios";
 import { Container, TextField, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { unirPartida } from "../../../store/jugadorSlice";
+import { useSnackbar } from "notistack";
 
 function UnirJugador() {
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const [partidaInput, setPartidaInput] = useState({
     player_name: "",
@@ -22,7 +24,9 @@ function UnirJugador() {
 
   const handleSubmit = async (event) => {
     if (partidaInput.player_name === "" || partidaInput.match_id === "") {
-      alert("Todos los campos son necesarios!");
+      enqueueSnackbar("Todos los campos son necesarios!", {
+        variant: "error"
+      });
       return;
     }
 
@@ -31,9 +35,11 @@ function UnirJugador() {
     axios
       .post(url, partidaInput)
       .then(function (response) {
-        alert(
+        enqueueSnackbar(
           `Te uniste a la partida con Nombre: ${response.data.match_name}, tu ID de Jugador es: ${response.data.player_id}`
-        );
+        , {
+          variant: "success"
+        });
 
         const formatoJugador = {
           id: response.data.player_id,
