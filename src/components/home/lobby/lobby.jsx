@@ -26,13 +26,13 @@ function Lobby() {
       .put(urlIniciar, endpoint_params_iniciar)
       .then(function (response) {
         console.log(response);
-        navigate("/jugador", { state: websocketref });
+        navigate("/partida", { state: websocketref });
       })
       .catch(function (response) {
         alert(`error: ${response.message}`);
       });
     */
-    navigate("/jugador");
+    navigate("/partida");
   };
 
   const output = [];

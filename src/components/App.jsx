@@ -26,7 +26,7 @@ function App() {
         /*
         Si El Doc Viene Iniciado = True y jugador.iniciado = false:
           dispatch(iniciarPartida());
-          navigate("/jugador");
+          navigate("/partida");
         
         Si El Doc Viene Iniciado = True y jugador.iniciado = true:
           dispatch(setEstadoPartida());
@@ -46,7 +46,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" Component={Home} />
-        <Route path="/jugador" Component={Jugador} />
+        <Route path="/partida" Component={Jugador} />
       </Routes>
     </BrowserRouter>
   );
