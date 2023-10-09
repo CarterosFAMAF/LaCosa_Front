@@ -26,6 +26,8 @@ function CrearPartida() {
     min_players: 4,
   });
 
+  const [hasPressedButton, setHasPressedButton] = useState(false);
+
   const handleChange = (event) => {
     setPartidaInput({
       ...partidaInput,
@@ -34,10 +36,11 @@ function CrearPartida() {
   };
 
   const handleSubmit = (event) => {
-    if (partidaInput.player_name === "" || partidaInput.nombre_partida === "") {
+    if (partidaInput.player_name === "" || partidaInput.match_name === "") {
       enqueueSnackbar("Todos los campos son necesarios!", {
         variant: "error",
       });
+      setHasPressedButton(true)
       return;
     }
 
@@ -84,6 +87,8 @@ function CrearPartida() {
         required
         fullWidth
         type="Text"
+        error={partidaInput.match_name == "" && hasPressedButton}
+        helperText={(partidaInput.match_name == "" && hasPressedButton)? "El campo es Requerido" : ""}
         onChange={handleChange}
       />
       <TextField
@@ -93,6 +98,8 @@ function CrearPartida() {
         required
         fullWidth
         type="Text"
+        error={partidaInput.player_name == "" && hasPressedButton}
+        helperText={(partidaInput.player_name == "" && hasPressedButton) ? "El campo es Requerido" : ""}
         onChange={handleChange}
       />
       <Typography> Minimo de jugadores </Typography>
