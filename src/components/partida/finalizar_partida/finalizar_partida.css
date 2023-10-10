@@ -1,0 +1,28 @@
+.miboton {
+    position: relative;
+    color: rgb(255, 255, 255);
+    background-image: linear-gradient(
+      to right,
+      rgb(28, 110, 164) 0%,
+      rgb(35, 136, 203) 50%,
+      rgb(20, 78, 117) 100%
+    );
+  }
+
+.modalFinalizar {
+  position: relative;
+  text-align: center;
+  border-radius: 10px;
+  top: 25%;
+  left: 25%;
+  height: 35%;
+  width: 50%;
+  color: rgb(255, 255, 255);
+  background-image: linear-gradient(
+    to right,
+    rgb(77, 22, 179) 0%,
+    rgb(94, 41, 192) 50%,
+    rgb(115, 60, 216) 100%
+  );
+  box-shadow: rgb(0, 0, 0) 5px 5px 15px 5px;
+}

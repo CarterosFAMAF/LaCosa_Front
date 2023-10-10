@@ -6,6 +6,7 @@ import Mano from "./mano/Mano";
 import RobarCarta from "./robar/RobarCarta";
 import JugarCarta from "./jugar/JugarCarta";
 import Lanzallamas from "/Lanzallamas.png?url";
+import FinalizarPartida from "./finalizar_partida/finalizar_partida";
 
 import Dorso1 from "/Dorso.png?url";
 import Dorso2 from "/Dorso.png?url";
@@ -38,23 +39,28 @@ function Jugador() {
   }, [])
   
   console.log(jugador.cartas);
-
+  console.log(jugador);
   return (
     <div>
-      {(jugador.turnoPartida && (jugador.turno === jugador.turnoPartida)) ? (
+      <Mano />
+      {(jugador.iniciada === true) ? (
         <div>
-          <Mano />
-          {(jugador.fase === 0) ? (
-            <RobarCarta />
-          ) : (
+          {(jugador.turnoPartida && (jugador.turno === jugador.turnoPartida)) ? (
             <div>
-              {jugador.seleccion !== 0 ? (
-                <JugarCarta />
-              ) : null}
+              {(jugador.fase === 0) ? (
+                <RobarCarta />
+              ) : (
+                <div>
+                  {jugador.seleccion !== 0 ? (
+                    <JugarCarta />
+                  ) : null}
+                </div>
+              )}
             </div>
-          )}
+          ) : null}
         </div>
-      ) : null}
+      ) : 
+      <FinalizarPartida /> }
     </div>
   );
 }

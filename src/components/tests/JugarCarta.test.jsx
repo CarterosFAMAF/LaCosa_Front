@@ -2,7 +2,7 @@ import TestRenderer from "react-test-renderer";
 import { Provider } from "react-redux";
 import store from "../../store/store"
 import { describe, expect, test } from "vitest";
-import JugarCarta from "../jugador/jugar/JugarCarta";
+import JugarCarta from "../partida/jugar/JugarCarta";
 
 describe("JugarCarta Test", () => {
   test("Renderiza JugarCarta", () => {

@@ -3,15 +3,16 @@ import { Provider } from "react-redux";
 import store from "../../store/store"
 import { describe, expect, test } from "vitest";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Jugador from "../partida/Jugador";
+import Lobby from "../home/lobby/lobby";
 
-describe("Jugador Test", () => {
-  test("Renderiza Jugador", () => {
+// Ruta incorrecta. REVISAR!
+describe("Lobby Test", () => {
+  test("Renderiza Lobby", () => {
     const elem = TestRenderer.create(
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path="/partida" Component={Jugador} />
+          <Route path="/partida" Component={Lobby} />
         </Routes>
       </BrowserRouter>
     </Provider>).toJSON();

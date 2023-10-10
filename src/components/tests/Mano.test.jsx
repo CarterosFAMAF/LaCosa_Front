@@ -2,7 +2,7 @@ import TestRenderer from "react-test-renderer";
 import { Provider } from "react-redux";
 import store from "../../store/store"
 import { describe, expect, test } from "vitest";
-import Mano from "../jugador/mano/Mano";
+import Mano from "../partida/mano/Mano";
 
 import Lanzallamas from "/Lanzallamas.png?url";
 

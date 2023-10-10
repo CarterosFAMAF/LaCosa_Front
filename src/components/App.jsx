@@ -4,11 +4,14 @@ import { useSelector, useDispatch } from "react-redux";
 import useWebSocket from "react-use-websocket";
 import { setJugadores } from "../store/lobbySlice";
 import Home from "./home/Home";
-import Jugador from "./jugador/Jugador";
+import Jugador from "./partida/Jugador";
+import { salirPartida, iniciarPartida } from "../store/jugadorSlice";
+import { useSnackbar } from "notistack";
 
 function App() {
   const jugador = useSelector((state) => state.jugador);
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const socketUrl = `ws://localhost:8000/ws/matches/${jugador.partidaId}/${jugador.id}`;
 
   useWebSocket(
@@ -19,24 +22,27 @@ function App() {
       },
       onMessage: (event) => {
         const parsedData = JSON.parse(JSON.parse(event.data));
-        
-        // Si El Doc viene Iniciado = false:
-        dispatch(setJugadores(parsedData.players));
 
-        /*
-        Si El Doc Viene Iniciado = True y jugador.iniciado = false:
-          dispatch(iniciarPartida());
-          navigate("/partida");
-        
-        Si El Doc Viene Iniciado = True y jugador.iniciado = true:
-          dispatch(setEstadoPartida());
-
-        Si el Doc viene Iniciado = False y jugador.iniciado = true:
-          dispatch(salirPartida());
-        */
+        if(parsedData.started === true) {
+          if(jugador.iniciada === true) {
+            // dispatch(setEstadoPartida());
+          } else {
+            dispatch(iniciarPartida());
+            navigate("/partida");
+          }
+        } else {
+          if(jugador.iniciada === false) {
+            dispatch(setJugadores(parsedData.players));
+          } else {
+            dispatch(salirPartida());
+          }
+        }
       },
       onClose: () => {
-        console.log("Closed");
+        enqueueSnackbar("Has abandonado la partida!", {
+          variant: "error",
+        });
+        dispatch(salirPartida());
       },
     },
     jugador.unido
