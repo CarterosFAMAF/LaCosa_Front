@@ -13,24 +13,20 @@ function Jugador() {
   return (
     <div>
       <Mano />
-      {(jugador.iniciada === true) ? (
+      {(jugador.turno === jugador.turnoPartida) ? (
         <div>
-          {(jugador.turnoPartida && (jugador.turno === jugador.turnoPartida)) ? (
+          {(jugador.fase === 0) ? (
+            <RobarCarta />
+          ) : (
             <div>
-              {(jugador.fase === 0) ? (
-                <RobarCarta />
-              ) : (
-                <div>
-                  {jugador.seleccion !== 0 ? (
-                    <JugarCarta />
-                  ) : null}
-                </div>
-              )}
+              {jugador.seleccion !== -1 ? (
+                <JugarCarta />
+              ) : null}
             </div>
-          ) : null}
+          )}
         </div>
-      ) :
-        <FinalizarPartida />}
+      ) : null}
+      {!jugador.iniciada && jugador.turnoPartida && <FinalizarPartida />}
     </div>
   );
 }

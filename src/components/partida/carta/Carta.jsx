@@ -13,7 +13,8 @@ function Carta({ id, imagen }) {
     <img
       className="carta"
       style={brillo_style}
-      src={imagen}
+      src={`data:image/png;base64,${imagen}`}
+      alt=""
       onClick={() => dispatch(seleccionar(id))}
     />
   );

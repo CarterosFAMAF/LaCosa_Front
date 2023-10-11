@@ -5,16 +5,16 @@ export const jugadorSlice = createSlice({
   initialState: {
     id: "",
     nombre: "",
-    partidaId: "",
+    partidaId: -1,
     partidaNombre: "",
     unido: false,
     creador: false,
     iniciada: false,
-    turno: 0,
+    turno: -1,
     fase: 0,
     cartas: [],
     turnoPartida: 0,
-    seleccion: 0,
+    seleccion: -1,
   },
   reducers: {
     unirPartida: (state, action) => {
@@ -28,22 +28,22 @@ export const jugadorSlice = createSlice({
     salirPartida: (state) => {
       state.id = "";
       state.nombre = "";
-      state.partidaId = "";
+      state.partidaId = -1;
       state.partidaNombre = "";
       state.unido = false;
       state.creador = false;
       state.iniciada = false;
-      state.turno = 0;
+      state.turno = -1;
       state.fase = 0;
       state.cartas = [];
       state.turnoPartida = 0;
-      state.seleccion = 0;
+      state.seleccion = -1;
     },
     iniciarPartida: (state) => {
       state.iniciada = true;
     },
     pedirMano: (state, action) => {
-      state.cartas = action.payload.cartas;
+      state.cartas = action.payload;
     },
     setTurno: (state, action) => {
       state.turnoPartida = action.payload.turnoPartida;
@@ -58,6 +58,7 @@ export const jugadorSlice = createSlice({
     },
     tirarCarta: (state, action) => {
       state.cartas = state.cartas.filter(item => item.id !== action.payload)
+      state.seleccion = -1;
       state.fase = 0; // Cuando termina turno: fase = 0.
     },
   },

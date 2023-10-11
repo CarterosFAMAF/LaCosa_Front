@@ -30,11 +30,7 @@ function App() {
         if (parsedData.started === true) {
           const formatoTurno = {
             turnoPartida: parsedData.turn_game,
-            turno: parsedData.players.find(player => {
-              if (player.id === jugador.id) {
-                return player.turn
-              }
-            })
+            turno: parsedData.players.filter(player => (player.id === jugador.id))[0].turn
           };
           if (jugador.iniciada === true) { //Avanza Turno.
             dispatch(setTurno(formatoTurno));
@@ -43,16 +39,11 @@ function App() {
               .get(urlPedirMano)
               .then(function (response) {
                 //Pedir Mano
-                console.log("Pedir Mano Response:")
-                console.log(response);
-                dispatch(pedirMano(response.hand));
-
+                dispatch(pedirMano(response.data));
                 //Establecer Turno
                 dispatch(setTurno(formatoTurno));
-
                 //Iniciar
                 dispatch(iniciarPartida());
-                navigate("/partida");
               })
               .catch(function (response) {
                 alert(`error: ${response.message}`);

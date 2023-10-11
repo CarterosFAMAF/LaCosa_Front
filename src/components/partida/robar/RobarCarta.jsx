@@ -1,18 +1,24 @@
 import "./RobarCarta.css";
-import { useDispatch } from "react-redux";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import { robarCarta } from "../../../store/jugadorSlice";
 
-//Petición al Back simulada.
-import Lanzallamas2 from "/Lanzallamas.png?url";
-const carta_nueva = { id: 5, imagen: Lanzallamas2 };
-// Back
 
 function RobarCarta() {
+  const jugador = useSelector((state) => state.jugador);
   const dispatch = useDispatch();
+  const urlRobarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/get_card`;
 
   const robar_carta = () => {
-    console.log(`Hacer petición al back de robar carta`);
-    dispatch(robarCarta(carta_nueva));
+    axios
+      .get(urlRobarCarta)
+      .then(function (response) {
+        console.log(response)
+        dispatch(robarCarta(response.data));
+      })
+      .catch(function (response) {
+        alert(`error: ${response.message}`);
+      });
   };
 
   return (

@@ -11,7 +11,7 @@ function Mano() {
       <li key={carta.id}>
         <Carta
           id={carta.id}
-          imagen={carta.imagen}
+          imagen={carta.image}
         ></Carta>
       </li>
     );
