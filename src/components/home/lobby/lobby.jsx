@@ -8,7 +8,6 @@ import { salirPartida } from "../../../store/jugadorSlice";
 
 function Lobby() {
   const jugador = useSelector((state) => state.jugador);
-  const lobbyData = useSelector((state) => state.lobby);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -34,7 +33,7 @@ function Lobby() {
 
   const output = [];
 
-  lobbyData.jugadores.forEach((jugadorElem) => {
+  jugador.jugadores.forEach((jugadorElem) => {
     output.push(
       <li key={jugadorElem.id} className="listajugadores">
         <Typography> {jugadorElem.name} </Typography>
@@ -56,7 +55,7 @@ function Lobby() {
             {jugador.partidaNombre}
           </Typography>
           <hr />
-          <Typography> Jugadores ({lobbyData.jugadores.length}): </Typography>
+          <Typography> Jugadores ({jugador.jugadores.length}): </Typography>
           {output}
           <br />
           <Button
@@ -64,7 +63,7 @@ function Lobby() {
             onClick={handleSubmit}
             disabled={
               !jugador.creador ||
-              lobbyData.jugadores.length < lobbyData.minJugadores
+              jugador.jugadores.length < jugador.minJugadores
             }
             className="boton_iniciar"
           >

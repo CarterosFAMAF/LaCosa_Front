@@ -1,5 +1,4 @@
 import { useSelector } from "react-redux";
-
 import Mano from "./mano/Mano";
 import RobarCarta from "./robar/RobarCarta";
 import JugarCarta from "./jugar/JugarCarta";
@@ -12,14 +11,14 @@ function Jugador() {
 
   return (
     <div>
-      <Mano />
+      {jugador.fase !== 2 && <Mano />}
       {(jugador.turno === jugador.turnoPartida) ? (
         <div>
           {(jugador.fase === 0) ? (
             <RobarCarta />
           ) : (
             <div>
-              {jugador.seleccion !== -1 ? (
+              {jugador.seleccion !== -1 || jugador.fase === 2 ? (
                 <JugarCarta />
               ) : null}
             </div>

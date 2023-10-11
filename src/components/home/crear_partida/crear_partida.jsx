@@ -10,8 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { unirPartida } from "../../../store/jugadorSlice";
-import { lobbyDef } from "../../../store/lobbySlice";
+import { unirPartida, partidaDef } from "../../../store/jugadorSlice";
 import { useSnackbar } from "notistack";
 
 function CrearPartida() {
@@ -68,9 +67,9 @@ function CrearPartida() {
           maxJugadores: partidaInput.max_players,
           minJugadores: partidaInput.min_players,
         };
-
+        
+        dispatch(partidaDef(formatoLobby));
         dispatch(unirPartida(formatoJugador));
-        dispatch(lobbyDef(formatoLobby));
       })
       .catch(function (response) {
         alert(`error: ${response.message}`);

@@ -6,8 +6,7 @@ import { useSnackbar } from "notistack";
 import useWebSocket from "react-use-websocket";
 import Home from "./home/Home";
 import Jugador from "./partida/Jugador";
-import { salirPartida, iniciarPartida, setTurno, pedirMano } from "../store/jugadorSlice";
-import { setJugadores } from "../store/lobbySlice";
+import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores } from "../store/jugadorSlice";
 
 function App() {
   const jugador = useSelector((state) => state.jugador);
@@ -24,6 +23,8 @@ function App() {
       },
       onMessage: (event) => {
         const parsedData = JSON.parse(JSON.parse(event.data));
+        dispatch(setJugadores(parsedData.players));
+
         console.log("Partida Ws:"); //Borrar
         console.log(parsedData);
 
@@ -50,9 +51,7 @@ function App() {
               });
           }
         } else {
-          if (jugador.iniciada === false) { //Lobby
-            dispatch(setJugadores(parsedData.players));
-          } else { //Termina la Partida
+          if (jugador.iniciada === true) {//Termina la Partida
             dispatch(salirPartida());
           }
         }

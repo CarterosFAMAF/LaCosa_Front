@@ -40,9 +40,9 @@ function UnirJugador() {
       .then(function (response) {
         enqueueSnackbar(
           `Te uniste a la partida con Nombre: ${response.data.match_name}, tu ID de Jugador es: ${response.data.player_id}`
-        , {
-          variant: "success"
-        });
+          , {
+            variant: "success"
+          });
 
         const formatoJugador = {
           id: response.data.player_id,
@@ -71,9 +71,9 @@ function UnirJugador() {
         fullWidth
         type="Number"
         error={partidaInput.match_id == 0 && hasPressedButton}
-        helperText={(partidaInput.match_id == 0 && hasPressedButton)? "El campo es Requerido" : ""}
+        helperText={(partidaInput.match_id == 0 && hasPressedButton) ? "El campo es Requerido" : ""}
         onChange={(event) => handleChange(event)}
-        inputProps= { { min: 0}}
+        inputProps={{ min: 0 }}
       />
       <TextField
         label="Nombre de jugador"
@@ -83,7 +83,7 @@ function UnirJugador() {
         fullWidth
         type="Text"
         error={partidaInput.player_name == "" && hasPressedButton}
-        helperText={(partidaInput.player_name == ""&& hasPressedButton) ? "El campo es Requerido" : ""}
+        helperText={(partidaInput.player_name == "" && hasPressedButton) ? "El campo es Requerido" : ""}
         onChange={(event) => handleChange(event)}
       />
       <Button variant="contained" onClick={handleSubmit} className="boton_unir">
