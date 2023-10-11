@@ -1,45 +1,14 @@
-import { useSelector, useDispatch } from "react-redux";
-import { pedirReparto } from "../../store/jugadorSlice";
+import { useSelector } from "react-redux";
 
-// Petición al Back simulado
 import Mano from "./mano/Mano";
 import RobarCarta from "./robar/RobarCarta";
 import JugarCarta from "./jugar/JugarCarta";
-import Lanzallamas from "/Lanzallamas.png?url";
 import FinalizarPartida from "./finalizar_partida/finalizar_partida";
-
-import Dorso1 from "/Dorso.png?url";
-import Dorso2 from "/Dorso.png?url";
-import Dorso3 from "/Dorso.png?url";
-import { useEffect } from "react";
-
-const cartas_import = [
-  { id: 1, imagen: Lanzallamas },
-  { id: 2, imagen: Dorso1 },
-  { id: 3, imagen: Dorso2 },
-  { id: 4, imagen: Dorso3 },
-];
-
-const formato_inicio_partida = {
-  turno: 1,
-  cartas: cartas_import,
-  turnoPartida: 1,
-}
-// Back
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
-  const dispatch = useDispatch();
+  console.log(`Renderiza Jugador: ${jugador}`);
 
-  // Los turnos (Jugador y Partida) se modificarán desde el Websocket.
-  useEffect(() => {
-    // Aquí mantener el Pedir Mano por primera vez.
-    console.log(`Hacer pedido de la mano del jugador con ID: ${jugador.id}`)
-    dispatch(pedirReparto(formato_inicio_partida));
-  }, [])
-  
-  console.log(jugador.cartas);
-  console.log(jugador);
   return (
     <div>
       <Mano />
@@ -59,8 +28,8 @@ function Jugador() {
             </div>
           ) : null}
         </div>
-      ) : 
-      <FinalizarPartida /> }
+      ) :
+        <FinalizarPartida />}
     </div>
   );
 }

@@ -42,11 +42,12 @@ export const jugadorSlice = createSlice({
     iniciarPartida: (state) => {
       state.iniciada = true;
     },
-    pedirReparto: (state, action) => {
-      // Probablemente separar estas 3 asignaciones en métodos distintos.
-      state.turno = action.payload.turno;   // setTurno
-      state.cartas = action.payload.cartas; // setCartas
-      state.turnoPartida = action.payload.turnoPartida; // setTurnoPartida
+    pedirMano: (state, action) => {
+      state.cartas = action.payload.cartas;
+    },
+    setTurno: (state, action) => {
+      state.turnoPartida = action.payload.turnoPartida;
+      state.turno = action.payload.turno;
     },
     seleccionar: (state, action) => {
       state.seleccion = action.payload;
@@ -62,7 +63,6 @@ export const jugadorSlice = createSlice({
   },
 });
 
-export const { unirPartida, salirPartida, iniciarPartida, pedirReparto, seleccionar, robarCarta, tirarCarta } =
-  jugadorSlice.actions;
+export const { unirPartida, salirPartida, iniciarPartida, pedirMano, setTurno, seleccionar, robarCarta, tirarCarta } = jugadorSlice.actions;
 
 export default jugadorSlice;

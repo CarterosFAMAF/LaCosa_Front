@@ -1,5 +1,6 @@
 import "./lobby.css";
 import React from "react";
+import axios from "axios";
 import { Container, Button, Typography, Modal, Box } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
@@ -11,28 +12,24 @@ function Lobby() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const urlIniciar = `http://127.0.0.1:8000/partidas/${jugador.partidaId}/iniciar`;
+  const urlIniciar = `http://127.0.0.1:8000/matches/${jugador.partidaId}/start_game`;
 
   const endpoint_params_iniciar = {
-    match_id: jugador.partidaId,
     player_id: jugador.id,
+    match_id: jugador.partidaId,
   };
 
   const handleSubmit = async (event) => {
-    /*
     event.preventDefault();
-    alert("Iniciar Partida");
     axios
       .put(urlIniciar, endpoint_params_iniciar)
       .then(function (response) {
-        console.log(response);
-        navigate("/partida", { state: websocketref });
+        console.log(`respuesta: ${response}`);
+        navigate("/partida");
       })
       .catch(function (response) {
         alert(`error: ${response.message}`);
       });
-    */
-    navigate("/partida");
   };
 
   const output = [];
