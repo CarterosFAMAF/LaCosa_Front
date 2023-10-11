@@ -24,8 +24,8 @@ function Lobby() {
     axios
       .put(urlIniciar, endpoint_params_iniciar)
       .then(function (response) {
-        console.log(`respuesta: ${response}`);
-        navigate("/partida");
+        console.log(response.data.message);
+        navigate("/partida"); // Borrar cuando ande Iniciar Partida.
       })
       .catch(function (response) {
         alert(`error: ${response.message}`);

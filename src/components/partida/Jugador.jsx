@@ -7,7 +7,8 @@ import FinalizarPartida from "./finalizar_partida/finalizar_partida";
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
-  console.log(`Renderiza Jugador: ${jugador}`);
+
+  console.log(jugador); //Borrar
 
   return (
     <div>

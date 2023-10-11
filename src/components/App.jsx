@@ -9,7 +9,6 @@ import Jugador from "./partida/Jugador";
 import { salirPartida, iniciarPartida, setTurno, pedirMano } from "../store/jugadorSlice";
 import { setJugadores } from "../store/lobbySlice";
 
-
 function App() {
   const jugador = useSelector((state) => state.jugador);
   const dispatch = useDispatch();
@@ -25,7 +24,8 @@ function App() {
       },
       onMessage: (event) => {
         const parsedData = JSON.parse(JSON.parse(event.data));
-        console.log(`Partida Ws: ${parsedData}`);
+        console.log("Partida Ws:"); //Borrar
+        console.log(parsedData);
 
         if (parsedData.started === true) {
           const formatoTurno = {
@@ -43,7 +43,8 @@ function App() {
               .get(urlPedirMano)
               .then(function (response) {
                 //Pedir Mano
-                console.log(`Pedir Mano Response: ${response}`);
+                console.log("Pedir Mano Response:")
+                console.log(response);
                 dispatch(pedirMano(response.hand));
 
                 //Establecer Turno
