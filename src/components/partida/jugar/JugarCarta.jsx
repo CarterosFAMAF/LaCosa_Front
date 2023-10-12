@@ -33,7 +33,7 @@ function JugarCarta() {
     const urlJugarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${objetivo_id}/${jugador.seleccion}/play_card`;
     console.log(urlJugarCarta);
     axios
-      .post(urlJugarCarta)
+      .put(urlJugarCarta)
       .then(function (response) {
         console.log(response);
         dispatch(setFase(0));
