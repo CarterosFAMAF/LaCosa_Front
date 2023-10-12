@@ -14,7 +14,7 @@ function Jugador() {
       {
         (jugador.vivo) ? (
           <div>
-            {jugador.fase !== 2 && <Mano />}
+            <Mano />
             {(jugador.turno === jugador.turnoPartida) ? (
               <div>
                 {(jugador.fase === 0) ? (

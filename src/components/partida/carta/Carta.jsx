@@ -15,7 +15,7 @@ function Carta({ id, imagen }) {
       style={brillo_style}
       src={`data:image/png;base64,${imagen}`}
       alt=""
-      onClick={() => dispatch(seleccionar(id))}
+      onClick={() => (jugador.fase === 1) ? dispatch(seleccionar(id)) : null}
     />
   );
 }
