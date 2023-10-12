@@ -17,7 +17,9 @@ function RobarCarta() {
         dispatch(robarCarta(response.data));
       })
       .catch(function (response) {
-        alert(`error: ${response.message}`);
+        enqueueSnackbar(`error: ${response.message}`, {
+          variant: "error",
+        });
       });
   };
 

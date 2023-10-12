@@ -48,11 +48,9 @@ function CrearPartida() {
       .then(function (response) {
         enqueueSnackbar(
           `Se creo la partida con exito. Su ID de usuario es: ${response.data.owner_id}. 
-          Su ID de partida: ${response.data.match_id}`
-        ,{ 
-          variant: "success",
-          
-        });
+          Su ID de partida: ${response.data.match_id}`, {
+            variant: "success",
+          });
 
         const formatoJugador = {
           id: response.data.owner_id,
@@ -67,12 +65,14 @@ function CrearPartida() {
           maxJugadores: partidaInput.max_players,
           minJugadores: partidaInput.min_players,
         };
-        
+
         dispatch(partidaDef(formatoLobby));
         dispatch(unirPartida(formatoJugador));
       })
       .catch(function (response) {
-        alert(`error: ${response.message}`);
+        enqueueSnackbar(`error: ${response.message}`, {
+          variant: "error",
+        });
       });
   };
 
@@ -87,7 +87,7 @@ function CrearPartida() {
         fullWidth
         type="Text"
         error={partidaInput.match_name == "" && hasPressedButton}
-        helperText={(partidaInput.match_name == "" && hasPressedButton)? "El campo es Requerido" : ""}
+        helperText={(partidaInput.match_name == "" && hasPressedButton) ? "El campo es Requerido" : ""}
         onChange={handleChange}
       />
       <TextField

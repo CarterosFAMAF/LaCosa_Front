@@ -48,7 +48,9 @@ function App() {
                 dispatch(iniciarPartida());
               })
               .catch(function (response) {
-                alert(`error: ${response.message}`);
+                enqueueSnackbar(`error: ${response.message}`, {
+                  variant: "error",
+                });
               });
           }
         } else {

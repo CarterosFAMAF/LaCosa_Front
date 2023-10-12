@@ -27,7 +27,9 @@ function Lobby() {
         navigate("/partida"); // Borrar cuando ande Iniciar Partida.
       })
       .catch(function (response) {
-        alert(`error: ${response.message}`);
+        enqueueSnackbar(`error: ${response.message}`, {
+          variant: "error",
+        });
       });
   };
 

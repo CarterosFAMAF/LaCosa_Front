@@ -32,7 +32,9 @@ function JugarCarta() {
         dispatch(limpiarSelector());
       })
       .catch(function (response) {
-        alert(`error: ${response.message}`);
+        enqueueSnackbar(`error: ${response.message}`, {
+          variant: "error",
+        });
       });
   }
 

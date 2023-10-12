@@ -55,8 +55,10 @@ function UnirJugador() {
 
         dispatch(unirPartida(formatoJugador));
       })
-      .catch(function (error) {
-        alert(`error: ${error}`);
+      .catch(function (response) {
+        enqueueSnackbar(`error: ${response.message}`, {
+          variant: "error",
+        });
       });
   };
 
