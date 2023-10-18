@@ -2,28 +2,44 @@ import "./JugarCarta.css";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { tirarCarta, setFase, limpiarSelector } from "../../../store/jugadorSlice";
+import { useSnackbar } from "notistack";
 
 function JugarCarta() {
   const jugador = useSelector((state) => state.jugador);
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
   const jugar_carta = () => {
     dispatch(tirarCarta(jugador.seleccion))
     const card_name = jugador.cartas.filter(carta => (carta.id === jugador.seleccion))[0].name;
-    if (card_name === "lanzallamas", card_name === "Mas_Vale_Que_Corras", card_name === "Sospecha") { //Pedir Objetivo
+    if (card_name === "lanzallamas" || card_name === "Mas_Vale_Que_Corras" || card_name === "Sospecha") { //Pedir Objetivo
       dispatch(setFase(2));
     } else { //Sin Objetivo
-      enviar_carta(-1);
+      enviar_carta(0);
     }
   };
 
   const descartar_carta = () => {
-    dispatch(tirarCarta(jugador.seleccion))
-    dispatch(limpiarSelector());
+    const urlDescartarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${jugador.seleccion}/discard`;
+    
+    axios
+      .put(urlDescartarCarta)
+      .then(function (response) {
+        console.log(response);
+        dispatch(tirarCarta(jugador.seleccion))
+        dispatch(limpiarSelector());
+        dispatch(setFase(0)); // Termina turno
+      })
+      .catch(function (response) {
+        enqueueSnackbar(`error: ${response.message}`, {
+          variant: "error",
+        });
+      });
   };
 
   const enviar_carta = (objetivo_id) => {
     const urlJugarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${objetivo_id}/${jugador.seleccion}/play_card`;
+
     axios
       .put(urlJugarCarta)
       .then(function (response) {
