@@ -5,11 +5,13 @@ import { Container, Button, Typography, Modal, Box } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { salirPartida } from "../../../store/jugadorSlice";
+import { useSnackbar } from "notistack";
 
 function Lobby() {
   const jugador = useSelector((state) => state.jugador);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { enqueueSnackbar } = useSnackbar();
 
   const urlIniciar = `http://127.0.0.1:8000/matches/${jugador.partidaId}/start_game`;
 
