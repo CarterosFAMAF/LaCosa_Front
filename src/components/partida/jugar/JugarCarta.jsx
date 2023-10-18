@@ -9,34 +9,6 @@ function JugarCarta() {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  const jugar_carta = () => {
-    dispatch(tirarCarta(jugador.seleccion))
-    const card_name = jugador.cartas.filter(carta => (carta.id === jugador.seleccion))[0].name;
-    if (card_name === "lanzallamas" || card_name === "Mas_Vale_Que_Corras" || card_name === "Sospecha") { //Pedir Objetivo
-      dispatch(setFase(2));
-    } else { //Sin Objetivo
-      enviar_carta(0);
-    }
-  };
-
-  const descartar_carta = () => {
-    const urlDescartarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${jugador.seleccion}/discard`;
-    
-    axios
-      .put(urlDescartarCarta)
-      .then(function (response) {
-        console.log(response);
-        dispatch(tirarCarta(jugador.seleccion))
-        dispatch(limpiarSelector());
-        dispatch(setFase(0)); // Termina turno
-      })
-      .catch(function (response) {
-        enqueueSnackbar(`error: ${response.message}`, {
-          variant: "error",
-        });
-      });
-  };
-
   const enviar_carta = (objetivo_id) => {
     const urlJugarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${objetivo_id}/${jugador.seleccion}/play_card`;
 
@@ -44,8 +16,9 @@ function JugarCarta() {
       .put(urlJugarCarta)
       .then(function (response) {
         console.log(response);
-        dispatch(setFase(0)); // Termina turno
+        dispatch(tirarCarta(jugador.seleccion));
         dispatch(limpiarSelector());
+        dispatch(setFase(0)); // Termina turno
       })
       .catch(function (response) {
         enqueueSnackbar(`error: ${response.message}`, {
@@ -54,7 +27,35 @@ function JugarCarta() {
       });
   }
 
+  const descartar_carta = () => {
+    const urlDescartarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${jugador.seleccion}/discard`;
+    axios
+      .put(urlDescartarCarta)
+      .then(function (response) {
+        console.log(response);
+        dispatch(tirarCarta(jugador.seleccion));
+        dispatch(limpiarSelector());
+        dispatch(setFase(0)); // Termina turno
+      })
+      .catch(function (response) {
+        enqueueSnackbar(`error: ${response.message}`, {
+          variant: "error",
+        });
+      });
+  };
+
+  const check_carta = () => {
+    const card_name = jugador.cartas.filter(carta => (carta.id === jugador.seleccion))[0].name;
+    if (card_name === "lanzallamas" || card_name === "Mas_Vale_Que_Corras" || card_name === "Sospecha") {
+      //Pedir Objetivo
+      dispatch(setFase(2));
+    } else { //Sin Objetivo
+      enviar_carta(0);
+    }
+  };
+
   const obtener_adyacentes = () => {
+    // CORREGIR
     // No checkea los muertos.
     return jugador.jugadores.filter(player => (
       (player.turn === jugador.turno + 1 % jugador.jugadores.length) ||
@@ -88,7 +89,7 @@ function JugarCarta() {
             className="descartar" onClick={() => descartar_carta()}>
             Descartar
           </button>
-          <button className="jugar" onClick={() => jugar_carta()}>
+          <button className="jugar" onClick={() => check_carta()}>
             Jugar
           </button>
         </div>
