@@ -10,7 +10,7 @@ function JugarCarta() {
   const jugar_carta = () => {
     dispatch(tirarCarta(jugador.seleccion))
     const card_name = jugador.cartas.filter(carta => (carta.id === jugador.seleccion))[0].name;
-    if (card_name === "lanzallamas") { //Pedir Objetivo
+    if (card_name === "lanzallamas", card_name === "Mas_Vale_Que_Corras", card_name === "Sospecha") { //Pedir Objetivo
       dispatch(setFase(2));
     } else { //Sin Objetivo
       enviar_carta(-1);
