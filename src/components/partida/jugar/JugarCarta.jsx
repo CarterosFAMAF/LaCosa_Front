@@ -9,11 +9,9 @@ function JugarCarta() {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  const enviar_carta = (objetivo_id) => {
-    const urlJugarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${objetivo_id}/${jugador.seleccion}/play_card`;
-
+  const enviar_carta = (urlEnviarCarta) => {
     axios
-      .put(urlJugarCarta)
+      .put(urlEnviarCarta)
       .then(function (response) {
         console.log(response);
         dispatch(tirarCarta(jugador.seleccion));
@@ -27,21 +25,14 @@ function JugarCarta() {
       });
   }
 
+  const jugar_carta = (objetivo_id) => {
+    const urlJugarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${objetivo_id}/${jugador.seleccion}/play_card`;
+    enviar_carta(urlJugarCarta);
+  }
+
   const descartar_carta = () => {
     const urlDescartarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${jugador.seleccion}/discard`;
-    axios
-      .put(urlDescartarCarta)
-      .then(function (response) {
-        console.log(response);
-        dispatch(tirarCarta(jugador.seleccion));
-        dispatch(limpiarSelector());
-        dispatch(setFase(0)); // Termina turno
-      })
-      .catch(function (response) {
-        enqueueSnackbar(`error: ${response.message}`, {
-          variant: "error",
-        });
-      });
+    enviar_carta(urlDescartarCarta);
   };
 
   const check_carta = () => {
@@ -50,36 +41,38 @@ function JugarCarta() {
       //Pedir Objetivo
       dispatch(setFase(2));
     } else { //Sin Objetivo
-      enviar_carta(0);
+      jugar_carta(0);
     }
   };
 
   const obtener_adyacentes = () => {
     // CORREGIR
-    // No checkea los muertos.
-    return jugador.jugadores.filter(player => (
+    // No checkea los muertos
+    const jugadoresAdyacentes = jugador.jugadores.filter(player => (
       (player.turn === jugador.turno + 1 % jugador.jugadores.length) ||
       (jugador.turno - 1 === -1 ?
         (player.turn === jugador.jugadores.length - 1)
         : player.turn === jugador.turno - 1
       )
     ))
+    const output = [];
+    jugadoresAdyacentes.forEach((player) => {
+      output.push(
+        <li key={player.id}>
+          <button
+            className="elegir_jugador"
+            onClick={() => jugar_carta(player.id)}
+          >
+            {player.name}
+          </button>
+        </li>
+      );
+    });
+
+    return output;
   }
 
-  const output = [];
-  const jugadoresAdyacentes = obtener_adyacentes();
-  jugadoresAdyacentes.forEach((player) => {
-    output.push(
-      <li key={player.id}>
-        <button
-          className="elegir_jugador"
-          onClick={() => enviar_carta(player.id)}
-        >
-          {player.name}
-        </button>
-      </li>
-    );
-  });
+  const outputAdyacentes = obtener_adyacentes();
 
   return (
     <div className="botones_juego">
@@ -93,7 +86,7 @@ function JugarCarta() {
             Jugar
           </button>
         </div>
-      ) : output}
+      ) : outputAdyacentes}
     </div>
   );
 }
