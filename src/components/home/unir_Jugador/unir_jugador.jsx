@@ -25,8 +25,8 @@ function UnirJugador() {
   };
 
   const handleSubmit = async (event) => {
-    if (partidaInput.player_name === "" || partidaInput.match_id === "") {
-      enqueueSnackbar("Todos los campos son necesarios!", {
+    if (partidaInput.player_name === "") {
+      enqueueSnackbar("Es necesario especificar un nombre de usuario!", {
         variant: "error"
       });
       setHasPressedButton(true)
@@ -65,18 +65,6 @@ function UnirJugador() {
   return (
     <Container className="unir_jugador">
       <h2>Unirse a Partida</h2>
-      <TextField
-        label="ID de partida"
-        name="match_id"
-        value={partidaInput.match_id}
-        required
-        fullWidth
-        type="Number"
-        error={partidaInput.match_id == 0 && hasPressedButton}
-        helperText={(partidaInput.match_id == 0 && hasPressedButton) ? "El campo es Requerido" : ""}
-        onChange={(event) => handleChange(event)}
-        inputProps={{ min: 0 }}
-      />
       <TextField
         label="Nombre de jugador"
         name="player_name"
