@@ -56,7 +56,7 @@ function JugarCarta() {
       )
     ))
     const output = [];
-    jugadoresAdyacentes.forEach((player) => {
+    jugador.jugadores.forEach((player) => {
       output.push(
         <li key={player.id}>
           <button
