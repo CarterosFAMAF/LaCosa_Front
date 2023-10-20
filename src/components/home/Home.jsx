@@ -4,17 +4,9 @@ import Listado_Partidas from "./listado_partidas/listado_partidas";
 import Lobby from "./lobby/lobby";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { useEffect } from "react";
 
 function Home() {
   const jugador = useSelector((state) => state.jugador);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (jugador.iniciada) {
-      navigate("/partida");
-    }
-  }, [jugador.iniciada]);
 
   return (
     <div className="container">
@@ -33,3 +25,5 @@ function Home() {
 }
 
 export default Home;
+
+

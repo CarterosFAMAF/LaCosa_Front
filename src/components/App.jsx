@@ -4,9 +4,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import useWebSocket from "react-use-websocket";
-import Home from "./home/Home";
-import Jugador from "./partida/Jugador";
 import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores } from "../store/jugadorSlice";
+import AppRoutes from "./AppRoutes";
 
 function App() {
   const jugador = useSelector((state) => state.jugador);
@@ -75,10 +74,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" Component={Home} />
-        <Route path="/partida" Component={Jugador} />
-      </Routes>
+      <AppRoutes/>
     </BrowserRouter>
   );
 }
