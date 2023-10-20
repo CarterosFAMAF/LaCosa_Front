@@ -28,6 +28,10 @@ function App() {
         console.log("Partida Ws:"); //Borrar
         console.log(parsedData);
 
+        if (parsedData.status === 3) {
+          dispatch(salirPartida());
+        }
+
         if (parsedData.started === true) {
           const formatoTurno = {
             turnoPartida: parsedData.turn_game,
@@ -53,17 +57,12 @@ function App() {
                 });
               });
           }
-        } else {
-          if (jugador.iniciada === true) {//Termina la Partida
-            dispatch(salirPartida());
-          }
         }
       },
       onClose: () => {
         enqueueSnackbar("Has abandonado la partida!", {
           variant: "error",
         });
-        dispatch(salirPartida());
       },
     },
     jugador.unido
