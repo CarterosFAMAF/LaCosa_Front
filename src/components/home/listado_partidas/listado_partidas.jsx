@@ -1,14 +1,15 @@
 import "./listado_partidas.css";
 import React, { useState } from "react";
 import axios from "axios";
-import { Container, TextField, Button, Modal, Typography, Box } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { Container, Button, Modal, Typography, Box } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import { listMatches } from "../../../store/jugadorSlice";
 import { useSnackbar } from "notistack";
 import UnirJugador from "../unir_Jugador/unir_jugador"
 
 
 function ListadoPartidas() {
+  const jugador = useSelector((state) => state.jugador);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -30,7 +31,7 @@ function ListadoPartidas() {
             <Typography className="jugadores">
               {"Jugadores: (" + partidaElem.player_count + "/" + partidaElem.player_max + ")"}
             </Typography>
-            <Button variant="contained" onClick={() => handleunir(partidaElem.match_id,partidaElem.match_name)} className="boton_unirse">
+            <Button variant="contained" onClick={() => handler(true, partidaElem.match_id,partidaElem.match_name)} className="boton_unirse">
               unirse
             </Button>
             <br></br>
@@ -44,18 +45,15 @@ function ListadoPartidas() {
         });
       });
 
-  const handleunir = async (match_id, match_name) => {
-    setOpen(true)
+  const handler = async (joining, match_id, match_name) => {
+    setOpen(joining)
     const formatoPartida = {
         partidaId: match_id,
         partidaNombre: match_name
     };
     dispatch(listMatches(formatoPartida));
-
   }
 }
-console.log(output);
-
   return (
     <Container className="listar_partidas">
       <div className="componentes">
@@ -67,10 +65,10 @@ console.log(output);
         </Button>
       </div>
       {output}
-      <Modal open={open}>
+      <Modal open={jugador.partidaId != -1 && open}>
         <Box className="modal_listar">
           <UnirJugador/>
-          <Button variant="contained" onClick={() => setOpen(false)} className="boton_cancelar"> cancelar </Button>
+          <Button variant="contained" onClick={() => handler(false, -1, "")} className="boton_cancelar"> cancelar </Button>
         </Box>
       </Modal>
     </Container>

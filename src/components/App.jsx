@@ -28,6 +28,11 @@ function App() {
         console.log("Partida Ws:"); //Borrar
         console.log(parsedData);
 
+        if (parsedData.status === 3) {
+          dispatch(salirPartida());
+
+        }
+
         if (parsedData.started === true) {
           const formatoTurno = {
             turnoPartida: parsedData.turn_game,
@@ -63,7 +68,6 @@ function App() {
         enqueueSnackbar("Has abandonado la partida!", {
           variant: "error",
         });
-        dispatch(salirPartida());
       },
     },
     jugador.unido
