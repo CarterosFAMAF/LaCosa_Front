@@ -76,7 +76,7 @@ function UnirJugador() {
     <Container className="unir_jugador">
       <h2>Unirse a {jugador.partidaNombre} (ID: {jugador.partidaId} )</h2>
       <TextField
-        label="Nombre de jugador"
+         label={<span style={{ color: "white" }}>Nombre de jugador</span>}
         name="player_name"
         value={partidaInput.player_name}
         required
@@ -85,6 +85,7 @@ function UnirJugador() {
         error={partidaInput.player_name == "" && hasPressedButton}
         helperText={(partidaInput.player_name == "" && hasPressedButton) ? "El campo es Requerido" : ""}
         onChange={(event) => handleChange(event)}
+        className="textfield_unir"
       />
       <Button variant="contained" onClick={handleSubmit} className="boton_unir">
         Unirse a Partida
