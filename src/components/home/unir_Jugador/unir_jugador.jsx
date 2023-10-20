@@ -59,11 +59,18 @@ function UnirJugador() {
         dispatch(unirPartida(formatoJugador));
       })
       .catch(function (response) {
-        enqueueSnackbar(`error: ${response.message}`, {
+        if (response.message === 'Request failed with status code 400'){
+          enqueueSnackbar(`error: La partida a la que intenta unirse esta llena`, {
+            variant: "error",
+          });
+        }
+        else {
+          enqueueSnackbar(`error: ${response.message}`, {
           variant: "error",
-        });
+          });
+        }
       });
-  };
+  }
 
   return (
     <Container className="unir_jugador">
