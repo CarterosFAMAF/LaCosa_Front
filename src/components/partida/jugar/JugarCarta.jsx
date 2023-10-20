@@ -48,13 +48,8 @@ function JugarCarta() {
   const obtener_adyacentes = () => {
     // CORREGIR
     // No checkea los muertos
-    const jugadoresAdyacentes = jugador.jugadores.filter(player => (
-      (player.turn === (jugador.posicion + 1) % jugador.jugadores.length) ||
-      (jugador.posicion - 1 === -1 ?
-        (player.turn === jugador.jugadores.length - 1)
-        : player.turn === jugador.posicion - 1
-      )
-    ))
+    const jugadoresVivos = jugador.jugadores.filter(player => (player.vivo === true))
+    // jugadoresAdyacentes = checkear jugadores adyacentes de los vivos  
 
     const output = [];
     jugador.jugadores.forEach((player) => {
