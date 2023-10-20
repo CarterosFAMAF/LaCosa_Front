@@ -4,11 +4,10 @@ import { Modal, Button, Box, Container, Typography } from '@mui/material';
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 
-function FinalizarPartida() {
-
+function FinalizarPartida({ganador}) {
   const jugador = useSelector((state) => state.jugador);
   const navigate = useNavigate();
-  
+
   return (
     <Modal 
       open={true}
@@ -21,6 +20,7 @@ function FinalizarPartida() {
           <Container>
             <Typography className="tituloLobby">
               La Partida ha terminado!
+              Ganador:
             </Typography>
             <hr />
             <br />
