@@ -20,7 +20,7 @@ function FinalizarPartida() {
         <Box className="modalFinalizar">
           <Container>
             <Typography className="tituloLobby">
-              El jugador {jugador.nombre} ha ganado la partida!
+              La Partida ha terminado!
             </Typography>
             <hr />
             <br />
