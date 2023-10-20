@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Container, Button, Modal, Typography, Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { listMatches } from "../../../store/jugadorSlice";
+import { verPartida } from "../../../store/jugadorSlice";
 import { useSnackbar } from "notistack";
 import UnirJugador from "../unir_Jugador/unir_jugador"
 
@@ -44,16 +44,15 @@ function ListadoPartidas() {
           variant: "error",
         });
       });
-
+  }
   const handler = async (joining, match_id, match_name) => {
     setOpen(joining)
     const formatoPartida = {
         partidaId: match_id,
         partidaNombre: match_name
     };
-    dispatch(listMatches(formatoPartida));
+    dispatch(verPartida(formatoPartida));
   }
-}
   return (
     <Container className="listar_partidas">
       <div className="componentes">
@@ -66,9 +65,9 @@ function ListadoPartidas() {
       </div>
       {output}
       <Modal open={jugador.partidaId != -1 && open}>
-        <Box className="modal_listar">
+        <Box className="modal_partida">
           <UnirJugador/>
-          <Button variant="contained" onClick={() => handler(false, -1, "")} className="boton_cancelar"> cancelar </Button>
+          <Button variant="contained" onClick={() => handler(false,-1,"")} className="boton_cancelar"> cancelar </Button>
         </Box>
       </Modal>
     </Container>

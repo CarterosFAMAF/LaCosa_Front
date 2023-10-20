@@ -21,7 +21,7 @@ export const jugadorSlice = createSlice({
     minJugadores: 4,
   },
   reducers: {
-    listMatches: (state, action) => {
+    verPartida: (state, action) => {
       state.partidaId = action.payload.partidaId;
       state.partidaNombre = action.payload.partidaNombre;
     },
@@ -89,7 +89,7 @@ export const jugadorSlice = createSlice({
   },
 });
 
-export const { listMatches, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores, setTurno,
+export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores, setTurno,
   pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector, setFase } = jugadorSlice.actions;
 
 export default jugadorSlice;
