@@ -11,7 +11,7 @@ export const jugadorSlice = createSlice({
     creador: false,
     iniciada: false,
     vivo: true,
-    turno: -1,
+    posicion: -1,
     fase: 0,
     cartas: [],
     turnoPartida: 0,
@@ -38,7 +38,7 @@ export const jugadorSlice = createSlice({
       state.creador = false;
       state.iniciada = false;
       state.vivo = true;
-      state.turno = -1;
+      state.posicion = -1;
       state.fase = 0;
       state.cartas = [];
       state.turnoPartida = 0;
@@ -59,7 +59,7 @@ export const jugadorSlice = createSlice({
     },
     setTurno: (state, action) => {
       state.turnoPartida = action.payload.turnoPartida;
-      state.turno = action.payload.turno;
+      state.posicion = action.payload.posicion;
       state.vivo = action.payload.vivo;
     },
     pedirMano: (state, action) => {

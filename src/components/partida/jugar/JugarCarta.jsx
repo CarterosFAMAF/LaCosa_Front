@@ -49,10 +49,10 @@ function JugarCarta() {
     // CORREGIR
     // No checkea los muertos
     const jugadoresAdyacentes = jugador.jugadores.filter(player => (
-      (player.turn === jugador.turno + 1 % jugador.jugadores.length) ||
-      (jugador.turno - 1 === -1 ?
+      (player.turn === jugador.posicion + 1 % jugador.jugadores.length) ||
+      (jugador.posicion - 1 === -1 ?
         (player.turn === jugador.jugadores.length - 1)
-        : player.turn === jugador.turno - 1
+        : player.turn === jugador.posicion - 1
       )
     ))
     const output = [];
