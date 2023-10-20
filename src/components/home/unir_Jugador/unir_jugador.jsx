@@ -2,18 +2,21 @@ import "./unir_jugador.css";
 import React, { useState } from "react";
 import axios from "axios";
 import { Container, TextField, Button } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { unirPartida } from "../../../store/jugadorSlice";
 import { useSnackbar } from "notistack";
 
 function UnirJugador() {
+  const jugador = useSelector((state) => state.jugador);
   const dispatch = useDispatch();
+
   const { enqueueSnackbar } = useSnackbar();
 
   const [partidaInput, setPartidaInput] = useState({
     player_name: "",
-    match_id: "",
+    match_id: jugador.partidaId
   });
+  
 
   const [hasPressedButton, setHasPressedButton] = useState(false);
 
@@ -64,13 +67,13 @@ function UnirJugador() {
 
   return (
     <Container className="unir_jugador">
-      <h2>Unirse a Partida</h2>
+      <h2>Unirse a {jugador.partidaNombre} (ID: {jugador.partidaId} )</h2>
       <TextField
         label="Nombre de jugador"
         name="player_name"
         value={partidaInput.player_name}
         required
-        fullWidth
+        variant = "filled"
         type="Text"
         error={partidaInput.player_name == "" && hasPressedButton}
         helperText={(partidaInput.player_name == "" && hasPressedButton) ? "El campo es Requerido" : ""}
