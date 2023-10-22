@@ -1,12 +1,17 @@
 import React from 'react';
 import './finalizar_partida.css';
 import { Modal, Button, Box, Container, Typography } from '@mui/material';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
+import { setGanadores } from '../../../store/jugadorSlice';
 
-function FinalizarPartida({ganador}) {
+function FinalizarPartida() {
   const jugador = useSelector((state) => state.jugador);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const ganadores = jugador.jugadores.filter(player => (player.alive === true));
+
+  dispatch(setGanadores(ganadores));
 
   return (
     <Modal 
@@ -20,7 +25,7 @@ function FinalizarPartida({ganador}) {
           <Container>
             <Typography className="tituloLobby">
               La Partida ha terminado!
-              Ganador:
+              Ganador: {jugador.ganadores[0]}
             </Typography>
             <hr />
             <br />

@@ -45,13 +45,35 @@ function JugarCarta() {
   };
 
   const obtener_adyacentes = () => {
-    // CORREGIR
-    // No checkea los muertos
-    const jugadoresVivos = jugador.jugadores.filter(player => (player.vivo === true))
-    // jugadoresAdyacentes = checkear jugadores adyacentes de los vivos  
+    
+    const turno_actual = jugador.turnoPartida;
+    var i = turno_actual;
+    var jugadorAnterior;
+    var jugadorSiguiente;
+    console.log(jugador.turnoPartida);
+    do{
+      if(i === 0){
+        i = jugador.jugadores.length;
+      };
+      i--;
+      jugadorAnterior = jugador.jugadores.find(player => (player.turn === i));
+      console.log(jugadorAnterior);
+    }while(!jugadorAnterior.alive);
+    i = turno_actual;
+    do{
+      if(i === jugador.jugadores.length-1){
+        i = -1;
+      };
+      i++;
+      jugadorSiguiente = jugador.jugadores.find(player => (player.turn === i));
+    }while(!jugadorSiguiente.alive);
+
+    const adyacentes = (jugadorAnterior.id === jugadorSiguiente.id) 
+      ? [jugadorAnterior] 
+      : [jugadorAnterior, jugadorSiguiente];
 
     const output = [];
-    jugador.jugadores.forEach((player) => {
+    adyacentes.forEach((player) => {
       output.push(
         <li key={player.id}>
           <button

@@ -10,6 +10,7 @@ function Jugador() {
 
   return (
     <div>
+      <h2>{jugador.nombre}</h2>
       {(!jugador.iniciada && !jugador.id) ?
         <FinalizarPartida /> :
         (jugador.vivo) ?
