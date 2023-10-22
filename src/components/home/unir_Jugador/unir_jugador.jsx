@@ -2,18 +2,21 @@ import "./unir_jugador.css";
 import React, { useState } from "react";
 import axios from "axios";
 import { Container, TextField, Button } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { unirPartida } from "../../../store/jugadorSlice";
 import { useSnackbar } from "notistack";
 
 function UnirJugador() {
+  const jugador = useSelector((state) => state.jugador);
   const dispatch = useDispatch();
+
   const { enqueueSnackbar } = useSnackbar();
 
   const [partidaInput, setPartidaInput] = useState({
     player_name: "",
-    match_id: "",
+    match_id: jugador.partidaId
   });
+  
 
   const [hasPressedButton, setHasPressedButton] = useState(false);
 
@@ -25,8 +28,8 @@ function UnirJugador() {
   };
 
   const handleSubmit = async (event) => {
-    if (partidaInput.player_name === "" || partidaInput.match_id === "") {
-      enqueueSnackbar("Todos los campos son necesarios!", {
+    if (partidaInput.player_name === "") {
+      enqueueSnackbar("Es necesario especificar un nombre de usuario!", {
         variant: "error"
       });
       setHasPressedButton(true)
@@ -56,37 +59,33 @@ function UnirJugador() {
         dispatch(unirPartida(formatoJugador));
       })
       .catch(function (response) {
-        enqueueSnackbar(`error: ${response.message}`, {
+        if (response.message === 'Request failed with status code 400'){
+          enqueueSnackbar(`error: La partida a la que intenta unirse esta llena`, {
+            variant: "error",
+          });
+        }
+        else {
+          enqueueSnackbar(`error: ${response.message}`, {
           variant: "error",
-        });
+          });
+        }
       });
-  };
+  }
 
   return (
     <Container className="unir_jugador">
-      <h2>Unirse a Partida</h2>
+      <h2>Unirse a {jugador.partidaNombre} (ID: {jugador.partidaId} )</h2>
       <TextField
-        label="ID de partida"
-        name="match_id"
-        value={partidaInput.match_id}
-        required
-        fullWidth
-        type="Number"
-        error={partidaInput.match_id == 0 && hasPressedButton}
-        helperText={(partidaInput.match_id == 0 && hasPressedButton) ? "El campo es Requerido" : ""}
-        onChange={(event) => handleChange(event)}
-        inputProps={{ min: 0 }}
-      />
-      <TextField
-        label="Nombre de jugador"
+         label={<span style={{ color: "white" }}>Nombre de jugador</span>}
         name="player_name"
         value={partidaInput.player_name}
         required
-        fullWidth
+        variant = "filled"
         type="Text"
         error={partidaInput.player_name == "" && hasPressedButton}
         helperText={(partidaInput.player_name == "" && hasPressedButton) ? "El campo es Requerido" : ""}
         onChange={(event) => handleChange(event)}
+        className="textfield_unir"
       />
       <Button variant="contained" onClick={handleSubmit} className="boton_unir">
         Unirse a Partida

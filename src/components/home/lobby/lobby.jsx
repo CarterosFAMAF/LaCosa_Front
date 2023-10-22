@@ -25,7 +25,6 @@ function Lobby() {
     axios
       .put(urlIniciar, endpoint_params_iniciar)
       .then(function (response) {
-        console.log(response.data.message);
         navigate("/partida"); // Borrar cuando ande Iniciar Partida.
       })
       .catch(function (response) {
@@ -47,7 +46,7 @@ function Lobby() {
 
   return (
     <Modal
-      open={true}
+      open={jugador.jugadores != 0}
       backdrop="static"
       keyboard="false"
       aria-labelledby="modal-modal-title"
