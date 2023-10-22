@@ -29,13 +29,12 @@ function App() {
 
         if (parsedData.status === 3) {
           dispatch(salirPartida());
-
         }
 
         if (parsedData.started === true) {
           const formatoTurno = {
             turnoPartida: parsedData.turn_game,
-            turno: parsedData.players.filter(player => (player.id === jugador.id))[0].turn,
+            posicion: parsedData.players.filter(player => (player.id === jugador.id))[0].turn,
             vivo: parsedData.players.filter(player => (player.id === jugador.id))[0].alive
           };
           if (jugador.iniciada === true) { //Avanza Turno.
@@ -56,10 +55,6 @@ function App() {
                   variant: "error",
                 });
               });
-          }
-        } else {
-          if (jugador.iniciada === true) {//Termina la Partida
-            dispatch(salirPartida());
           }
         }
       },
