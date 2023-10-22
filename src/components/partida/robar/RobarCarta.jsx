@@ -13,7 +13,6 @@ function RobarCarta() {
     axios
       .get(urlRobarCarta)
       .then(function (response) {
-        console.log(response)
         dispatch(robarCarta(response.data));
       })
       .catch(function (response) {

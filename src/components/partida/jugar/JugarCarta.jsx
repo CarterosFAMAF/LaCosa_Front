@@ -13,7 +13,6 @@ function JugarCarta() {
     axios
       .put(urlEnviarCarta)
       .then(function (response) {
-        console.log(response);
         dispatch(tirarCarta(jugador.seleccion));
         dispatch(limpiarSelector());
         dispatch(setFase(0)); // Termina turno

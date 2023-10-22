@@ -59,13 +59,13 @@ function UnirJugador() {
         dispatch(unirPartida(formatoJugador));
       })
       .catch(function (response) {
-        if (response.message === 'Request failed with status code 400'){
-          enqueueSnackbar(`error: La partida a la que intenta unirse esta llena`, {
+        if (response.response.status === 400){
+          enqueueSnackbar("La partida ya está llena.", {
             variant: "error",
           });
         }
-        else {
-          enqueueSnackbar(`error: ${response.message}`, {
+        if ((response.response.status === 404)){
+          enqueueSnackbar("La Partida ya no existe.", {
           variant: "error",
           });
         }
