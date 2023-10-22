@@ -1,7 +1,7 @@
 import "./JugarCarta.css";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { tirarCarta, setFase, limpiarSelector } from "../../../store/jugadorSlice";
+import { tirarCarta, setFase, limpiarSelector, setCartaPublica } from "../../../store/jugadorSlice";
 import { useSnackbar } from "notistack";
 
 function JugarCarta() {
@@ -9,13 +9,21 @@ function JugarCarta() {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
+  const card_name = jugador.cartas.filter(carta => (carta.id === jugador.seleccion))[0].name;
+
   const enviar_carta = (urlEnviarCarta) => {
     axios
       .put(urlEnviarCarta)
       .then(function (response) {
         dispatch(tirarCarta(jugador.seleccion));
         dispatch(limpiarSelector());
-        dispatch(setFase(0)); // Termina turno
+        if (response.data && response.data.message !== "Card discard") {
+          dispatch(setCartaPublica(response.data)); // Para Sospecha: {id, image, name}
+          dispatch(setFase(3)); // Ver Efecto
+        }
+        else {
+          dispatch(setFase(0)); // Termina turno
+        }
       })
       .catch(function (response) {
         enqueueSnackbar(`error: ${response.message}`, {
@@ -35,7 +43,6 @@ function JugarCarta() {
   };
 
   const check_carta = () => {
-    const card_name = jugador.cartas.filter(carta => (carta.id === jugador.seleccion))[0].name;
     if (card_name === "lanzallamas" || card_name === "Mas_Vale_Que_Corras" || card_name === "Sospecha") {
       //Pedir Objetivo
       dispatch(setFase(2));
@@ -44,52 +51,70 @@ function JugarCarta() {
     }
   };
 
-  const obtener_adyacentes = () => {
-    
-    const turno_actual = jugador.turnoPartida;
-    var i = turno_actual;
-    var jugadorAnterior;
-    var jugadorSiguiente;
-    console.log(jugador.turnoPartida);
-    do{
-      if(i === 0){
-        i = jugador.jugadores.length;
-      };
-      i--;
-      jugadorAnterior = jugador.jugadores.find(player => (player.turn === i));
-      console.log(jugadorAnterior);
-    }while(!jugadorAnterior.alive);
-    i = turno_actual;
-    do{
-      if(i === jugador.jugadores.length-1){
-        i = -1;
-      };
-      i++;
-      jugadorSiguiente = jugador.jugadores.find(player => (player.turn === i));
-    }while(!jugadorSiguiente.alive);
+  const obtenerObjetivos = () => {
+    if (card_name === "lanzallamas" || card_name === "Sospecha") {
+      //Jugadores Adyacentes
+      const turno_actual = jugador.turnoPartida;
+      var i = turno_actual;
+      var jugadorAnterior;
+      var jugadorSiguiente;
+      console.log(jugador.turnoPartida);
+      do {
+        if (i === 0) {
+          i = jugador.jugadores.length;
+        };
+        i--;
+        jugadorAnterior = jugador.jugadores.find(player => (player.turn === i));
+        console.log(jugadorAnterior);
+      } while (!jugadorAnterior.alive);
+      i = turno_actual;
+      do {
+        if (i === jugador.jugadores.length - 1) {
+          i = -1;
+        };
+        i++;
+        jugadorSiguiente = jugador.jugadores.find(player => (player.turn === i));
+      } while (!jugadorSiguiente.alive);
 
-    const adyacentes = (jugadorAnterior.id === jugadorSiguiente.id) 
-      ? [jugadorAnterior] 
-      : [jugadorAnterior, jugadorSiguiente];
+      const adyacentes = (jugadorAnterior.id === jugadorSiguiente.id)
+        ? [jugadorAnterior]
+        : [jugadorAnterior, jugadorSiguiente];
 
-    const output = [];
-    adyacentes.forEach((player) => {
-      output.push(
-        <li key={player.id}>
-          <button
-            className="elegir_jugador"
-            onClick={() => jugar_carta(player.id)}
-          >
-            {player.name}
-          </button>
-        </li>
-      );
-    });
-
-    return output;
+      const output = [];
+      adyacentes.forEach((player) => {
+        output.push(
+          <li key={player.id}>
+            <button
+              className="elegir_jugador"
+              onClick={() => jugar_carta(player.id)}
+            >
+              {player.name}
+            </button>
+          </li>
+        );
+      });
+      return output;
+    }
+    else {
+      const objetivos = jugador.jugadores.filter(player => (player.alive === true && player.id != jugador.id))
+      const output = [];
+      objetivos.forEach((player) => {
+        output.push(
+          <li key={player.id}>
+            <button
+              className="elegir_jugador"
+              onClick={() => jugar_carta(player.id)}
+            >
+              {player.name}
+            </button>
+          </li>
+        );
+      });
+      return output;
+    }
   }
 
-  const outputAdyacentes = obtener_adyacentes();
+  const objetivosJugadores = obtenerObjetivos();
 
   return (
     <div className="botones_juego">
@@ -103,7 +128,7 @@ function JugarCarta() {
             Jugar
           </button>
         </div>
-      ) : outputAdyacentes}
+      ) : objetivosJugadores}
     </div>
   );
 }
