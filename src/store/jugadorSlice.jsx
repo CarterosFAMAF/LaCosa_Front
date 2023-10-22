@@ -17,7 +17,6 @@ export const jugadorSlice = createSlice({
     turnoPartida: 0,
     seleccion: -1,
     jugadores: [],
-    ganadores: [],
     maxJugadores: 14,
     minJugadores: 4,
   },
@@ -48,7 +47,6 @@ export const jugadorSlice = createSlice({
       state.cartas = [];
       state.turnoPartida = 0;
       state.seleccion = -1;
-      state.jugadores = [];
       state.maxJugadores = 14;
       state.minJugadores = 4;
     },
@@ -86,14 +84,11 @@ export const jugadorSlice = createSlice({
     setFase: (state, action) => {
       // Cuando termina turno: fase = 0.
       state.fase = action.payload;
-    },
-    setGanadores: (state, action) => {
-      state.ganadores = action.payload;
-    },
+    }
   },
 });
 
 export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores, setTurno,
-  pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector, setFase, setGanadores } = jugadorSlice.actions;
+  pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector, setFase } = jugadorSlice.actions;
 
 export default jugadorSlice;

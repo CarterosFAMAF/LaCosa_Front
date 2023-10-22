@@ -4,7 +4,7 @@ import axios from "axios";
 import { Container, Button, Typography, Modal, Box } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
-import { salirPartida } from "../../../store/jugadorSlice";
+import { salirPartida, setJugadores } from "../../../store/jugadorSlice";
 import { useSnackbar } from "notistack";
 
 function Lobby() {
@@ -33,6 +33,11 @@ function Lobby() {
         });
       });
   };
+
+  const abandonar_lobby = () => {
+    dispatch(salirPartida())
+    dispatch(setJugadores([]))
+  }
 
   const output = [];
 
@@ -75,7 +80,7 @@ function Lobby() {
           <br />
           <Button
             variant="contained"
-            onClick={() => dispatch(salirPartida())}
+            onClick={() => abandonar_lobby()}
             className="boton_abandonar"
           >
             Abandonar Partida
