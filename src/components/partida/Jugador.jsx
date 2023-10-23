@@ -39,7 +39,7 @@ function Jugador() {
               <div>
                 {jugador.fase === 3 &&
                   <Carta
-                    id={0}
+                    id={jugador.cartaPublica.id}
                     imagen={jugador.cartaPublica.image} />
                 }
               </div>}
