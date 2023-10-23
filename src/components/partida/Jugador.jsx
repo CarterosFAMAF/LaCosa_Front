@@ -1,3 +1,4 @@
+import "./Jugador.css";
 import Mano from "./mano/Mano";
 import RobarCarta from "./robar/RobarCarta";
 import JugarCarta from "./jugar/JugarCarta";
@@ -20,7 +21,7 @@ function Jugador() {
   }
 
   return (
-    <div>
+    <div className="container">
       <h2>{jugador.nombre}</h2>
       {(!jugador.iniciada && !jugador.id) ?
         <FinalizarPartida /> :

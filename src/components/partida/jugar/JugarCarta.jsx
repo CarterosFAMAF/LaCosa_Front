@@ -11,13 +11,14 @@ function JugarCarta() {
 
   const card_name = jugador.cartas.filter(carta => (carta.id === jugador.seleccion))[0].name;
 
-  const enviar_carta = (urlEnviarCarta) => {
+  const jugar_carta = (objetivo_id) => {
+    const urlJugarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${objetivo_id}/${jugador.seleccion}/play_card`;
     axios
-      .put(urlEnviarCarta)
+      .put(urlJugarCarta)
       .then(function (response) {
         dispatch(tirarCarta(jugador.seleccion));
         dispatch(limpiarSelector());
-        if (response.data && response.data.message !== "Card discard") {
+        if (response.data) {
           dispatch(setCartaPublica(response.data)); // Para Sospecha: {id, image, name}
           dispatch(setFase(3)); // Ver Efecto
         }
@@ -32,14 +33,20 @@ function JugarCarta() {
       });
   }
 
-  const jugar_carta = (objetivo_id) => {
-    const urlJugarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${objetivo_id}/${jugador.seleccion}/play_card`;
-    enviar_carta(urlJugarCarta);
-  }
-
   const descartar_carta = () => {
     const urlDescartarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${jugador.seleccion}/discard`;
-    enviar_carta(urlDescartarCarta);
+    axios
+      .put(urlDescartarCarta)
+      .then(function (response) {
+        dispatch(tirarCarta(jugador.seleccion));
+        dispatch(limpiarSelector());
+        dispatch(setFase(0)); // Termina turno
+      })
+      .catch(function (response) {
+        enqueueSnackbar(`error: ${response.message}`, {
+          variant: "error",
+        });
+      });
   };
 
   const check_carta = () => {
