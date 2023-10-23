@@ -10,6 +10,7 @@ function FinalizarPartida() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const ganador = jugador.jugadores.filter(player => (player.alive === true))[0].name
   const finalizar_partida = () => {
     dispatch(setJugadores([]));
     navigate("/")
@@ -27,7 +28,7 @@ function FinalizarPartida() {
           <Container>
             <Typography className="tituloLobby">
               La Partida ha terminado!
-              Ganador: {jugador.jugadores[0].name}
+              Ganador: {ganador}
             </Typography>
             <hr />
             <br />
