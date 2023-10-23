@@ -9,8 +9,7 @@ function JugarCarta() {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  const carta_jugada = jugador.cartas.filter(carta => (carta.id === jugador.seleccion))[0];
-  const carta_nombre = carta_jugada ? carta_jugada.name : "";
+  const carta_nombre = jugador.cartas.filter(carta => (carta.id === jugador.seleccion))[0].name;
 
   const enviar_carta = (urlEnviarCarta) => {
     axios
