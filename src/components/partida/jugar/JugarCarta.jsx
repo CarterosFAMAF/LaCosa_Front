@@ -3,11 +3,14 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { tirarCarta, setFase, limpiarSelector, setCartasPublicas } from "../../../store/jugadorSlice";
 import { useSnackbar } from "notistack";
+import { useState } from "react";
 
 function JugarCarta() {
   const jugador = useSelector((state) => state.jugador);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
+  const [targetAquired, setTargetAquired] = useState(true);
+  const [hasPlayed, setHasPlayed] = useState(false);
 
   const carta_nombre = jugador.cartas.filter(carta => (carta.id === jugador.seleccion))[0].name;
 
@@ -35,21 +38,25 @@ function JugarCarta() {
   }
 
   const jugar_carta = (objetivo_id) => {
+    setTargetAquired(true);
     const urlJugarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${objetivo_id}/${jugador.seleccion}/play_card`;
     enviar_carta(urlJugarCarta);
   }
 
   const descartar_carta = () => {
+    setHasPlayed(true);
     const urlDescartarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${jugador.seleccion}/discard`;
     enviar_carta(urlDescartarCarta);
   };
 
   const check_carta = () => {
+    setHasPlayed(true);
     if (carta_nombre === "Vigila_Tus_Espaldas" || carta_nombre === "Whisky") {
       //Sin Objetivo
       jugar_carta(0);
     } else {
       //Pedir Objetivo
+      setTargetAquired(false);
       dispatch(setFase(2));
     }
   };
@@ -116,11 +123,11 @@ function JugarCarta() {
     }
   }
 
-  const objetivosJugadores = obtenerObjetivos();
+  const objetivosJugadores = targetAquired ? null : obtenerObjetivos();
 
   return (
     <div className="botones_juego">
-      {jugador.fase == 1 ? (
+      {jugador.fase === 1 && !hasPlayed &&
         <div>
           <button
             className="descartar" onClick={() => descartar_carta()}>
@@ -130,7 +137,8 @@ function JugarCarta() {
             Jugar
           </button>
         </div>
-      ) : objetivosJugadores}
+      } 
+      {jugador.fase === 2 && objetivosJugadores}
     </div>
   );
 }
