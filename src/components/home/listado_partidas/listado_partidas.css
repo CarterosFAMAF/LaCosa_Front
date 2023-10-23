@@ -61,6 +61,7 @@
     rgb(115, 60, 216) 100%
   );
   box-shadow: rgb(0, 0, 0) 5px 5px 15px 5px;
+  padding: 10px;
 }
 
 .boton_unirse{

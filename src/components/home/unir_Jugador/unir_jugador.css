@@ -7,8 +7,6 @@
 .boton_unir {
   position: relative;
   left: 5%;
-  height: 20%;
-  width: 15%;
   color: rgb(255, 255, 255);
   background-image: linear-gradient(
     to right,

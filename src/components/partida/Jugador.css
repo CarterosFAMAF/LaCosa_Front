@@ -1,4 +1,24 @@
-.container {
+body {
     height: 100vh;
     background: linear-gradient(to bottom, #2e48be, #778ece);
+}
+
+.check_fase {
+  position: absolute;
+  width: 100%;
+  left: 50%;
+  top: 0%;
+  transform: translate(-50%, 0%);
+  justify-content: center;
+  text-align: center;
+}
+
+.listo {
+  position: absolute;
+  width: 100px;
+  height: 30px;
+  transform: translate(-50%, 1030%);
+  font-size: large;
+  background-color: rgb(20, 120, 20);
+  border-radius: 5px;
 }

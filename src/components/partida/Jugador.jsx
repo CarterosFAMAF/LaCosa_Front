@@ -2,10 +2,9 @@ import "./Jugador.css";
 import Mano from "./mano/Mano";
 import RobarCarta from "./robar/RobarCarta";
 import JugarCarta from "./jugar/JugarCarta";
-import Carta from "./carta/Carta";
 import FinalizarPartida from "./finalizar_partida/finalizar_partida";
 import { useSelector, useDispatch } from "react-redux";
-import { setCartaPublica, setFase } from "../../store/jugadorSlice";
+import { setCartasPublicas, setFase } from "../../store/jugadorSlice";
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
@@ -13,22 +12,20 @@ function Jugador() {
 
   console.log(jugador); //Borrar
 
-  if (jugador.fase === 3) {
-    setTimeout(() => {
-      dispatch(setFase(0)); // Termina turno
-      dispatch(setCartaPublica({}))
-    }, 3000);
+  const terminar_checkeo = () => {
+    dispatch(setFase(0)); // Termina turno
+    dispatch(setCartasPublicas([]))
   }
 
   return (
-    <div className="container">
+    <div>
       <h2>{jugador.nombre}</h2>
       {(!jugador.iniciada && !jugador.id) ?
         <FinalizarPartida /> :
         (jugador.vivo) ?
           <div>
-            <Mano />
-            {(jugador.posicion === jugador.turnoPartida) ?
+            <Mano cartas={jugador.cartas} />
+            {(jugador.posicion === jugador.turnoPartida) &&
               <div>
                 {(jugador.fase === 0) ?
                   <RobarCarta /> :
@@ -36,14 +33,13 @@ function Jugador() {
                     {(jugador.seleccion !== -1 || jugador.fase === 2) && <JugarCarta />}
                   </div>
                 }
-              </div> :
-              <div>
-                {jugador.fase === 3 &&
-                  <Carta
-                    id={jugador.cartaPublica.id}
-                    imagen={jugador.cartaPublica.image} />
-                }
               </div>}
+            {jugador.fase === 3 &&
+              <div className="check_fase">
+                <Mano cartas={jugador.cartasPublicas} />
+                <button className="listo" onClick={() => terminar_checkeo()}>Listo</button>
+              </div>
+            }
           </div>
           : <h1>Estás Muerto jajaja</h1>
       }

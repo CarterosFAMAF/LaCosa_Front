@@ -88,7 +88,7 @@ function UnirJugador() {
         className="textfield_unir"
       />
       <Button variant="contained" onClick={handleSubmit} className="boton_unir">
-        Unirse a Partida
+        Unirse
       </Button>
     </Container>
   );

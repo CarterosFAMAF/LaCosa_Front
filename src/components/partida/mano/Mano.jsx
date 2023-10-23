@@ -1,12 +1,10 @@
 import "./Mano.css";
 import Carta from "../carta/Carta";
-import { useSelector } from "react-redux";
 
-function Mano() {
-  const jugador = useSelector((state) => state.jugador);
+function Mano({cartas}) {
 
   const output = [];
-  jugador.cartas.forEach((carta) => {
+  cartas.forEach((carta) => {
     output.push(
       <li key={carta.id}>
         <Carta
