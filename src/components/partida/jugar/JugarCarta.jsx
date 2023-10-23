@@ -65,14 +65,12 @@ function JugarCarta() {
       var i = turno_actual;
       var jugadorAnterior;
       var jugadorSiguiente;
-      console.log(jugador.turnoPartida);
       do {
         if (i === 0) {
           i = jugador.jugadores.length;
         };
         i--;
         jugadorAnterior = jugador.jugadores.find(player => (player.turn === i));
-        console.log(jugadorAnterior);
       } while (!jugadorAnterior.alive);
       i = turno_actual;
       do {
