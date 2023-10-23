@@ -12,7 +12,7 @@ describe("Lobby Test", () => {
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path="/partida" Component={Lobby} />
+          <Route path="/" Component={Lobby} />
         </Routes>
       </BrowserRouter>
     </Provider>).toJSON();

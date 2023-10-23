@@ -1,9 +1,9 @@
 import TestRenderer from "react-test-renderer";
 import { Provider } from "react-redux";
-import store from "../../store/store"
 import { describe, expect, test } from "vitest";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Jugador from "../partida/Jugador";
+import store from "../../store/store"
 
 describe("Jugador Test", () => {
   test("Renderiza Jugador", () => {
@@ -11,7 +11,8 @@ describe("Jugador Test", () => {
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path="/partida" Component={Jugador} />
+          <Route path="/" element={null} />
+          <Route path="/partida" element={Jugador} />
         </Routes>
       </BrowserRouter>
     </Provider>).toJSON();
