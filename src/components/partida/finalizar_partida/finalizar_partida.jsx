@@ -1,13 +1,20 @@
 import React from 'react';
 import './finalizar_partida.css';
 import { Modal, Button, Box, Container, Typography } from '@mui/material';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
+import { setJugadores } from '../../../store/jugadorSlice';
 
 function FinalizarPartida() {
-
   const jugador = useSelector((state) => state.jugador);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const ganador = jugador.jugadores.filter(player => (player.alive === true))[0].name
+  const finalizar_partida = () => {
+    dispatch(setJugadores([]));
+    navigate("/")
+  }
   
   return (
     <Modal 
@@ -20,14 +27,15 @@ function FinalizarPartida() {
         <Box className="modalFinalizar">
           <Container>
             <Typography className="tituloLobby">
-              El jugador {jugador.nombre} ha ganado la partida!
+              La Partida ha terminado!
+              Ganador: {ganador}
             </Typography>
             <hr />
             <br />
             <Button 
               className="miboton"
               variant="contained" 
-              onClick={() => navigate("/")}>
+              onClick={() => finalizar_partida()}>
               Volver al inicio
             </Button>
           </Container>

@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import useWebSocket from "react-use-websocket";
-import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores } from "../store/jugadorSlice";
+import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores, setFase, setCartasPublicas } from "../store/jugadorSlice";
 import AppRoutes from "./AppRoutes";
 
 function App() {
@@ -22,25 +22,36 @@ function App() {
       },
       onMessage: (event) => {
         const parsedData = JSON.parse(JSON.parse(event.data));
-        dispatch(setJugadores(parsedData.players));
-
-        console.log("Partida Ws:"); //Borrar
-        console.log(parsedData);
 
         if (parsedData.status === 3) {
+          // Terminó la Partida
           dispatch(salirPartida());
-
         }
+
+        dispatch(setJugadores(parsedData.players));
+
+        console.log("Partida Ws:"); // BORRAR: DEBUG
+        console.log(parsedData);
 
         if (parsedData.started === true) {
           const formatoTurno = {
             turnoPartida: parsedData.turn_game,
-            turno: parsedData.players.filter(player => (player.id === jugador.id))[0].turn,
+            posicion: parsedData.players.filter(player => (player.id === jugador.id))[0].turn,
             vivo: parsedData.players.filter(player => (player.id === jugador.id))[0].alive
           };
-          if (jugador.iniciada === true) { //Avanza Turno.
+          if (jugador.iniciada === true) {//En Partida
+            //Whisky
+            if (parsedData.status === 14) {
+              dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
+              dispatch(setFase(3));
+              enqueueSnackbar(parsedData.message, {
+                variant: "info",
+              });
+            }
+            //Avanza Turno.
             dispatch(setTurno(formatoTurno));
-          } else { //Iniciar Partida.
+          } else {
+            //Iniciar Partida.
             axios
               .get(urlPedirMano)
               .then(function (response) {
@@ -57,15 +68,11 @@ function App() {
                 });
               });
           }
-        } else {
-          if (jugador.iniciada === true) {//Termina la Partida
-            dispatch(salirPartida());
-          }
         }
       },
       onClose: () => {
         enqueueSnackbar("Has abandonado la partida!", {
-          variant: "error",
+          variant: "info",
         });
       },
     },
@@ -74,7 +81,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <AppRoutes/>
+      <AppRoutes />
     </BrowserRouter>
   );
 }
