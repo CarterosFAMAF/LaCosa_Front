@@ -9,7 +9,7 @@ function JugarCarta() {
   const jugador = useSelector((state) => state.jugador);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
-  const [targetAquired, setTargetAquired] = useState(true);
+  const [hasTarget, setHasTaget] = useState(false);
   const [hasPlayed, setHasPlayed] = useState(false);
 
   const carta_nombre = jugador.cartas.filter(carta => (carta.id === jugador.seleccion))[0].name;
@@ -38,7 +38,7 @@ function JugarCarta() {
   }
 
   const jugar_carta = (objetivo_id) => {
-    setTargetAquired(true);
+    setHasTaget(true);
     const urlJugarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${objetivo_id}/${jugador.seleccion}/play_card`;
     enviar_carta(urlJugarCarta);
   }
@@ -56,7 +56,6 @@ function JugarCarta() {
       jugar_carta(0);
     } else {
       //Pedir Objetivo
-      setTargetAquired(false);
       dispatch(setFase(2));
     }
   };
@@ -123,7 +122,7 @@ function JugarCarta() {
     }
   }
 
-  const objetivosJugadores = targetAquired ? null : obtenerObjetivos();
+  const objetivosJugadores = obtenerObjetivos();
 
   return (
     <div className="botones_juego">
@@ -137,8 +136,8 @@ function JugarCarta() {
             Jugar
           </button>
         </div>
-      } 
-      {jugador.fase === 2 && objetivosJugadores}
+      }
+      {jugador.fase === 2 && !hasTarget && objetivosJugadores}
     </div>
   );
 }
