@@ -78,6 +78,7 @@ function Lobby() {
             Iniciar Partida
           </Button>
           <br />
+          <br />
           <Button
             variant="contained"
             onClick={() => abandonar_lobby()}

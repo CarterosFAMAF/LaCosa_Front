@@ -6,7 +6,7 @@
 
 .boton_unir {
   position: relative;
-  left: 5%;
+  left: 0.5%;
   color: rgb(255, 255, 255);
   background-image: linear-gradient(
     to right,
@@ -18,5 +18,5 @@
 
 .textfield_unir {
   color: white;
-  background-color: #8502ff9d;
+  background-color: #2b4acb;
 }
