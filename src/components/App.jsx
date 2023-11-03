@@ -40,10 +40,14 @@ function App() {
             vivo: parsedData.players.filter(player => (player.id === jugador.id))[0].alive
           };
           if (jugador.iniciada === true) {//En Partida
-            // Intercambio
-            if (parsedData.status === 16) {
+            // Solicitar Intercambio
+            if (parsedData.status === 16 && parsedData.player_target_id === jugador.id) {
               dispatch(setIntercambiante(parsedData.player_id))
               dispatch(setFase(5))
+            }
+            // Intercambio Exitoso
+            if (parsedData.status === 17) {
+              dispatch(setFase(0)) // Termina Turno
             }
             //Whisky
             if (parsedData.status === 14) {

@@ -78,7 +78,6 @@ function ElegirCarta() {
       .then(function (response) {
         dispatch(tirarCarta(jugador.seleccion));
         dispatch(limpiarSelector());
-        dispatch(setFase(0)) // Termina Turno
       })
       .catch(function (response) {
         enqueueSnackbar(`error: ${response.message}`, {
