@@ -64,7 +64,6 @@ function ElegirCarta() {
 
   const intercambiar_carta = () => {
     setHasExchanged(true);
-    dispatch(setFase(0)) // Termina Turno
     const urlIntercambiarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/exchange_cards`;
 
     const endpoint_params_intercambiar = {
@@ -79,8 +78,7 @@ function ElegirCarta() {
       .then(function (response) {
         dispatch(tirarCarta(jugador.seleccion));
         dispatch(limpiarSelector());
-        console.log("Intercambiar")
-        console.log(response)
+        dispatch(setFase(0)) // Termina Turno
       })
       .catch(function (response) {
         enqueueSnackbar(`error: ${response.message}`, {

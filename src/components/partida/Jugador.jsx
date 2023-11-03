@@ -5,6 +5,7 @@ import ElegirCarta from "./elegir_carta/ElegirCarta";
 import FinalizarPartida from "./finalizar_partida/finalizar_partida";
 import { useSelector, useDispatch } from "react-redux";
 import { setCartasPublicas, setFase } from "../../store/jugadorSlice";
+import Tracker from "./tracker/Tracker";
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
@@ -19,11 +20,11 @@ function Jugador() {
 
   return (
     <div>
-      <h2>{jugador.nombre}</h2>
       {(!jugador.iniciada && !jugador.id) ?
         <FinalizarPartida /> :
         (jugador.vivo) ?
           <div>
+            <Tracker />
             <Mano cartas={jugador.cartas} />
 
             {(jugador.posicion === jugador.turnoPartida && jugador.fase === 0) && <RobarCarta />}
