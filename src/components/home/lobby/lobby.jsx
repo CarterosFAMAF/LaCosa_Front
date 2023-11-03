@@ -1,5 +1,4 @@
 import "./lobby.css";
-import '../../Estilos.css';
 import React from "react";
 import axios from "axios";
 import { Container, Button, Typography, Modal, Box } from "@mui/material";

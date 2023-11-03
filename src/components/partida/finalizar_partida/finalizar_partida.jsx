@@ -1,6 +1,5 @@
 import React from 'react';
 import './finalizar_partida.css';
-import '../../Estilos.css';
 import { Modal, Button, Box, Container, Typography } from '@mui/material';
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";

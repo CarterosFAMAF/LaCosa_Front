@@ -1,5 +1,4 @@
 import "./RobarCarta.css";
-import '../../Estilos.css';
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { robarCarta } from "../../../store/jugadorSlice";

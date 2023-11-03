@@ -1,5 +1,4 @@
 import "./listado_partidas.css";
-import '../../Estilos.css';
 import React, { useState } from "react";
 import axios from "axios";
 import { Container, Button, Modal, Typography, Box } from "@mui/material";

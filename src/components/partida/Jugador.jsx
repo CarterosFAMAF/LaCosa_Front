@@ -1,5 +1,4 @@
 import "./Jugador.css";
-import '../Estilos.css';
 import Mano from "./mano/Mano";
 import RobarCarta from "./robar/RobarCarta";
 import JugarCarta from "./jugar/JugarCarta";

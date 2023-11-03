@@ -1,5 +1,4 @@
 import "./JugarCarta.css";
-import '../../Estilos.css';
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { tirarCarta, setFase, limpiarSelector, setCartasPublicas } from "../../../store/jugadorSlice";

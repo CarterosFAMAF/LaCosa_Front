@@ -1,5 +1,4 @@
 import "./unir_jugador.css";
-import '../../Estilos.css';
 import React, { useState } from "react";
 import axios from "axios";
 import { Container, TextField, Button } from "@mui/material";
