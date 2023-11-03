@@ -14,6 +14,6 @@
   width: 200px;
   height: 50px;
   font-size: large;
-  background-color: #3f6600;
+  background-color: var(--color-bottom-game-positive);
   border-radius: 5px;
 }

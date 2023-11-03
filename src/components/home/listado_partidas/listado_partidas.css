@@ -13,12 +13,7 @@
   height: 5%;
   width: 20%;
   color: rgb(255, 255, 255);
-  background-image: linear-gradient(
-    to right,
-    rgb(28, 110, 164) 0%,
-    rgb(35, 136, 203) 50%,
-    rgb(20, 78, 117) 100%
-  );
+  background-image: var(--color-bottom-action);
 }
 
 .boton_cancelar {
@@ -26,12 +21,7 @@
   width: 15%;
   left: 4%;
   color: rgb(255, 255, 255);
-  background-image: linear-gradient(
-    to right,
-    rgb(28, 110, 164) 0%,
-    rgb(35, 136, 203) 50%,
-    rgb(20, 78, 117) 100%
-  );
+  background-image: var(--color-bottom-action);
 }
 
 .componentes {
@@ -57,7 +47,7 @@
   width: 50%;
   height: auto;
   color: rgb(255, 255, 255);
-  background: #263ea0;
+  background: var(--color-background-no-gradient);
   box-shadow: rgb(0, 0, 0) 5px 5px 15px 5px;
   padding: 10px;
 }
@@ -66,10 +56,5 @@
   height: 5%;
   width: 20%;
   color: rgb(255, 255, 255);
-  background-image: linear-gradient(
-    to right,
-    rgb(28, 110, 164) 0%,
-    rgb(35, 136, 203) 50%,
-    rgb(20, 78, 117) 100%
-  );
+  background-image: var(--color-bottom-action);
 }

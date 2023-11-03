@@ -1,4 +1,5 @@
 import "./crear_partida.css";
+import '../../Estilos.css';
 import { useState } from "react";
 import axios from "axios";
 import {
@@ -134,7 +135,11 @@ function CrearPartida() {
           </MenuItem>
         ))}
       </Select>
-      <Button variant="contained" onClick={handleSubmit} className="miboton">
+      <Button 
+        variant="contained" 
+        style={{ marginTop: "10px" }}
+        onClick={handleSubmit} 
+        className="miboton">
         Crear Partida
       </Button>
     </Container>

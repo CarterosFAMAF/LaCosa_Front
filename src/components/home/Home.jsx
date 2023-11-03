@@ -1,4 +1,5 @@
 import "./Home.css";
+import '../Estilos.css';
 import CrearPartida from "./crear_partida/crear_partida";
 import Listado_Partidas from "./listado_partidas/listado_partidas";
 import Lobby from "./lobby/lobby";

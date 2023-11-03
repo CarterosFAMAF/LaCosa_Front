@@ -1,4 +1,5 @@
 import "./lobby.css";
+import '../../Estilos.css';
 import React from "react";
 import axios from "axios";
 import { Container, Button, Typography, Modal, Box } from "@mui/material";
@@ -69,6 +70,7 @@ function Lobby() {
           <Button
             variant="contained"
             onClick={handleSubmit}
+            style={{ marginBottom: "10px" }}
             disabled={
               !jugador.creador ||
               jugador.jugadores.length < jugador.minJugadores
@@ -77,7 +79,6 @@ function Lobby() {
           >
             Iniciar Partida
           </Button>
-          <br />
           <br />
           <Button
             variant="contained"

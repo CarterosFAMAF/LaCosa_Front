@@ -1,4 +1,5 @@
 import "./listado_partidas.css";
+import '../../Estilos.css';
 import React, { useState } from "react";
 import axios from "axios";
 import { Container, Button, Modal, Typography, Box } from "@mui/material";
@@ -31,7 +32,10 @@ function ListadoPartidas() {
             <Typography className="jugadores">
               {"Jugadores: (" + partidaElem.player_count + "/" + partidaElem.player_max + ")"}
             </Typography>
-            <Button variant="contained" onClick={() => handler(true, partidaElem.match_id,partidaElem.match_name)} className="boton_unirse">
+            <Button 
+              variant="contained"
+              onClick={() => handler(true, partidaElem.match_id,partidaElem.match_name)} 
+              className="boton_unirse">
               unirse
             </Button>
             <br></br>

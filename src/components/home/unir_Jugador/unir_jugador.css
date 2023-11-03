@@ -8,15 +8,10 @@
   position: relative;
   left: 0.5%;
   color: rgb(255, 255, 255);
-  background-image: linear-gradient(
-    to right,
-    rgb(28, 110, 164) 0%,
-    rgb(35, 136, 203) 50%,
-    rgb(20, 78, 117) 100%
-  );
+  background-image: var(--color-bottom-action);
 }
 
 .textfield_unir {
   color: white;
-  background-color: #2b4acb;
+  background-color: var(--color-background-no-gradient);
 }

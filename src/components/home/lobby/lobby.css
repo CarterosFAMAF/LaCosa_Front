@@ -22,6 +22,6 @@
   height: 75%;
   width: 50%;
   color: rgb(255, 255, 255);
-  background: #263ea0;
+  background: var(--color-background-no-gradient);
   box-shadow: rgb(0, 0, 0) 5px 5px 15px 5px;
 }

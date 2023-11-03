@@ -1,5 +1,6 @@
 import React from 'react';
 import './finalizar_partida.css';
+import '../../Estilos.css';
 import { Modal, Button, Box, Container, Typography } from '@mui/material';
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
@@ -31,10 +32,10 @@ function FinalizarPartida() {
               Ganador: {ganador}
             </Typography>
             <hr />
-            <br />
             <Button 
               className="miboton"
               variant="contained" 
+              style={{ marginTop: "45px" }}
               onClick={() => finalizar_partida()}>
               Volver al inicio
             </Button>
