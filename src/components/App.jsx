@@ -40,8 +40,8 @@ function App() {
             vivo: parsedData.players.filter(player => (player.id === jugador.id))[0].alive
           };
           if (jugador.iniciada === true) {//En Partida
-            //Whisky
-            if (parsedData.status === 14) {
+            //Whisky & Ups!
+            if (parsedData.status === 14 || parsedData.status === 23 || parsedData.status === 22) {
               dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
               dispatch(setFase(3));
               enqueueSnackbar(parsedData.message, {

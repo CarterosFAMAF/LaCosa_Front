@@ -51,7 +51,7 @@ function JugarCarta() {
 
   const check_carta = () => {
     setHasPlayed(true);
-    if (carta_nombre === "Vigila_Tus_Espaldas" || carta_nombre === "Whisky") {
+    if (carta_nombre === "Vigila_Tus_Espaldas" || carta_nombre === "Whisky" || carta_nombre === "Ups!") {
       //Sin Objetivo
       jugar_carta(0);
     } else {
