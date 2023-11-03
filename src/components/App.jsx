@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import useWebSocket from "react-use-websocket";
-import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores, setFase, setCartasPublicas } from "../store/jugadorSlice";
+import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores, setFase, setCartasPublicas, setIntercambiante } from "../store/jugadorSlice";
 import AppRoutes from "./AppRoutes";
 
 function App() {
@@ -40,6 +40,11 @@ function App() {
             vivo: parsedData.players.filter(player => (player.id === jugador.id))[0].alive
           };
           if (jugador.iniciada === true) {//En Partida
+            // Intercambio
+            if (parsedData.status === 16) {
+              dispatch(setIntercambiante(parsedData.player_id))
+              dispatch(setFase(5))
+            }
             //Whisky
             if (parsedData.status === 14) {
               dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));

@@ -15,15 +15,15 @@
   font-size: large;
   background-color: rgb(200, 50, 50);
   border-radius: 5px;
+  margin-right: 260px;
 }
 
-.jugar {
+.elegir_carta {
   width: 200px;
   height: 50px;
   font-size: large;
   background-color: rgb(20, 120, 20);
   border-radius: 5px;
-  margin-left: 260px;
 }
 
 .elegir_jugador {
