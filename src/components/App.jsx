@@ -1,10 +1,10 @@
 import React from "react";
 import axios from "axios";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import useWebSocket from "react-use-websocket";
-import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores, setFase, setCartasPublicas, setIntercambiante } from "../store/jugadorSlice";
+import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores, setFase, setCartasPublicas, setIntercambiante, robarCarta } from "../store/jugadorSlice";
 import AppRoutes from "./AppRoutes";
 
 function App() {
@@ -28,8 +28,13 @@ function App() {
           dispatch(salirPartida());
         }
 
-        dispatch(setJugadores(parsedData.players));
-
+        if (parsedData.status === 100) {
+          dispatch(robarCarta(parsedData.card));
+        }
+        else {
+          dispatch(setJugadores(parsedData.players));
+        }
+        
         console.log("Partida Ws:"); // BORRAR: DEBUG
         console.log(parsedData);
 
@@ -40,23 +45,30 @@ function App() {
             vivo: parsedData.players.filter(player => (player.id === jugador.id))[0].alive
           };
           if (jugador.iniciada === true) {//En Partida
-            // Solicitar Intercambio
-            if (parsedData.status === 16 && parsedData.player_target_id === jugador.id) {
-              dispatch(setIntercambiante(parsedData.player_id))
-              dispatch(setFase(5))
+            switch (parsedData.status) {
+              case 14: // Whisky
+                dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
+                dispatch(setFase(3));
+                enqueueSnackbar(parsedData.message, {
+                  variant: "info",
+                });
+                break;
+
+              case 16: // Solicitar Intercambio
+                if (parsedData.player_target_id === jugador.id) {
+                  dispatch(setIntercambiante(parsedData.player_id))
+                  dispatch(setFase(5))
+                }
+                break;
+
+              case 17:  // Intercambio Extioso
+                dispatch(setFase(0)) // Termina Turno
+                break;
+
+              default:
+                break;
             }
-            // Intercambio Exitoso
-            if (parsedData.status === 17) {
-              dispatch(setFase(0)) // Termina Turno
-            }
-            //Whisky
-            if (parsedData.status === 14) {
-              dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
-              dispatch(setFase(3));
-              enqueueSnackbar(parsedData.message, {
-                variant: "info",
-              });
-            }
+
             //Avanza Turno.
             dispatch(setTurno(formatoTurno));
           } else {

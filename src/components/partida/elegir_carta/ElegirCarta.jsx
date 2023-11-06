@@ -1,7 +1,7 @@
 import "./ElegirCarta.css";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { tirarCarta, setFase, limpiarSelector, setCartasPublicas } from "../../../store/jugadorSlice";
+import { tirarCarta, setFase, limpiarSelector, setCartasPublicas, setIntercambiante } from "../../../store/jugadorSlice";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 
@@ -78,6 +78,7 @@ function ElegirCarta() {
       .then(function (response) {
         dispatch(tirarCarta(jugador.seleccion));
         dispatch(limpiarSelector());
+        dispatch(setIntercambiante(0));
       })
       .catch(function (response) {
         enqueueSnackbar(`error: ${response.message}`, {
