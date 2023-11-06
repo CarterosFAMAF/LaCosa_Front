@@ -20,6 +20,7 @@ export const jugadorSlice = createSlice({
     jugadores: [],
     maxJugadores: 14,
     minJugadores: 4,
+    mensaje_finalizar: "",
   },
   reducers: {
     verPartida: (state, action) => {
@@ -95,10 +96,14 @@ export const jugadorSlice = createSlice({
     setCartasPublicas: (state, action) => {
       state.cartasPublicas = action.payload;
     },
+    setMensajeFinalizar: (state, action) => {
+      state.mensaje_finalizar = action.payload;
+    },
   },
 });
 
 export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores, setTurno,
-  pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector, setFase, setCartasPublicas } = jugadorSlice.actions;
+  pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector, setFase, setCartasPublicas,
+  setMensajeFinalizar } = jugadorSlice.actions;
 
 export default jugadorSlice;
