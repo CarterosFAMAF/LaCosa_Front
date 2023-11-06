@@ -3,32 +3,32 @@
   width: 100%;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -130%);
+  transform: translate(-50%, -70%);
   justify-content: center;
   text-align: center;
   list-style-type: none;
 }
 
 .descartar {
-  width: 200px;
-  height: 50px;
+  width: 180px;
+  height: 45px;
   font-size: large;
   background-color: rgb(200, 50, 50);
   border-radius: 5px;
+  margin-right: 260px;
 }
 
-.jugar {
-  width: 200px;
-  height: 50px;
+.elegir_carta {
+  width: 180px;
+  height: 45px;
   font-size: large;
   background-color: rgb(20, 120, 20);
   border-radius: 5px;
-  margin-left: 260px;
 }
 
 .elegir_jugador {
-  width: 200px;
-  height: 50px;
+  width: 180px;
+  height: 45px;
   font-size: large;
   background-color: rgb(20, 120, 20);
   border-radius: 5px;
