@@ -8,6 +8,6 @@
   text-align: center;
 }
 .mano li {
-  display: inline;
-  margin-right: 10px;
+  display:inline;
+  margin: 3px;
 }

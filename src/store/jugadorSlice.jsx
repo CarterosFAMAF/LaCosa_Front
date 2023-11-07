@@ -18,6 +18,7 @@ export const jugadorSlice = createSlice({
     turnoPartida: 0,
     seleccion: -1,
     jugadores: [],
+    intercambiante: 0,
     maxJugadores: 14,
     minJugadores: 4,
   },
@@ -34,6 +35,13 @@ export const jugadorSlice = createSlice({
       state.unido = action.payload.unido;
       state.creador = action.payload.creador;
     },
+    partidaDef: (state, action) => {
+      state.maxJugadores = action.payload.maxJugadores;
+      state.minJugadores = action.payload.minJugadores;
+    },
+    iniciarPartida: (state) => {
+      state.iniciada = true;
+    },
     salirPartida: (state) => {
       state.id = "";
       state.nombre = "";
@@ -48,15 +56,9 @@ export const jugadorSlice = createSlice({
       state.cartas = [];
       state.turnoPartida = 0;
       state.seleccion = -1;
+      state.intercambiante = 0;
       state.maxJugadores = 14;
       state.minJugadores = 4;
-    },
-    partidaDef: (state, action) => {
-      state.maxJugadores = action.payload.maxJugadores;
-      state.minJugadores = action.payload.minJugadores;
-    },
-    iniciarPartida: (state) => {
-      state.iniciada = true;
     },
     setJugadores: (state, action) => {
       state.jugadores = action.payload;
@@ -69,25 +71,27 @@ export const jugadorSlice = createSlice({
     pedirMano: (state, action) => {
       state.cartas = action.payload;
     },
-    seleccionar: (state, action) => {
-      state.seleccion = action.payload;
-    },
     robarCarta: (state, action) => {
       state.cartas.push(action.payload);
       state.fase++;
     },
-    tirarCarta: (state, action) => {
-      state.cartas = state.cartas.filter(item => item.id !== action.payload);
+    seleccionar: (state, action) => {
+      state.seleccion = action.payload;
     },
     limpiarSelector: (state) => {
       state.seleccion = -1;
     },
+    tirarCarta: (state, action) => {
+      state.cartas = state.cartas.filter(item => item.id !== action.payload);
+    },
     setFase: (state, action) => {
       /*
       Robar Carta: Fase 0
-      Elegir Carta: Fase 1
+      Elegir Carta (Jugar): Fase 1
       Elegir Objetivo: Fase 2
-      Ver Resultado de Carta: Fase 3 
+      Elegir Carta (Defensa): Fase 3
+      Ver Resultado de Carta: Fase 4
+      Elegir Carta (Intercambio): Fase 5
       */
       // Cuando termina turno: fase = 0.
       state.fase = action.payload;
@@ -95,10 +99,14 @@ export const jugadorSlice = createSlice({
     setCartasPublicas: (state, action) => {
       state.cartasPublicas = action.payload;
     },
+    setIntercambiante: (state, action) => {
+      state.intercambiante = action.payload;
+    },
   },
 });
 
-export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores, setTurno,
-  pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector, setFase, setCartasPublicas } = jugadorSlice.actions;
+export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores,
+  setTurno, pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector, setFase,
+  setCartasPublicas, setIntercambiante } = jugadorSlice.actions;
 
 export default jugadorSlice;
