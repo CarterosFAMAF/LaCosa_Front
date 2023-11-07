@@ -74,7 +74,7 @@ function UnirJugador() {
 
   return (
     <Container className="unir_jugador">
-      <h2>Unirse a {jugador.partidaNombre} (ID: {jugador.partidaId} )</h2>
+      <h2>Unirse a {jugador.partidaNombre} ( ID: {jugador.partidaId} )</h2>
       <TextField
          label={<span style={{ color: "white" }}>Nombre de jugador</span>}
         name="player_name"
@@ -87,6 +87,8 @@ function UnirJugador() {
         onChange={(event) => handleChange(event)}
         className="textfield_unir"
       />
+      <br />
+      <br />
       <Button variant="contained" onClick={handleSubmit} className="boton_unir">
         Unirse
       </Button>

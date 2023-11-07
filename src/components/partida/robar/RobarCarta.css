@@ -9,6 +9,6 @@
   width: 180px;
   height: 45px;
   font-size: large;
-  background-color: rgb(20, 120, 20);
+  background-color: var(--color-bottom-game-positive);
   border-radius: 5px;
 }

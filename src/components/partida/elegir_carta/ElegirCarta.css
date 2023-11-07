@@ -7,30 +7,37 @@
   justify-content: center;
   text-align: center;
   list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 
 .descartar {
   width: 180px;
   height: 45px;
   font-size: large;
-  background-color: rgb(200, 50, 50);
+  background-color: var(--color-bottom-game-negative);
   border-radius: 5px;
-  margin-right: 260px;
+  float: left;
+  margin-right: 10px;
 }
 
 .elegir_carta {
   width: 180px;
   height: 45px;
   font-size: large;
-  background-color: rgb(20, 120, 20);
+  background-color: var(--color-bottom-game-positive);
   border-radius: 5px;
+  float: left;
 }
 
 .elegir_jugador {
   width: 180px;
   height: 45px;
   font-size: large;
-  background-color: rgb(20, 120, 20);
+  background-color: var(--color-bottom-game-positive);
   border-radius: 5px;
-  margin-left: 260px;
+  float: left;
+  margin-right: 10px;
 }

@@ -4,7 +4,7 @@
 
 body {
   height: 100vh;
-  background: linear-gradient(to bottom, #2e48be, #778ece);
+  background: var(--color-background-gradient);
 }
 
 .titulo {

@@ -69,6 +69,7 @@ function Lobby() {
           <Button
             variant="contained"
             onClick={handleSubmit}
+            style={{ marginBottom: "10px" }}
             disabled={
               !jugador.creador ||
               jugador.jugadores.length < jugador.minJugadores
