@@ -7,8 +7,11 @@ import { useState } from "react";
 
 function ElegirCarta() {
   const jugador = useSelector((state) => state.jugador);
+  const fase = useSelector((state) => state.fase);
   const dispatch = useDispatch();
+
   const { enqueueSnackbar } = useSnackbar();
+  
   const [hasTarget, setHasTaget] = useState(false);
   const [hasPlayed, setHasPlayed] = useState(false);
   const [hasExchanged, setHasExchanged] = useState(false);
@@ -25,11 +28,11 @@ function ElegirCarta() {
         console.log("Jugar")
         console.log(response)
         if (Array.isArray(response.data) && response.data.length) {
-          dispatch(setCartasPublicas(response.data)); //Carta: {id, image, name}
-          dispatch(setFase(4)); // Ver Efecto
+          dispatch(setCartasPublicas(response.data)); // Carta: {id, image, name, type}
+          dispatch(setFase(fase.resultado)); // Ver Efecto
         }
         else {
-          dispatch(setFase(5)); // Ir a Intercambio
+          dispatch(setFase(fase.intercambio)); // Ir a Intercambio
         }
       })
       .catch(function (response) {
@@ -53,12 +56,12 @@ function ElegirCarta() {
 
   const check_carta = () => {
     setHasPlayed(true);
-    if (carta_nombre === "Vigila_Tus_Espaldas" || carta_nombre === "Whisky") {
+    if (carta_nombre === "Vigila_tus_espaldas" || carta_nombre === "Whisky") {
       //Sin Objetivo
       jugar_carta(0);
     } else {
       //Pedir Objetivo
-      dispatch(setFase(2));
+      dispatch(setFase(fase.objetivo));
     }
   };
 
@@ -154,7 +157,7 @@ function ElegirCarta() {
   return (
     <div className="botones_juego">
       {jugador.seleccion !== -1 && <div>
-        {jugador.fase === 1 &&
+        {jugador.fase === fase.juego &&
           <div>
             {!hasPlayed &&
               <div>
@@ -167,14 +170,14 @@ function ElegirCarta() {
                 </button>
               </div>}
           </div>}
-        {jugador.fase === 5 && !hasExchanged &&
+        {jugador.fase === fase.intercambiar && !hasExchanged &&
           <button
             className="elegir_carta" onClick={() => intercambiar_carta()}>
             Intercambiar
           </button>
         }
       </div>}
-      {jugador.fase === 2 && !hasTarget && objetivosJugadores}
+      {jugador.fase === fase.objetivo && !hasTarget && objetivosJugadores}
     </div>
   );
 }

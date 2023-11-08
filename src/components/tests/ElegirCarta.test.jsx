@@ -25,7 +25,14 @@ describe("ElegirCarta Test", () => {
           { id: 8, name: 'Juan Carlos', turn: 2, alive: true },
           { id: 7, name: 'Elena', turn: 3, alive: true },
         ],
-
+      },
+      fase: {
+        robo: 0,
+        juego: 1,
+        objetivo: 2,
+        defensa: 3,
+        resultado: 4,
+        intercambio: 5,
       }
     };
 

@@ -93,7 +93,6 @@ export const jugadorSlice = createSlice({
       Ver Resultado de Carta: Fase 4
       Elegir Carta (Intercambio): Fase 5
       */
-      // Cuando termina turno: fase = 0.
       state.fase = action.payload;
     },
     setCartasPublicas: (state, action) => {
