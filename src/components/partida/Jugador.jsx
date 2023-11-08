@@ -6,25 +6,21 @@ import FinalizarPartida from "./finalizar_partida/finalizar_partida";
 import Tracker from "./tracker/Tracker";
 import { setCartasPublicas, setFase } from "../../store/jugadorSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
-import { useEffect } from "react";
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
   const fase = useSelector((state) => state.fase);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (jugador.jugadores.length) {
-      navigate("/");
-    }
-  }, [jugador.jugadores]);
 
   console.log(jugador); //Borrar
 
   const terminar_checkeo = () => {
-    dispatch(setFase(fase.intercambio)); // Ir a Intercambio
+    if (jugador.posicion === jugador.turnoPartida) {
+      dispatch(setFase(fase.intercambio)); // Ir a Intercambio
+    }
+    else {
+      dispatch(setFase(fase.robo)); // No es tu turno
+    }
     dispatch(setCartasPublicas([]))
   }
 

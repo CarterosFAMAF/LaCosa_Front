@@ -4,12 +4,14 @@ import { BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import useWebSocket from "react-use-websocket";
-import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores, setFase, setCartasPublicas, setIntercambiante, robarCarta } from "../store/jugadorSlice";
+import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores, setFase, setCartasPublicas, setIntercambiante, robarCarta, setAtacante, setOpcionesDefensivas } from "../store/jugadorSlice";
 import AppRoutes from "./AppRoutes";
+import { findNonSerializableValue } from "@reduxjs/toolkit";
 
 // Web Socket Status
 const WS_STATUS_MATCH_ENDED = 3;
 const WS_STATUS_EXCHANGE_REQUEST = 12;
+const WS_STATUS_DEFENSE_PRIVATE_MSG = 15;
 const WS_STATUS_EXCHANGE = 13;
 const WS_STATUS_WHISKY = 108;
 const WS_CARD_EXCHANGE = 505;
@@ -36,10 +38,23 @@ function App() {
           dispatch(salirPartida());
         }
 
-        if (parsedData.status === WS_CARD_EXCHANGE) { // Recibir Carta del Intercambio
-          dispatch(robarCarta(parsedData.card));
-        } else {
-          dispatch(setJugadores(parsedData.players));
+        // Mensajes con formato distinto y que no tienen la lista de jugadores.
+        switch (parsedData.status) {
+          case WS_CARD_EXCHANGE: // Recibir Carta del Intercambio
+            dispatch(robarCarta(parsedData.card));
+            break;
+
+          case WS_STATUS_DEFENSE_PRIVATE_MSG: // Mensaje de que puedes defenderte
+            dispatch(setOpcionesDefensivas(parsedData.data_for_defense.defensive_options_id));
+            dispatch(setAtacante(parsedData.data_for_defense));
+            if (jugador.fase !== fase.intercambio) {
+              dispatch(setFase(fase.defensa));
+            }
+            break;
+
+          default:
+            dispatch(setJugadores(parsedData.players));
+            break;
         }
 
         console.log("Partida Ws:"); // BORRAR: DEBUG

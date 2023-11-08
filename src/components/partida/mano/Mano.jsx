@@ -4,12 +4,11 @@ import Carta from "../carta/Carta";
 function Mano({cartas}) {
 
   const output = [];
-  cartas.forEach((carta) => {
+  cartas.forEach((card) => {
     output.push(
-      <li key={carta.id}>
+      <li key={card.id}>
         <Carta
-          id={carta.id}
-          imagen={carta.image}
+          carta={card}
         ></Carta>
       </li>
     );

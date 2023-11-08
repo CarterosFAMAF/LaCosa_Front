@@ -17,8 +17,12 @@ export const jugadorSlice = createSlice({
     cartasPublicas: [],
     turnoPartida: 0,
     seleccion: -1,
+    seleccionType: "",
     jugadores: [],
     intercambiante: 0,
+    atacanteId: 0,
+    opcionesDefensivas: [],
+    atacanteCardId: 0,
     maxJugadores: 14,
     minJugadores: 4,
   },
@@ -56,7 +60,11 @@ export const jugadorSlice = createSlice({
       state.cartas = [];
       state.turnoPartida = 0;
       state.seleccion = -1;
+      state.seleccionType = "";
       state.intercambiante = 0;
+      state.atacanteId = 0;
+      state.atacanteCardId = 0;
+      state.opcionesDefensivas = [];
       state.maxJugadores = 14;
       state.minJugadores = 4;
     },
@@ -76,10 +84,12 @@ export const jugadorSlice = createSlice({
       state.fase++;
     },
     seleccionar: (state, action) => {
-      state.seleccion = action.payload;
+      state.seleccion = action.payload.id;
+      state.seleccionType = action.payload.type;
     },
     limpiarSelector: (state) => {
       state.seleccion = -1;
+      state.seleccionType = "";
     },
     tirarCarta: (state, action) => {
       state.cartas = state.cartas.filter(item => item.id !== action.payload);
@@ -101,11 +111,22 @@ export const jugadorSlice = createSlice({
     setIntercambiante: (state, action) => {
       state.intercambiante = action.payload;
     },
+    setAtacante: (state, action) => {
+      state.atacanteId = action.payload.player_id;
+      state.atacanteCardId = action.payload.card_main_id;
+    },
+    limpiarAtacante: (state) => {
+      state.atacanteId = 0;
+      state.atacanteCardId = 0;
+    },
+    setOpcionesDefensivas: (state, action) => {
+      state.opcionesDefensivas = action.payload;
+    },
   },
 });
 
 export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores,
   setTurno, pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector, setFase,
-  setCartasPublicas, setIntercambiante } = jugadorSlice.actions;
+  setCartasPublicas, setIntercambiante, setAtacante, limpiarAtacante, setOpcionesDefensivas } = jugadorSlice.actions;
 
 export default jugadorSlice;
