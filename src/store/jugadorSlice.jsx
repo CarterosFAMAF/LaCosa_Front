@@ -17,8 +17,12 @@ export const jugadorSlice = createSlice({
     cartasPublicas: [],
     turnoPartida: 0,
     seleccion: -1,
+    seleccionType: "",
     jugadores: [],
     intercambiante: 0,
+    atacanteId: 0,
+    opcionesDefensivas: [],
+    atacanteCardId: 0,
     maxJugadores: 14,
     minJugadores: 4,
     mensaje_finalizar: "",
@@ -57,7 +61,11 @@ export const jugadorSlice = createSlice({
       state.cartas = [];
       state.turnoPartida = 0;
       state.seleccion = -1;
+      state.seleccionType = "";
       state.intercambiante = 0;
+      state.atacanteId = 0;
+      state.atacanteCardId = 0;
+      state.opcionesDefensivas = [];
       state.maxJugadores = 14;
       state.minJugadores = 4;
     },
@@ -77,10 +85,12 @@ export const jugadorSlice = createSlice({
       state.fase++;
     },
     seleccionar: (state, action) => {
-      state.seleccion = action.payload;
+      state.seleccion = action.payload.id;
+      state.seleccionType = action.payload.type;
     },
     limpiarSelector: (state) => {
       state.seleccion = -1;
+      state.seleccionType = "";
     },
     tirarCarta: (state, action) => {
       state.cartas = state.cartas.filter(item => item.id !== action.payload);
@@ -94,7 +104,6 @@ export const jugadorSlice = createSlice({
       Ver Resultado de Carta: Fase 4
       Elegir Carta (Intercambio): Fase 5
       */
-      // Cuando termina turno: fase = 0.
       state.fase = action.payload;
     },
     setCartasPublicas: (state, action) => {
@@ -106,11 +115,23 @@ export const jugadorSlice = createSlice({
     setMensajeFinalizar: (state, action) => {
       state.mensaje_finalizar = action.payload;
     },
+    setAtacante: (state, action) => {
+      state.atacanteId = action.payload.player_id;
+      state.atacanteCardId = action.payload.card_main_id;
+    },
+    limpiarAtacante: (state) => {
+      state.atacanteId = 0;
+      state.atacanteCardId = 0;
+    },
+    setOpcionesDefensivas: (state, action) => {
+      state.opcionesDefensivas = action.payload;
+    },
   },
 });
 
 export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores,
   setTurno, pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector, setFase,
-  setCartasPublicas, setIntercambiante, setFaltanteFinalizar, setMensajeFinalizar } = jugadorSlice.actions;
-
+  setCartasPublicas, setIntercambiante, setMensajeFinalizar, 
+  setAtacante, limpiarAtacante, setOpcionesDefensivas } = jugadorSlice.actions;
+  
 export default jugadorSlice;

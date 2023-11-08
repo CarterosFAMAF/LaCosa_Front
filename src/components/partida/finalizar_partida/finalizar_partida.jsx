@@ -37,10 +37,10 @@ function FinalizarPartida() {
               Ganadores: {ganadores}
             </Typography>
             <hr />
-            <br />
             <Button 
               className="miboton"
               variant="contained" 
+              style={{ marginTop: "45px" }}
               onClick={() => finalizar_partida()}>
               Volver al inicio
             </Button>

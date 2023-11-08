@@ -5,11 +5,20 @@ import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import useWebSocket from "react-use-websocket";
 import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores, setFase, setCartasPublicas, 
-  setMensajeFinalizar, setIntercambiante, robarCarta } from "../store/jugadorSlice";
+  setMensajeFinalizar, setIntercambiante, robarCarta, setAtacante, setOpcionesDefensivas} from "../store/jugadorSlice";
 import AppRoutes from "./AppRoutes";
+
+// Web Socket Status
+const WS_STATUS_MATCH_ENDED = 3;
+const WS_STATUS_EXCHANGE_REQUEST = 12;
+const WS_STATUS_DEFENSE_PRIVATE_MSG = 15;
+const WS_STATUS_EXCHANGE = 13;
+const WS_STATUS_WHISKY = 108;
+const WS_CARD_EXCHANGE = 505;
 
 function App() {
   const jugador = useSelector((state) => state.jugador);
+  const fase = useSelector((state) => state.fase);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const socketUrl = `ws://localhost:8000/ws/matches/${jugador.partidaId}/${jugador.id}`;
@@ -25,21 +34,32 @@ function App() {
         const parsedData = JSON.parse(JSON.parse(event.data));
 
         // Terminó la Partida
-        if (parsedData.status === 3){
+        if (parsedData.status === WS_STATUS_MATCH_ENDED) {
           dispatch(setMensajeFinalizar("No hay ganadores"));
           dispatch(salirPartida());
-        }if (parsedData.status === 300 || parsedData.status === 301 || parsedData.status === 302) {
+        } else if (parsedData.status === 300 || parsedData.status === 301 || parsedData.status === 302) {
           dispatch(setMensajeFinalizar(parsedData.message));
-          dispatch(salirPartida());
         }
 
-        if (parsedData.status === 100) {
-          dispatch(robarCarta(parsedData.card));
+        // Mensajes con formato distinto y que no tienen la lista de jugadores.
+        switch (parsedData.status) {
+          case WS_CARD_EXCHANGE: // Recibir Carta del Intercambio
+            dispatch(robarCarta(parsedData.card));
+            break;
+
+          case WS_STATUS_DEFENSE_PRIVATE_MSG: // Mensaje de que puedes defenderte
+            dispatch(setOpcionesDefensivas(parsedData.data_for_defense.defensive_options_id));
+            dispatch(setAtacante(parsedData.data_for_defense));
+            if (jugador.fase !== fase.intercambio) {
+              dispatch(setFase(fase.defensa));
+            }
+            break;
+
+          default:
+            dispatch(setJugadores(parsedData.players));
+            break;
         }
-        else {
-          dispatch(setJugadores(parsedData.players));
-        }
-        
+
         console.log("Partida Ws:"); // BORRAR: DEBUG
         console.log(parsedData);
 
@@ -51,23 +71,23 @@ function App() {
           };
           if (jugador.iniciada === true) {//En Partida
             switch (parsedData.status) {
-              case 14: // Whisky
+              case WS_STATUS_WHISKY: // Whisky
                 dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
-                dispatch(setFase(3));
+                dispatch(setFase(fase.resultado));
                 enqueueSnackbar(parsedData.message, {
                   variant: "info",
                 });
                 break;
 
-              case 16: // Solicitar Intercambio
+              case WS_STATUS_EXCHANGE_REQUEST: // Solicitar Intercambio
                 if (parsedData.player_target_id === jugador.id) {
                   dispatch(setIntercambiante(parsedData.player_id))
-                  dispatch(setFase(5))
+                  dispatch(setFase(fase.intercambio))
                 }
                 break;
 
-              case 17:  // Intercambio Extioso
-                dispatch(setFase(0)) // Termina Turno
+              case WS_STATUS_EXCHANGE:  // Intercambio Extioso
+                dispatch(setFase(fase.robo)) // Termina Turno
                 break;
 
               default:
