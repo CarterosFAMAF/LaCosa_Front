@@ -13,7 +13,7 @@
   align-items: center;
 }
 
-.descartar {
+.opcion_rojo {
   width: 180px;
   height: 45px;
   font-size: large;
@@ -23,20 +23,21 @@
   margin-right: 10px;
 }
 
-.elegir_carta {
+.opcion_verde {
   width: 180px;
   height: 45px;
   font-size: large;
   background-color: var(--color-bottom-game-positive);
   border-radius: 5px;
   float: left;
+  margin-right: 10px;
 }
 
-.elegir_jugador {
+.opcion_azul {
   width: 180px;
   height: 45px;
   font-size: large;
-  background-color: var(--color-bottom-game-positive);
+  background-color: var(--color-bottom-game-defense);
   border-radius: 5px;
   float: left;
   margin-right: 10px;

@@ -3,18 +3,24 @@ import Mano from "./mano/Mano";
 import RobarCarta from "./robar/RobarCarta";
 import ElegirCarta from "./elegir_carta/ElegirCarta";
 import FinalizarPartida from "./finalizar_partida/finalizar_partida";
-import { useSelector, useDispatch } from "react-redux";
-import { setCartasPublicas, setFase } from "../../store/jugadorSlice";
 import Tracker from "./tracker/Tracker";
+import { setCartasPublicas, setFase } from "../../store/jugadorSlice";
+import { useSelector, useDispatch } from "react-redux";
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
+  const fase = useSelector((state) => state.fase);
   const dispatch = useDispatch();
 
   console.log(jugador); //Borrar
 
   const terminar_checkeo = () => {
-    dispatch(setFase(5)); // Ir a Intercambio
+    if (jugador.posicion === jugador.turnoPartida) {
+      dispatch(setFase(fase.intercambio)); // Ir a Intercambio
+    }
+    else {
+      dispatch(setFase(fase.robo)); // No es tu turno
+    }
     dispatch(setCartasPublicas([]))
   }
 
@@ -27,16 +33,16 @@ function Jugador() {
             <Tracker />
             <Mano cartas={jugador.cartas} />
 
-            {(jugador.posicion === jugador.turnoPartida && jugador.fase === 0) && <RobarCarta />}
-            {(jugador.fase !== 0 && jugador.fase !== 4) && <ElegirCarta />}
-            {jugador.fase === 4 &&
+            {(jugador.posicion === jugador.turnoPartida && jugador.fase === fase.robo) && <RobarCarta />}
+            {(jugador.fase !== fase.robo && jugador.fase !== fase.resultado) && <ElegirCarta />}
+            {jugador.fase === fase.resultado &&
               <div className="check_fase">
                 <Mano cartas={jugador.cartasPublicas} />
                 <button className="listo" onClick={() => terminar_checkeo()}>Listo</button>
               </div>
             }
           </div>
-          : <h1>Estás Muerto jajaja</h1>
+          : <h1>Estás Muerto</h1>
       }
     </div>
   );
