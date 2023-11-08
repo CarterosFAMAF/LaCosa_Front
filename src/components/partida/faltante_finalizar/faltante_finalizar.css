@@ -1,0 +1,14 @@
+.faltante_finalizar {
+  position: fixed;
+  bottom: 10px;
+  left: 10px; /* Cambiado de right a left */
+  width: 180px;
+  height: 45px;
+  font-size: large;
+  background-color: rgb(20, 120, 20);
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+

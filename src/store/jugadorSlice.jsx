@@ -102,11 +102,14 @@ export const jugadorSlice = createSlice({
     setIntercambiante: (state, action) => {
       state.intercambiante = action.payload;
     },
+    setFaltanteFinalizar: (state, action) => { 
+      state.faltanteFinalizar = action.payload;
+    },
   },
 });
 
 export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores,
   setTurno, pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector, setFase,
-  setCartasPublicas, setIntercambiante } = jugadorSlice.actions;
+  setCartasPublicas, setIntercambiante, setFaltanteFinalizar } = jugadorSlice.actions;
 
 export default jugadorSlice;

@@ -6,6 +6,7 @@ import FinalizarPartida from "./finalizar_partida/finalizar_partida";
 import { useSelector, useDispatch } from "react-redux";
 import { setCartasPublicas, setFase } from "../../store/jugadorSlice";
 import Tracker from "./tracker/Tracker";
+import FaltanteFinalizar from "./faltante_finalizar/faltante_finalizar";
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
@@ -26,6 +27,7 @@ function Jugador() {
           <div>
             <Tracker />
             <Mano cartas={jugador.cartas} />
+            <FaltanteFinalizar />
 
             {(jugador.posicion === jugador.turnoPartida && jugador.fase === 0) && <RobarCarta />}
             {(jugador.fase !== 0 && jugador.fase !== 4) && <ElegirCarta />}
