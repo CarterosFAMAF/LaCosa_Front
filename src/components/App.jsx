@@ -4,7 +4,8 @@ import { BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import useWebSocket from "react-use-websocket";
-import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores, setFase, setCartasPublicas, setIntercambiante, robarCarta } from "../store/jugadorSlice";
+import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores, setFase, setCartasPublicas, 
+  setMensajeFinalizar, setIntercambiante, robarCarta } from "../store/jugadorSlice";
 import AppRoutes from "./AppRoutes";
 
 function App() {
@@ -23,8 +24,12 @@ function App() {
       onMessage: (event) => {
         const parsedData = JSON.parse(JSON.parse(event.data));
 
-        if (parsedData.status === 3) {
-          // Terminó la Partida
+        // Terminó la Partida
+        if (parsedData.status === 3){
+          dispatch(setMensajeFinalizar("No hay ganadores"));
+          dispatch(salirPartida());
+        }if (parsedData.status === 300 || parsedData.status === 301 || parsedData.status === 302) {
+          dispatch(setMensajeFinalizar(parsedData.message));
           dispatch(salirPartida());
         }
 

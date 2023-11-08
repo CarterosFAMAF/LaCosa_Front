@@ -21,6 +21,7 @@ export const jugadorSlice = createSlice({
     intercambiante: 0,
     maxJugadores: 14,
     minJugadores: 4,
+    mensaje_finalizar: "",
   },
   reducers: {
     verPartida: (state, action) => {
@@ -102,14 +103,14 @@ export const jugadorSlice = createSlice({
     setIntercambiante: (state, action) => {
       state.intercambiante = action.payload;
     },
-    setFaltanteFinalizar: (state, action) => { 
-      state.faltanteFinalizar = action.payload;
+    setMensajeFinalizar: (state, action) => {
+      state.mensaje_finalizar = action.payload;
     },
   },
 });
 
 export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores,
   setTurno, pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector, setFase,
-  setCartasPublicas, setIntercambiante, setFaltanteFinalizar } = jugadorSlice.actions;
+  setCartasPublicas, setIntercambiante, setFaltanteFinalizar, setMensajeFinalizar } = jugadorSlice.actions;
 
 export default jugadorSlice;
