@@ -45,6 +45,7 @@ function App() {
         switch (parsedData.status) {
           case WS_CARD_EXCHANGE: // Recibir Carta del Intercambio
             dispatch(robarCarta(parsedData.card));
+            dispatch(setFase(fase.robo));
             break;
 
           case WS_STATUS_DEFENSE_PRIVATE_MSG: // Mensaje de que puedes defenderte

@@ -82,7 +82,6 @@ export const jugadorSlice = createSlice({
     },
     robarCarta: (state, action) => {
       state.cartas.push(action.payload);
-      state.fase++;
     },
     seleccionar: (state, action) => {
       state.seleccion = action.payload.id;

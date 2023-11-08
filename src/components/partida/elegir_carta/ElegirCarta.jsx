@@ -84,6 +84,8 @@ function ElegirCarta() {
         dispatch(tirarCarta(jugador.seleccion));
         dispatch(limpiarSelector());
         dispatch(setIntercambiante(0));
+        dispatch(limpiarAtacante());
+        dispatch(setOpcionesDefensivas([]));
       })
       .catch(function (response) {
         enqueueSnackbar(`error: ${response.message}`, {
