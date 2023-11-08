@@ -10,7 +10,8 @@ function FinalizarPartida() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const ganador = jugador.jugadores.filter(player => (player.alive === true))[0].name
+  const ganadores = jugador.jugadores.filter(player => (player.winner === true))
+  .map(player => (player.name)).join(", ");
   const finalizar_partida = () => {
     dispatch(setJugadores([]));
     navigate("/")
@@ -26,9 +27,14 @@ function FinalizarPartida() {
       >
         <Box className="modalFinalizar">
           <Container>
-            <Typography className="tituloLobby">
+            <Typography className='body1'>
               La Partida ha terminado!
-              Ganador: {ganador}
+            </Typography>
+            <Typography className='body2'>
+              {jugador.mensaje_finalizar}
+            </Typography>
+            <Typography className='body3'>
+              Ganadores: {ganadores}
             </Typography>
             <hr />
             <Button 

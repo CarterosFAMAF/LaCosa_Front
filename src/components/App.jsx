@@ -4,9 +4,9 @@ import { BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import useWebSocket from "react-use-websocket";
-import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores, setFase, setCartasPublicas, setIntercambiante, robarCarta, setAtacante, setOpcionesDefensivas } from "../store/jugadorSlice";
+import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores, setFase, setCartasPublicas, 
+  setMensajeFinalizar, setIntercambiante, robarCarta, setAtacante, setOpcionesDefensivas} from "../store/jugadorSlice";
 import AppRoutes from "./AppRoutes";
-import { findNonSerializableValue } from "@reduxjs/toolkit";
 
 // Web Socket Status
 const WS_STATUS_MATCH_ENDED = 3;
@@ -33,9 +33,12 @@ function App() {
       onMessage: (event) => {
         const parsedData = JSON.parse(JSON.parse(event.data));
 
+        // Terminó la Partida
         if (parsedData.status === WS_STATUS_MATCH_ENDED) {
-          // Terminó la Partida
+          dispatch(setMensajeFinalizar("No hay ganadores"));
           dispatch(salirPartida());
+        } else if (parsedData.status === 300 || parsedData.status === 301 || parsedData.status === 302) {
+          dispatch(setMensajeFinalizar(parsedData.message));
         }
 
         // Mensajes con formato distinto y que no tienen la lista de jugadores.

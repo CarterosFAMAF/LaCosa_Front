@@ -4,6 +4,7 @@ import RobarCarta from "./robar/RobarCarta";
 import ElegirCarta from "./elegir_carta/ElegirCarta";
 import FinalizarPartida from "./finalizar_partida/finalizar_partida";
 import Tracker from "./tracker/Tracker";
+import FaltanteFinalizar from "./faltante_finalizar/faltante_finalizar";
 import { setCartasPublicas, setFase } from "../../store/jugadorSlice";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -32,6 +33,7 @@ function Jugador() {
           <div>
             <Tracker />
             <Mano cartas={jugador.cartas} />
+            <FaltanteFinalizar />
 
             {(jugador.posicion === jugador.turnoPartida && jugador.fase === fase.robo) && <RobarCarta />}
             {(jugador.fase !== fase.robo && jugador.fase !== fase.resultado) && <ElegirCarta />}
