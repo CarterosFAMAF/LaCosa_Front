@@ -17,6 +17,7 @@ const WS_STATUS_INFECTED = 14;
 const WS_STATUS_DEFENSE_PRIVATE_MSG = 15;
 const WS_STATUS_EXCHANGE = 13;
 const WS_STATUS_WHISKY = 108;
+const WS_STATUS_SEDUCCION = 109;
 const WS_CARD_EXCHANGE = 505;
 const WS_STATUS_NOPE_THANKS = 203;
 
@@ -37,6 +38,9 @@ function App() {
       onMessage: (event) => {
         const parsedData = JSON.parse(JSON.parse(event.data));
 
+        console.log("Partida Ws:"); // BORRAR: DEBUG
+        console.log(parsedData);
+
         // Terminó la Partida
         if (parsedData.status === WS_STATUS_MATCH_ENDED) {
           dispatch(setMensajeFinalizar("No hay ganadores"));
@@ -45,7 +49,7 @@ function App() {
           dispatch(setMensajeFinalizar(parsedData.message));
         }
 
-        // Mensajes con formato distinto y que no tienen la lista de jugadores.
+        // Mensajes que no necesitan actualizar la lista de jugadores.
         switch (parsedData.status) {
           case WS_CARD_EXCHANGE: // Recibir Carta del Intercambio
             dispatch(robarCarta(parsedData.card));
@@ -68,13 +72,19 @@ function App() {
             dispatch(setInfectado()); // Infectado
             break;
 
+          case WS_STATUS_SEDUCCION: // Seducción
+            if(jugador.id === parsedData.player_id) {
+              dispatch(setIntercambiante(parsedData.player_target_id));
+            }
+            if (jugador.id === parsedData.player_target_id) {
+              dispatch(setIntercambiante(parsedData.player_id));
+            }
+            break;
+
           default:
             dispatch(setJugadores(parsedData.players));
             break;
         }
-
-        console.log("Partida Ws:"); // BORRAR: DEBUG
-        console.log(parsedData);
 
         if (parsedData.started === true) {
           const formatoTurno = {
