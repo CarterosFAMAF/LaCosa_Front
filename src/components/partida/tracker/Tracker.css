@@ -6,6 +6,7 @@
   background-color: white;
   border: solid 1px black;
   overflow: hidden;
+  font-weight: bold;
 }
 
 .tracker li {

@@ -128,8 +128,6 @@ function App() {
                 dispatch(pedirMano(response.data));
                 //Establecer Jugadores
                 dispatch(setJugadores(parsedData.players));
-                //Turno Nuevo
-                dispatch(setTurnoPartida(parsedData.turn_game)); // QUITAR CUANDO BACK MANDE TURNO NUEVO AL INICIAR LA PARTIDA
                 //Iniciar
                 dispatch(iniciarPartida());
               })
@@ -150,6 +148,7 @@ function App() {
 
           default:
             dispatch(setJugadores(parsedData.players));
+            dispatch(setTurnoPartida(parsedData.turn_game));
             break;
         }
       },
