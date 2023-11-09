@@ -30,7 +30,7 @@ export const jugadorSlice = createSlice({
     atacanteCardId: 0,
     maxJugadores: 14,
     minJugadores: 4,
-    mensaje_finalizar: "",
+    mensaje_finalizar: "No hubo ganadores!",
   },
   reducers: {
     verPartida: (state, action) => {
@@ -65,24 +65,28 @@ export const jugadorSlice = createSlice({
       state.posicion = -1;
       state.fase = 0;
       state.cartas = [];
+      state.cartasPublicas = [];
       state.turnoPartida = 0;
       state.seleccion = -1;
       state.seleccionType = "";
+      state.jugadores = [];
       state.intercambiante = 0;
       state.cosaId = 0;
       state.atacanteId = 0;
-      state.atacanteCardId = 0;
       state.opcionesDefensivas = [];
+      state.atacanteCardId = 0;
       state.maxJugadores = 14;
       state.minJugadores = 4;
+      state.mensaje_finalizar = "No hubo ganadores!";
     },
     setJugadores: (state, action) => {
+      const me_player = action.payload.filter(player => (player.id === state.id))[0];
+      state.posicion = me_player.turn;
+      state.vivo = me_player.alive;
       state.jugadores = action.payload;
     },
-    setTurno: (state, action) => {
-      state.turnoPartida = action.payload.turnoPartida;
-      state.posicion = action.payload.posicion;
-      state.vivo = action.payload.vivo;
+    setTurnoPartida: (state, action) => {
+      state.turnoPartida = action.payload;
     },
     setInfectado: (state) => {
       state.rol === INFECCION_STR;
@@ -145,8 +149,8 @@ export const jugadorSlice = createSlice({
 });
 
 export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores,
-  setTurno, setInfectado, pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector, setFase,
-  setCartasPublicas, setIntercambiante, setMensajeFinalizar, setAtacante, limpiarAtacante,
+  setTurnoPartida, setInfectado, pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector,
+  setFase, setCartasPublicas, setIntercambiante, setMensajeFinalizar, setAtacante, limpiarAtacante,
   setOpcionesDefensivas } = jugadorSlice.actions;
-  
+
 export default jugadorSlice;

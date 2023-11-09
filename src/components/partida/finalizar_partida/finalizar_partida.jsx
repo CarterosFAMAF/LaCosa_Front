@@ -12,10 +12,6 @@ function FinalizarPartida() {
 
   const ganadores = jugador.jugadores.filter(player => (player.winner === true))
   .map(player => (player.name)).join(", ");
-  const finalizar_partida = () => {
-    dispatch(setJugadores([]));
-    navigate("/")
-  }
   
   return (
     <Modal 
@@ -33,15 +29,12 @@ function FinalizarPartida() {
             <Typography className='body2'>
               {jugador.mensaje_finalizar}
             </Typography>
-            <Typography className='body3'>
-              Ganadores: {ganadores}
-            </Typography>
             <hr />
             <Button 
               className="miboton"
               variant="contained" 
               style={{ marginTop: "45px" }}
-              onClick={() => finalizar_partida()}>
+              onClick={() => navigate("/")}>
               Volver al inicio
             </Button>
           </Container>
