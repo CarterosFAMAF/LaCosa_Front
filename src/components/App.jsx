@@ -4,8 +4,10 @@ import { BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import useWebSocket from "react-use-websocket";
-import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores, setFase, setCartasPublicas, 
-  setMensajeFinalizar, setIntercambiante, robarCarta, setAtacante, setOpcionesDefensivas} from "../store/jugadorSlice";
+import {
+  salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores, setFase, setCartasPublicas,
+  setMensajeFinalizar, setIntercambiante, robarCarta, setAtacante, setOpcionesDefensivas
+} from "../store/jugadorSlice";
 import AppRoutes from "./AppRoutes";
 
 // Web Socket Status
@@ -15,6 +17,7 @@ const WS_STATUS_DEFENSE_PRIVATE_MSG = 15;
 const WS_STATUS_EXCHANGE = 13;
 const WS_STATUS_WHISKY = 108;
 const WS_CARD_EXCHANGE = 505;
+const WS_STATUS_NOPE_THANKS = 203;
 
 function App() {
   const jugador = useSelector((state) => state.jugador);
@@ -56,6 +59,10 @@ function App() {
             }
             break;
 
+          case WS_STATUS_NOPE_THANKS:
+            dispatch(setIntercambiante(0));
+            break;
+
           default:
             dispatch(setJugadores(parsedData.players));
             break;
@@ -89,6 +96,7 @@ function App() {
 
               case WS_STATUS_EXCHANGE:  // Intercambio Extioso
                 dispatch(setFase(fase.robo)) // Termina Turno
+                dispatch(setIntercambiante(0));
                 break;
 
               default:

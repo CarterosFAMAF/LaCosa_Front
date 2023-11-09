@@ -71,6 +71,9 @@ function ElegirCarta() {
     setHasPlayed(true);
     const urlIntercambiarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/exchange_cards`;
 
+    console.log("Intercambiante")
+    console.log(jugador.intercambiante)
+
     const endpoint_params_intercambiar = {
       match_id: jugador.partidaId,
       player_id: jugador.id,
