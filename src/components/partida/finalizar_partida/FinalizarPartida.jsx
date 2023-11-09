@@ -1,13 +1,11 @@
 import React from 'react';
-import './finalizar_partida.css';
+import './FinalizarPartida.css';
 import { Modal, Button, Box, Container, Typography } from '@mui/material';
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import { setJugadores } from '../../../store/jugadorSlice';
 
 function FinalizarPartida() {
   const jugador = useSelector((state) => state.jugador);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const ganadores = jugador.jugadores.filter(player => (player.winner === true))

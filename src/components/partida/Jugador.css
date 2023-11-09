@@ -17,7 +17,7 @@ body {
   position: absolute;
   width: 100px;
   height: 30px;
-  transform: translate(-50%, 1030%);
+  transform: translate(-50%, 970%);
   font-size: large;
   background-color: var(--color-bottom-game-positive);
   border-radius: 5px;
