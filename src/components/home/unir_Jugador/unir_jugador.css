@@ -5,7 +5,8 @@
 }
 
 .boton_unir {
-  position: relative;
+  height: 20%;
+  width: 16.5%;
   left: 0.5%;
   color: rgb(255, 255, 255);
   background-image: var(--color-bottom-action);

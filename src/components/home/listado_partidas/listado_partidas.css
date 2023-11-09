@@ -3,10 +3,10 @@
     color:green !important;
   }
 
-  .partidas {
-    font-size: 120% !important;
-    color: black !important;
-  }
+.partidas {
+  font-size: 120% !important;
+  color: black !important;
+}
 
 .boton_actualizar {
   margin-left: 62% !important;
@@ -44,8 +44,8 @@
   position: relative;
   top: 30%;
   left: 25%;
-  width: 50%;
-  height: auto;
+  width: 700px;
+  height: 200px;
   color: rgb(255, 255, 255);
   background: var(--color-background-no-gradient);
   box-shadow: rgb(0, 0, 0) 5px 5px 15px 5px;

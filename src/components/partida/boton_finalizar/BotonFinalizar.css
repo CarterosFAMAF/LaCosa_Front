@@ -2,10 +2,10 @@
   position: fixed;
   bottom: 10px;
   left: 10px; /* Cambiado de right a left */
-  width: 180px;
+  width: 150px;
   height: 45px;
   font-size: large;
-  background-color: rgb(20, 120, 20);
+  background-color: var(--color-bottom-game-positive);
   border-radius: 5px;
   display: flex;
   justify-content: center;

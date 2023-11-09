@@ -67,7 +67,7 @@ function ListadoPartidas() {
         </Button>
       </div>
       {output}
-      <Modal open={jugador.partidaId != -1 && open}>
+      <Modal open={jugador.partidaId != -1 && open && !jugador.unido}>
         <Box className="modal_partida">
           <UnirJugador/>
           <Button variant="contained" onClick={() => handler(false,-1,"")} className="boton_cancelar"> cancelar </Button>
