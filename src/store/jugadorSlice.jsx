@@ -1,4 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+const COSA_STR = "La_Cosa";
+const HUMANO_STR = "Humano";
+const INFECCION_STR = "Infeccion";
 
 export const jugadorSlice = createSlice({
   name: "jugador",
@@ -11,6 +14,7 @@ export const jugadorSlice = createSlice({
     creador: false,
     iniciada: false,
     vivo: true,
+    rol: "",
     posicion: -1,
     fase: 0,
     cartas: [],
@@ -20,6 +24,7 @@ export const jugadorSlice = createSlice({
     seleccionType: "",
     jugadores: [],
     intercambiante: 0,
+    cosaId: 0,
     atacanteId: 0,
     opcionesDefensivas: [],
     atacanteCardId: 0,
@@ -56,6 +61,7 @@ export const jugadorSlice = createSlice({
       state.creador = false;
       state.iniciada = false;
       state.vivo = true;
+      state.rol = "";
       state.posicion = -1;
       state.fase = 0;
       state.cartas = [];
@@ -63,6 +69,7 @@ export const jugadorSlice = createSlice({
       state.seleccion = -1;
       state.seleccionType = "";
       state.intercambiante = 0;
+      state.cosaId = 0;
       state.atacanteId = 0;
       state.atacanteCardId = 0;
       state.opcionesDefensivas = [];
@@ -77,8 +84,17 @@ export const jugadorSlice = createSlice({
       state.posicion = action.payload.posicion;
       state.vivo = action.payload.vivo;
     },
+    setInfectado: (state) => {
+      state.rol === INFECCION_STR;
+      state.cosaId === state.intercambiante;
+    },
     pedirMano: (state, action) => {
       state.cartas = action.payload;
+      if (action.payload.some(card => card.type === COSA_STR)) {
+        state.rol = COSA_STR;
+      } else {
+        state.rol = HUMANO_STR;
+      }
     },
     robarCarta: (state, action) => {
       state.cartas.push(action.payload);
@@ -129,8 +145,8 @@ export const jugadorSlice = createSlice({
 });
 
 export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores,
-  setTurno, pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector, setFase,
-  setCartasPublicas, setIntercambiante, setMensajeFinalizar, 
-  setAtacante, limpiarAtacante, setOpcionesDefensivas } = jugadorSlice.actions;
+  setTurno, setInfectado, pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector, setFase,
+  setCartasPublicas, setIntercambiante, setMensajeFinalizar, setAtacante, limpiarAtacante,
+  setOpcionesDefensivas } = jugadorSlice.actions;
   
 export default jugadorSlice;

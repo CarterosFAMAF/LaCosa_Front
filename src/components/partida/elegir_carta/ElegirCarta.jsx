@@ -237,12 +237,18 @@ function ElegirCarta() {
             }
           </div>
         }
-        {jugador.fase === fase.intercambio && jugador.seleccionType !== "Infectado" && !hasPlayed &&
+        {jugador.fase === fase.intercambio && !hasPlayed &&
           <div>
-            <button
-              className="opcion_verde" onClick={() => intercambiar_carta()}>
-              Intercambiar
-            </button>
+            {(jugador.seleccionType !== "Infectado" || jugador.rol === "La_Cosa" ||
+              (jugador.rol === "Infeccion" &&
+                jugador.cartas.filter(card => card.type === "Infecccion").length > 1 &&
+                jugador.intercambiante === jugador.cosaId))
+              &&
+              <button
+                className="opcion_verde" onClick={() => intercambiar_carta()}>
+                Intercambiar
+              </button>
+            }
             {jugador.opcionesDefensivas.some(id => jugador.seleccion === id) &&
               <button className="opcion_azul" onClick={() => defender_carta(jugador.seleccion)}>
                 Defender

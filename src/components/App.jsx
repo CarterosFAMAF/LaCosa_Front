@@ -6,13 +6,14 @@ import { useSnackbar } from "notistack";
 import useWebSocket from "react-use-websocket";
 import {
   salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores, setFase, setCartasPublicas,
-  setMensajeFinalizar, setIntercambiante, robarCarta, setAtacante, setOpcionesDefensivas
+  setMensajeFinalizar, setIntercambiante, robarCarta, setAtacante, setOpcionesDefensivas, setInfectado
 } from "../store/jugadorSlice";
 import AppRoutes from "./AppRoutes";
 
 // Web Socket Status
 const WS_STATUS_MATCH_ENDED = 3;
 const WS_STATUS_EXCHANGE_REQUEST = 12;
+const WS_STATUS_INFECTED = 14;
 const WS_STATUS_DEFENSE_PRIVATE_MSG = 15;
 const WS_STATUS_EXCHANGE = 13;
 const WS_STATUS_WHISKY = 108;
@@ -59,8 +60,12 @@ function App() {
             }
             break;
 
-          case WS_STATUS_NOPE_THANKS:
+          case WS_STATUS_NOPE_THANKS:   // Cancelación de Intercambio "No Gracias"
             dispatch(setIntercambiante(0));
+            break;
+
+          case WS_STATUS_INFECTED:
+            dispatch(setInfectado()); // Infectado
             break;
 
           default:
