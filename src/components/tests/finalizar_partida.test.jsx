@@ -3,7 +3,7 @@ import { Provider } from "react-redux";
 import { describe, expect, test } from "vitest";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import configureStore from "redux-mock-store";
-import FinalizarPartida from "../partida/finalizar_partida/finalizar_partida";
+import FinalizarPartida from "../partida/finalizar_partida/FinalizarPartida";
 
 const mockStore = configureStore([]);
 describe("Finalizar Partida Test", () => {
