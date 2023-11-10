@@ -124,7 +124,7 @@ function ElegirCarta() {
           dispatch(setFase(fase.resultado)); // Ver Efecto
         }
         else {
-          dispatch(setFase(fase.robo)); // No es tu turno.
+          dispatch(setFase(fase.espera)); // No es tu turno.
         }
 
         const urlRobarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/get_card`;
@@ -242,7 +242,7 @@ function ElegirCarta() {
           <div>
             {(jugador.seleccionType !== "Infectado" || jugador.rol === "La_Cosa" ||
               (jugador.rol === "Infeccion" &&
-                jugador.cartas.filter(card => card.type === "Infecccion").length > 1 &&
+                jugador.cartas.filter(card => card.type === "Infectado").length > 1 &&
                 jugador.intercambiante === jugador.cosaId))
               &&
               <button
