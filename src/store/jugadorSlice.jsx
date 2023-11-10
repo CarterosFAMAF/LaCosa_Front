@@ -88,9 +88,9 @@ export const jugadorSlice = createSlice({
     setTurnoPartida: (state, action) => {
       state.turnoPartida = action.payload;
     },
-    setInfectado: (state) => {
-      state.rol === INFECCION_STR;
-      state.cosaId === state.intercambiante;
+    setInfectado: (state, action) => {
+      state.rol = INFECCION_STR;
+      state.cosaId = action.payload;
     },
     pedirMano: (state, action) => {
       state.cartas = action.payload;

@@ -6,7 +6,11 @@ import Carta from "../partida/carta/Carta";
 
 describe("Carta Test", () => {
   test("Renderiza Carta", () => {
-    const elem = TestRenderer.create(<Provider store={store}><Carta></Carta></Provider>).toJSON();
+    const card = {
+      id: 1,
+      image: "wa",
+    }
+    const elem = TestRenderer.create(<Provider store={store}><Carta carta={card}></Carta></Provider>).toJSON();
     expect(elem).not.toBeNull;
   });
 });

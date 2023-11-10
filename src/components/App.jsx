@@ -5,9 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import useWebSocket from "react-use-websocket";
 import {
-  salirPartida, iniciarPartida, setTurnoPartida, pedirMano, setJugadores, setFase, setCartasPublicas,
-  setMensajeFinalizar, setIntercambiante, robarCarta, setAtacante, setOpcionesDefensivas, setInfectado
-} from "../store/jugadorSlice";
+  salirPartida, iniciarPartida, setTurnoPartida, pedirMano, setJugadores, setFase,
+  setCartasPublicas, setMensajeFinalizar, setIntercambiante, robarCarta, setAtacante,
+  setOpcionesDefensivas, setInfectado, limpiarSelector} from "../store/jugadorSlice";
 import AppRoutes from "./AppRoutes";
 
 //Web Socket Status
@@ -84,13 +84,12 @@ function App() {
             break;
 
           case WS_STATUS_EXCHANGE: // Intercambio Extioso
-            dispatch(setFase(fase.robo))
+            dispatch(setFase(fase.espera))
             dispatch(setIntercambiante(0));
             break;
 
           case WS_CARD: // Recibir Carta del Intercambio
             dispatch(robarCarta(parsedData.card));
-            dispatch(setFase(fase.robo));
             break;
 
           case WS_STATUS_DEFENSE_PRIVATE_MSG: // Mensaje de que puedes defenderte
@@ -106,7 +105,7 @@ function App() {
             break;
 
           case WS_STATUS_INFECTED: // Infección
-            dispatch(setInfectado());
+            dispatch(setInfectado(parsedData.player_id));
             break;
 
           case WS_STATUS_WHISKY: // Whisky
@@ -161,7 +160,11 @@ function App() {
             break;
 
           case WS_STATUS_NEW_TURN: // Turno Nuevo
+            if (parsedData.player_id === jugador.id) {
+              dispatch(setFase(fase.robo));
+            }
             dispatch(setTurnoPartida(parsedData.turn_game));
+            dispatch(limpiarSelector());
             break;
 
           case WS_STATUS_MATCH_ENDED: // Terminó Partida (Desconexion)

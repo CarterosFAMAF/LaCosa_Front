@@ -53,7 +53,8 @@ function Jugador() {
             <BotonFinalizar />
 
             {(jugador.posicion === jugador.turnoPartida && jugador.fase === fase.robo) && <RobarCarta />}
-            {(jugador.fase !== fase.robo && jugador.fase !== fase.resultado) && <ElegirCarta />}
+            {(jugador.fase === fase.juego || jugador.fase === fase.objetivo ||
+              jugador.fase === fase.defensa || jugador.fase === fase.intercambio) && <ElegirCarta />}
             {jugador.fase === fase.resultado &&
               <div className="check_fase">
                 <Mano cartas={jugador.cartasPublicas} />
