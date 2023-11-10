@@ -1,7 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+// Deben ser iguales a los strings en rolesSlice
 const COSA_STR = "La_Cosa";
 const HUMANO_STR = "Humano";
-const INFECCION_STR = "Infeccion";
+const INFECCION_STR = "Infectado";
 
 export const jugadorSlice = createSlice({
   name: "jugador",

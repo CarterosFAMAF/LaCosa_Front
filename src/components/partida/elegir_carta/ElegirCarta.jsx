@@ -9,6 +9,9 @@ import { useEffect } from "react";
 function ElegirCarta() {
   const jugador = useSelector((state) => state.jugador);
   const fase = useSelector((state) => state.fase);
+  const typecard = useSelector((state) => state.typecard);
+  const rol = useSelector((state) => state.rol);
+
   const dispatch = useDispatch();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -216,7 +219,7 @@ function ElegirCarta() {
 
   return (
     <div className="botones_juego">
-      {jugador.seleccion !== -1 && jugador.seleccionType !== "La_Cosa" && <div>
+      {jugador.seleccion !== -1 && jugador.seleccionType !== typecard.lacosa && <div>
         {jugador.fase === fase.juego && !hasPlayed &&
         <div>
           {cartasPanico.length ? 
@@ -226,7 +229,7 @@ function ElegirCarta() {
               className="opcion_rojo" onClick={() => descartar_carta()}>
               Descartar
             </button>
-            {jugador.seleccionType === "Accion" &&
+            {jugador.seleccionType === typecard.accion &&
               <button className="opcion_verde" onClick={() => check_carta()}>
                 Jugar
               </button>}
@@ -248,9 +251,9 @@ function ElegirCarta() {
         }
         {jugador.fase === fase.intercambio && !hasPlayed &&
           <div>
-            {(jugador.seleccionType !== "Infectado" || jugador.rol === "La_Cosa" ||
-              (jugador.rol === "Infeccion" &&
-                jugador.cartas.filter(card => card.type === "Infectado").length > 1 &&
+            {(jugador.seleccionType !== typecard.infectado || jugador.rol === typecard.lacosa ||
+              (jugador.rol === rol.infectado &&
+                jugador.cartas.filter(card => card.type === typecard.infectado).length > 1 &&
                 jugador.intercambiante === jugador.cosaId))
               &&
               <button

@@ -5,6 +5,7 @@ import { useSnackbar } from "notistack";
 
 function BotonFinalizar() {
   const jugador = useSelector((state) => state.jugador);
+  const rol = useSelector((state) => state.rol);
   const { enqueueSnackbar } = useSnackbar();
 
   const urlBotonFinalizar = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/declare_end`;
@@ -24,7 +25,7 @@ function BotonFinalizar() {
   return (
     <div>
       {
-        jugador.rol === "La_Cosa" &&
+        jugador.rol === rol.lacosa &&
         <button className="boton_finalizar" onClick={() => boton_finalizar()}>
           Finalizar
         </button>
