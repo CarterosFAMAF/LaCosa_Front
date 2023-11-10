@@ -27,6 +27,11 @@ function FinalizarPartida() {
             <Typography className='body2'>
               {jugador.mensaje_finalizar}
             </Typography>
+            {ganadores.length && 
+              <Typography className='body3'>
+                Ganadores: {ganadores}
+              </Typography>
+            }
             <hr />
             <Button 
               className="miboton"

@@ -1,4 +1,5 @@
 import "./Jugador.css";
+import axios from "axios";
 import Mano from "./mano/Mano";
 import RobarCarta from "./robar/RobarCarta";
 import ElegirCarta from "./elegir_carta/ElegirCarta";
@@ -7,14 +8,30 @@ import Tracker from "./tracker/Tracker";
 import BotonFinalizar from "./boton_finalizar/BotonFinalizar";
 import { setCartasPublicas, setFase } from "../../store/jugadorSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { useSnackbar } from "notistack";
+import { useState } from "react";
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
   const fase = useSelector((state) => state.fase);
+  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
+  const [endedMatch, setEndedMatch] = useState(false);
 
   console.log(jugador); //Borrar
-
+  if(jugador.rol === "La_Cosa" && !jugador.vivo && endedMatch){
+    const urlBotonFinalizar = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/declare_end`;
+    axios
+      .put(urlBotonFinalizar, {match_id: jugador.partidaId})
+      .then(function (response) {
+      })
+      .catch(function (response) {
+        enqueueSnackbar(`error: ${response.message}`, {
+          variant: "error",
+        });
+      });
+    setEndedMatch(true);
+  }
   const terminar_checkeo = () => {
     if (jugador.posicion === jugador.turnoPartida) {
       dispatch(setFase(fase.intercambio)); // Ir a Intercambio

@@ -8,13 +8,10 @@ function BotonFinalizar() {
   const { enqueueSnackbar } = useSnackbar();
 
   const urlBotonFinalizar = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/declare_end`;
-  const endpoint_params_faltante = {
-    match_id: jugador.partidaId,
-  };
 
   const boton_finalizar = () => {
     axios
-      .put(urlBotonFinalizar, endpoint_params_faltante)
+      .put(urlBotonFinalizar, {match_id: jugador.partidaId})
       .then(function (response) {
       })
       .catch(function (response) {
