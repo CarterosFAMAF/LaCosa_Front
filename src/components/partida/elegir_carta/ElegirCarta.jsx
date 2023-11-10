@@ -78,7 +78,8 @@ function ElegirCarta() {
       match_id: jugador.partidaId,
       player_id: jugador.id,
       player_target_id: jugador.intercambiante,
-      card_id: jugador.seleccion
+      card_id: jugador.seleccion,
+      is_you_failed: false
     };
 
     axios
