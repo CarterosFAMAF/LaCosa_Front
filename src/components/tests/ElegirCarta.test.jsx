@@ -1,13 +1,13 @@
 import TestRenderer from "react-test-renderer";
 import { Provider } from "react-redux";
 import configureStore from "redux-mock-store";
-import JugarCarta from "../partida/jugar/JugarCarta";
+import ElegirCarta from "../partida/elegir_carta/ElegirCarta";
 import { describe, expect, test } from "vitest";
 
 const mockStore = configureStore([]);
 
-describe("JugarCarta Test", () => {
-  test("Renderiza JugarCarta", () => {
+describe("ElegirCarta Test", () => {
+  test("Renderiza ElegirCarta", () => {
 
     const initialState = {
       jugador: {
@@ -25,7 +25,14 @@ describe("JugarCarta Test", () => {
           { id: 8, name: 'Juan Carlos', turn: 2, alive: true },
           { id: 7, name: 'Elena', turn: 3, alive: true },
         ],
-
+      },
+      fase: {
+        robo: 0,
+        juego: 1,
+        objetivo: 2,
+        defensa: 3,
+        resultado: 4,
+        intercambio: 5,
       }
     };
 
@@ -33,7 +40,7 @@ describe("JugarCarta Test", () => {
 
     const elem = TestRenderer.create(
       <Provider store={store}>
-        <JugarCarta />
+        <ElegirCarta />
       </Provider>
     ).toJSON();
 

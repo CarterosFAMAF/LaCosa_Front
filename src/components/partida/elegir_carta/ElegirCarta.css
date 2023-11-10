@@ -1,0 +1,44 @@
+.botones_juego {
+  position: absolute;
+  width: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -70%);
+  justify-content: center;
+  text-align: center;
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.opcion_rojo {
+  width: 180px;
+  height: 45px;
+  font-size: large;
+  background-color: var(--color-bottom-game-negative);
+  border-radius: 5px;
+  float: left;
+  margin-right: 10px;
+}
+
+.opcion_verde {
+  width: 180px;
+  height: 45px;
+  font-size: large;
+  background-color: var(--color-bottom-game-positive);
+  border-radius: 5px;
+  float: left;
+  margin-right: 10px;
+}
+
+.opcion_azul {
+  width: 180px;
+  height: 45px;
+  font-size: large;
+  background-color: var(--color-bottom-game-defense);
+  border-radius: 5px;
+  float: left;
+  margin-right: 10px;
+}

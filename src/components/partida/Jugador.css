@@ -1,6 +1,6 @@
 body {
-    height: 100vh;
-    background: linear-gradient(to bottom, #2e48be, #778ece);
+  height: 100vh;
+  background: var(--color-background-gradient);
 }
 
 .check_fase {
@@ -17,8 +17,8 @@ body {
   position: absolute;
   width: 100px;
   height: 30px;
-  transform: translate(-50%, 1030%);
+  transform: translate(-50%, 970%);
   font-size: large;
-  background-color: rgb(20, 120, 20);
+  background-color: var(--color-bottom-game-positive);
   border-radius: 5px;
 }

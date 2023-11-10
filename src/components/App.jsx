@@ -1,14 +1,52 @@
 import React from "react";
 import axios from "axios";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import useWebSocket from "react-use-websocket";
-import { salirPartida, iniciarPartida, setTurno, pedirMano, setJugadores, setFase, setCartasPublicas } from "../store/jugadorSlice";
+import {
+  salirPartida, iniciarPartida, setTurnoPartida, pedirMano, setJugadores, setFase, setCartasPublicas,
+  setMensajeFinalizar, setIntercambiante, robarCarta, setAtacante, setOpcionesDefensivas, setInfectado
+} from "../store/jugadorSlice";
 import AppRoutes from "./AppRoutes";
+
+//Web Socket Status
+//Lobby
+const WS_STATUS_PLAYER_JOINED = 0
+const WS_STATUS_PLAYER_LEFT = 1
+const WS_STATUS_MATCH_STARTED = 2
+const WS_STATUS_MATCH_ENDED = 3
+const WS_STATUS_PLAYER_WELCOME = 4
+//Partida
+const WS_STATUS_NEW_TURN = 10
+const WS_STATUS_DISCARD = 11
+const WS_STATUS_EXCHANGE_REQUEST = 12
+const WS_STATUS_EXCHANGE = 13
+const WS_STATUS_INFECTED = 14
+const WS_STATUS_DEFENSE_PRIVATE_MSG = 15
+//Accion
+const WS_STATUS_PLAYER_BURNED = 101
+const WS_STATUS_CHANGED_OF_PLACES = 102
+const WS_STATUS_REVERSE_POSITION = 103
+const WS_STATUS_SUSPECT = 104
+const WS_STATUS_CARD_DISCOVER = 105
+const WS_STATUS_CARD_SHOWN = 106
+const WS_STATUS_ANALYSIS = 107
+const WS_STATUS_WHISKY = 108
+const WS_STATUS_SEDUCCION = 109
+//Defensa
+const WS_STATUS_HERE_IM_FINE = 201
+const WS_STATUS_NOTHING_BARBECUE = 202
+const WS_STATUS_NOPE_THANKS = 203
+const WS_STATUS_YOU_FAILED = 204
+const WS_STATUS_SCARY = 205
+// Carta de Intercambio Ws
+const WS_CARD = 505
+
 
 function App() {
   const jugador = useSelector((state) => state.jugador);
+  const fase = useSelector((state) => state.fase);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const socketUrl = `ws://localhost:8000/ws/matches/${jugador.partidaId}/${jugador.id}`;
@@ -22,43 +60,74 @@ function App() {
       },
       onMessage: (event) => {
         const parsedData = JSON.parse(JSON.parse(event.data));
-
-        if (parsedData.status === 3) {
-          // Terminó la Partida
-          dispatch(salirPartida());
-        }
-
-        dispatch(setJugadores(parsedData.players));
-
         console.log("Partida Ws:"); // BORRAR: DEBUG
         console.log(parsedData);
 
-        if (parsedData.started === true) {
-          const formatoTurno = {
-            turnoPartida: parsedData.turn_game,
-            posicion: parsedData.players.filter(player => (player.id === jugador.id))[0].turn,
-            vivo: parsedData.players.filter(player => (player.id === jugador.id))[0].alive
-          };
-          if (jugador.iniciada === true) {//En Partida
-            //Whisky & Ups!
-            if (parsedData.status === 14 || parsedData.status === 23 || parsedData.status === 22) {
-              dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
-              dispatch(setFase(3));
-              enqueueSnackbar(parsedData.message, {
-                variant: "info",
-              });
+        // Terminó la Partida
+        if (parsedData.status === 300 || parsedData.status === 301 || parsedData.status === 302) {
+          dispatch(setMensajeFinalizar(parsedData.message));
+        }
+
+        switch (parsedData.status) {
+
+          case WS_STATUS_EXCHANGE_REQUEST: // Solicitar Intercambio
+            if (parsedData.player_target_id === jugador.id) {
+              dispatch(setIntercambiante(parsedData.player_id))
+              dispatch(setFase(fase.intercambio))
             }
-            //Avanza Turno.
-            dispatch(setTurno(formatoTurno));
-          } else {
-            //Iniciar Partida.
+            break;
+
+          case WS_STATUS_EXCHANGE: // Intercambio Extioso
+            dispatch(setFase(fase.robo))
+            dispatch(setIntercambiante(0));
+            break;
+
+          case WS_CARD: // Recibir Carta del Intercambio
+            dispatch(robarCarta(parsedData.card));
+            dispatch(setFase(fase.robo));
+            break;
+
+          case WS_STATUS_DEFENSE_PRIVATE_MSG: // Mensaje de que puedes defenderte
+            dispatch(setOpcionesDefensivas(parsedData.data_for_defense.defensive_options_id));
+            dispatch(setAtacante(parsedData.data_for_defense));
+            if (jugador.fase !== fase.intercambio) {
+              dispatch(setFase(fase.defensa));
+            }
+            break;
+
+          case WS_STATUS_NOPE_THANKS: // Cancelación de Intercambio: "No Gracias"
+            dispatch(setIntercambiante(0));
+            break;
+
+          case WS_STATUS_INFECTED: // Infección
+            dispatch(setInfectado());
+            break;
+
+          case WS_STATUS_WHISKY: // Whisky
+            dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
+            dispatch(setFase(fase.resultado));
+            enqueueSnackbar(parsedData.message, {
+              variant: "info",
+            });
+            break;
+
+          case WS_STATUS_SEDUCCION: // Seducción
+            if (jugador.id === parsedData.player_id) {
+              dispatch(setIntercambiante(parsedData.player_target_id));
+            }
+            if (jugador.id === parsedData.player_target_id) {
+              dispatch(setIntercambiante(parsedData.player_id));
+            }
+            break;
+
+          case WS_STATUS_MATCH_STARTED: // Iniciar Partida
             axios
               .get(urlPedirMano)
               .then(function (response) {
                 //Pedir Mano
                 dispatch(pedirMano(response.data));
-                //Establecer Turno
-                dispatch(setTurno(formatoTurno));
+                //Establecer Jugadores
+                dispatch(setJugadores(parsedData.players));
                 //Iniciar
                 dispatch(iniciarPartida());
               })
@@ -67,7 +136,20 @@ function App() {
                   variant: "error",
                 });
               });
-          }
+            break;
+
+          case WS_STATUS_NEW_TURN: // Turno Nuevo
+            dispatch(setTurnoPartida(parsedData.turn_game));
+            break;
+
+          case WS_STATUS_MATCH_ENDED: // Terminó Partida (Desconexion)
+            dispatch(salirPartida());
+            break;
+
+          default:
+            dispatch(setJugadores(parsedData.players));
+            dispatch(setTurnoPartida(parsedData.turn_game));
+            break;
         }
       },
       onClose: () => {
