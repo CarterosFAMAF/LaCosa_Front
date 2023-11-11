@@ -186,7 +186,7 @@ function App() {
           
           case WS_STATUS_CHAT_MESSAGE: // Mensaje Chat
             dispatch(addMessage({owner: parsedData.owner, 
-              text: parsedData.text, //Listo?
+              text: parsedData.text, // PREGUNTAR A MARIÑO
               infeccion: false}));
             break;
 

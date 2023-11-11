@@ -6,11 +6,38 @@ import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import { IconButton, Box } from '@mui/material';
 import { useSelector } from 'react-redux';
+import axios from "axios";
 
 function Chat () {
   
   const jugador = useSelector((state) => state.jugador);
   const [showChat, setShowChat] = useState(true);
+  const [mensaje, setMensaje] = useState("");
+  
+  const handleChange = (event) => {
+    setMensaje({
+      ...mensaje,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const enviar_mensaje = () => {
+    const urlMensaje = `http://127.0.0.1:8000/matches/`;
+    const mensaje = {
+      owner: jugador.nombre,
+      text: mensaje,
+    }
+    // PREGUNTAR A MARIÑO
+    axios
+      .post(urlMensaje, mensaje)
+      .then(function (response) {
+      })
+      .catch(function (response) {
+        enqueueSnackbar(`error: ${response.message}`, {
+          variant: "error",
+        });
+      });
+  }
   
   const chat = jugador.chat.map ( (mensaje) => {
     if (mensaje.owner !== 'Sistema') {
@@ -78,6 +105,8 @@ function Chat () {
                 width: "75%", 
                 height: "50px"
               }}
+              value={mensaje}
+              onChange={handleChange}
             >  
             </TextField>
             <IconButton 
@@ -90,7 +119,8 @@ function Chat () {
                 position: "fixed", 
                 width: "50px", 
                 height: "50px"
-              }} 
+              }}
+              onClick={ () => enviar_mensaje() } 
               >
               <SendOutlinedIcon 
                 sx={{ color: 'black' }}
