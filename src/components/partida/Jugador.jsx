@@ -10,6 +10,7 @@ import { setCartasPublicas, setFase, setIntercambiante } from "../../store/jugad
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
+import Chat from "../chat/chat";
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
@@ -54,6 +55,7 @@ function Jugador() {
         <FinalizarPartida /> :
         (jugador.vivo) ?
           <div>
+            <Chat />
             <Tracker />
             <Mano cartas={jugador.cartas} />
             <BotonFinalizar />

@@ -1,0 +1,55 @@
+.abrir_chat{
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+
+.cerrar_chat{
+    top: 0px;
+    right: 10px;
+}
+
+.modal_chat{
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    width: 20%;
+    height: 99.2%;
+    background-color: white;
+    border-radius: 20px;
+    border: 2px solid black;
+    overflow: 'auto';
+}
+
+.ReactModal__Overlay {
+    opacity: 0;
+    transition: opacity 500ms ease-in-out;
+}
+
+.ReactModal__Overlay--after-open{
+    opacity: 1;
+}
+
+.ReactModal__Overlay--before-close{
+    opacity: 0;
+}
+
+.titulo_chat{
+    font-family: 'Open Sans', sans-serif;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.chat{
+    border: 2px solid black;
+    height: 520px;
+    width: 91%;
+    margin-left: 10px;
+    border-radius: 20px;
+    margin-right: 20px;
+    margin-top: 15px;
+}
