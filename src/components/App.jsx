@@ -185,8 +185,8 @@ function App() {
             break;
           
           case WS_STATUS_CHAT_MESSAGE: // Mensaje Chat
-            dispatch(addMessage({owner: parsedData.owner, 
-              text: parsedData.text, // PREGUNTAR A MARIÑO
+            dispatch(addMessage({owner: parsedData.msg.owner, 
+              text: parsedData.msg.text,
               infeccion: false}));
             break;
 
