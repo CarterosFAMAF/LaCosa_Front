@@ -124,7 +124,7 @@ function App() {
               variant: "info",
             });
             break;
-          
+
           case WS_STATUS_UPS: // Ups
             dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
             dispatch(setFase(fase.resultado));
@@ -168,6 +168,21 @@ function App() {
 
           case WS_STATUS_MATCH_ENDED: // Terminó Partida (Desconexion)
             dispatch(salirPartida());
+            break;
+
+          case WS_STATUS_PLAYER_BURNED:
+            if (jugador.rol === rol.lacosa && jugador.id === parsedData.player_target_id) {
+              const urlBotonFinalizar = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/declare_end`;
+              axios
+                .put(urlBotonFinalizar, { match_id: jugador.partidaId })
+                .then(function (response) {
+                })
+                .catch(function (response) {
+                  enqueueSnackbar(`error: ${response.message}`, {
+                    variant: "error",
+                  });
+                });
+            }
             break;
 
           default:

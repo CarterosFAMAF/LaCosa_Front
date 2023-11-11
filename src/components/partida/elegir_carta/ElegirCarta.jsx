@@ -21,7 +21,6 @@ function ElegirCarta() {
   const cartasPanico = jugador.cartas.filter(carta => carta.type === "Panico");
 
   useEffect(() => {
-    console.log("SetHasPlayed: False")
     setHasPlayed(false);
   }, [jugador.fase]);
 

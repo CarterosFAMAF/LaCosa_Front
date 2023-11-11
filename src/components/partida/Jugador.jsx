@@ -21,21 +21,6 @@ function Jugador() {
 
   console.log(jugador); //Borrar
 
-  // La Cosa avisa cuando muere
-  if (jugador.rol === "La_Cosa" && !jugador.vivo && endedMatch) {
-    const urlBotonFinalizar = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/declare_end`;
-    axios
-      .put(urlBotonFinalizar, { match_id: jugador.partidaId })
-      .then(function (response) {
-        setEndedMatch(true);
-      })
-      .catch(function (response) {
-        enqueueSnackbar(`error: ${response.message}`, {
-          variant: "error",
-        });
-      });
-  }
-
   //Infectado revisa si el intercambiante es LaCosa
   if (jugador.rol === rol.infectado &&
     jugador.fase === fase.intercambio && !jugador.intercambiante &&
