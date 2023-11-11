@@ -1,6 +1,6 @@
 .botones_juego {
   position: absolute;
-  width: 100%;
+  width: 70%;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -70%);
@@ -31,6 +31,7 @@
   border-radius: 5px;
   float: left;
   margin-right: 10px;
+  margin-bottom: 10px;
 }
 
 .opcion_azul {
@@ -41,4 +42,10 @@
   border-radius: 5px;
   float: left;
   margin-right: 10px;
+}
+
+.column {
+  float: left;
+  width: 180px;
+  margin: 5px;
 }
