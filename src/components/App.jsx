@@ -7,7 +7,7 @@ import useWebSocket from "react-use-websocket";
 import {
   salirPartida, iniciarPartida, setTurnoPartida, pedirMano, setJugadores, setFase,
   setCartasPublicas, setMensajeFinalizar, setIntercambiante, robarCarta, setAtacante,
-  setOpcionesDefensivas, setInfectado, limpiarSelector
+  setOpcionesDefensivas, setInfectado, limpiarSelector, addMessage
 } from "../store/jugadorSlice";
 import AppRoutes from "./AppRoutes";
 
@@ -48,6 +48,8 @@ const WS_STATUS_BLIND_DATE = 403
 const WS_STATUS_REVELATIONS = 404
 // Carta de Intercambio Ws
 const WS_CARD = 505
+// Mensaje Chat Ws
+const WS_STATUS_CHAT_MESSAGE = 600
 
 
 function App() {
@@ -79,6 +81,7 @@ function App() {
         switch (parsedData.status) {
 
           case WS_STATUS_EXCHANGE_REQUEST: // Solicitar Intercambio
+            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: false}));
             if (parsedData.player_target_id === jugador.id) {
               dispatch(setIntercambiante(parsedData.player_id))
               dispatch(setFase(fase.intercambio))
@@ -86,15 +89,18 @@ function App() {
             break;
 
           case WS_STATUS_EXCHANGE: // Intercambio Extioso
+            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: false}));
             dispatch(setFase(fase.espera))
             dispatch(setIntercambiante(0));
             break;
 
           case WS_CARD: // Recibir Carta del Intercambio
+            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: false}));
             dispatch(robarCarta(parsedData.card));
             break;
 
           case WS_STATUS_DEFENSE_PRIVATE_MSG: // Mensaje de que puedes defenderte
+            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: false}));
             dispatch(setOpcionesDefensivas(parsedData.data_for_defense.defensive_options_id));
             dispatch(setAtacante(parsedData.data_for_defense));
             if (jugador.fase !== fase.intercambio) {
@@ -103,40 +109,37 @@ function App() {
             break;
 
           case WS_STATUS_NOPE_THANKS: // No Gracias: Cancela intercambio
+            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: false}));
             dispatch(setIntercambiante(0));
             break;
 
           case WS_STATUS_INFECTED: // Infección
+            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: true}));
             dispatch(setInfectado(parsedData.player_id));
             break;
 
           case WS_STATUS_WHISKY: // Whisky
+            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: false}));
             if (parsedData.player_id !== jugador.id) {
               dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
               dispatch(setFase(fase.resultado));
             }
-            enqueueSnackbar(parsedData.message, {
-              variant: "info",
-            });
             break;
 
           case WS_STATUS_LET_IT_REMAIN_BETWEEN_US: // Dejarlo entre nosotros
+            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: false}));
             dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
             dispatch(setFase(fase.resultado));
-            enqueueSnackbar(parsedData.message, {
-              variant: "info",
-            });
             break;
 
           case WS_STATUS_UPS: // Ups
+            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: false}));
             dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
             dispatch(setFase(fase.resultado));
-            enqueueSnackbar(parsedData.message, {
-              variant: "info",
-            });
             break;
 
           case WS_STATUS_SEDUCCION: // Seducción
+            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: false}));
             if (jugador.id === parsedData.player_id) {
               dispatch(setIntercambiante(parsedData.player_target_id));
             }
@@ -146,6 +149,7 @@ function App() {
             break;
 
           case WS_STATUS_YOU_FAILED: // Fallaste
+            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: false}));
             if (jugador.id === parsedData.player_fallaste) {
               dispatch(setIntercambiante(0));
             } else if (jugador.id === parsedData.player_target) {
@@ -155,6 +159,7 @@ function App() {
             break;
 
           case WS_STATUS_MATCH_STARTED: // Iniciar Partida
+            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: false}));
             axios
               .get(urlPedirMano)
               .then(function (response) {
@@ -173,12 +178,20 @@ function App() {
             break;
 
           case WS_STATUS_NEW_TURN: // Turno Nuevo
+            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: false}));
             dispatch(setFase(fase.robo));
             dispatch(setTurnoPartida(parsedData.turn_game));
             dispatch(limpiarSelector());
             break;
+          
+          case WS_STATUS_CHAT_MESSAGE: // Mensaje Chat
+            dispatch(addMessage({owner: parsedData.owner, 
+              text: parsedData.text, //Listo?
+              infeccion: false}));
+            break;
 
           case WS_STATUS_PLAYER_BURNED: // Muere alguien (Cosa Check)
+            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: false}));
             if (jugador.rol === rol.lacosa && jugador.id === parsedData.player_target_id) {
               const urlBotonFinalizar = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/declare_end`;
               axios
@@ -198,6 +211,7 @@ function App() {
             break;
 
           default:
+            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: false}));
             dispatch(setJugadores(parsedData.players));
             dispatch(setTurnoPartida(parsedData.turn_game));
             break;

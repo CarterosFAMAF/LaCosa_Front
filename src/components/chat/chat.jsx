@@ -2,26 +2,36 @@ import "./chat.css";
 import ChatIcon from '@mui/icons-material/Chat';
 import CloseIcon from '@mui/icons-material/Close';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
-import Modal from 'react-modal';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
-import { IconButton } from '@mui/material';
+import { IconButton, Box } from '@mui/material';
+import { useSelector } from 'react-redux';
 
 function Chat () {
-  const [isOpen, setIsOpen] = useState(true);
-
-  const openChat = () => {
-    setIsOpen(true);
-  };
-
-  const closeChat = () => {
-    setIsOpen(false);
-  };
+  
+  const jugador = useSelector((state) => state.jugador);
+  const [showChat, setShowChat] = useState(true);
+  
+  const chat = jugador.chat.map ( (mensaje) => {
+    if (mensaje.owner !== 'Sistema') {
+      return (
+        <div style={mensaje.infeccion ? {color: "green"} : {color: "grey"}}>
+          <p> {mensaje.owner}: {mensaje.text} </p>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <p> {mensaje.text} </p>
+        </div>
+      );
+    }
+  } );
 
   return (
     <div>
       <IconButton 
-        className="abrir_chat"
+        className={!showChat ? "abrir_chat" : "hidden"}
         aria-label="upload picture"
         style={{ marginTop: "10px", 
           marginLeft: "10px", 
@@ -29,27 +39,17 @@ function Chat () {
           width: "30px", 
           height: "19px"
         }} 
-        onClick={openChat}> 
+        onClick={() => setShowChat(true)}> 
         <ChatIcon
           color="secondary"
           sx={{ fontSize: 40, color: 'white' }}
         /> 
       </IconButton>
-      <Modal
-        className="modal_chat"
-        style={{
-          overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0)', // Fondo transparente
-          },
-        }}
-        shouldCloseOnOverlayClick={false}
-        isOpen={isOpen}
-        onRequestClose={closeChat}
-        closeTimeoutMS={500}
-        contentLabel="Chat Modal"
-        ariaHideApp={false}
+      <Box
+        className={showChat ? "modal_chat" : "hidden"}
+        component="div"
       >
-        {/* Contenido del chat */}
+        {chat}
         <div>
           <h2 className="titulo_chat"> Chat </h2>
           <IconButton 
@@ -61,7 +61,7 @@ function Chat () {
               width: "50px", 
               height: "50px"
             }} 
-            onClick={closeChat}> 
+            onClick={ () => setShowChat(false) }> 
             <CloseIcon 
               sx={{ color: 'black' }}
             /> 
@@ -97,7 +97,7 @@ function Chat () {
               />
             </IconButton>
         </div>
-      </Modal>
+      </Box>
     </div>
   );
 };

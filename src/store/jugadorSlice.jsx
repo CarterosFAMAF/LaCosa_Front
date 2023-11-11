@@ -33,6 +33,7 @@ export const jugadorSlice = createSlice({
     maxJugadores: 14,
     minJugadores: 4,
     mensaje_finalizar: "No hubo ganadores!",
+    chat: [],
   },
   reducers: {
     verPartida: (state, action) => {
@@ -81,6 +82,7 @@ export const jugadorSlice = createSlice({
       state.maxJugadores = 14;
       state.minJugadores = 4;
       state.mensaje_finalizar = "No hubo ganadores!";
+      state.chat = [];
     },
     setJugadores: (state, action) => {
       const me_player = action.payload.filter(player => (player.id === state.id))[0];
@@ -151,12 +153,15 @@ export const jugadorSlice = createSlice({
     setOpcionesDefensivas: (state, action) => {
       state.opcionesDefensivas = action.payload;
     },
+    addMessage: (state, action) => {
+      state.chat.push(action.payload);
+    },
   },
 });
 
 export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores,
   setTurnoPartida, setInfectado, pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector,
   setFase, setFaseTemp, setCartasPublicas, setIntercambiante, setMensajeFinalizar, setAtacante,
-  limpiarAtacante, setOpcionesDefensivas } = jugadorSlice.actions;
+  limpiarAtacante, setOpcionesDefensivas, addMessage } = jugadorSlice.actions;
 
 export default jugadorSlice;
