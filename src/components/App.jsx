@@ -41,6 +41,11 @@ const WS_STATUS_NOTHING_BARBECUE = 202
 const WS_STATUS_NOPE_THANKS = 203
 const WS_STATUS_YOU_FAILED = 204
 const WS_STATUS_SCARY = 205
+//Pánico
+const WS_STATUS_LET_IT_REMAIN_BETWEEN_US = 401
+const WS_STATUS_UPS = 402
+const WS_STATUS_BLIND_DATE = 403
+const WS_STATUS_REVELATIONS = 404
 // Carta de Intercambio Ws
 const WS_CARD = 505
 
@@ -66,6 +71,7 @@ function App() {
 
         // Terminó la Partida
         if (parsedData.status === 300 || parsedData.status === 301 || parsedData.status === 302) {
+          dispatch(salirPartida());
           dispatch(setMensajeFinalizar(parsedData.message));
         }
 
@@ -104,6 +110,22 @@ function App() {
             break;
 
           case WS_STATUS_WHISKY: // Whisky
+            dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
+            dispatch(setFase(fase.resultado));
+            enqueueSnackbar(parsedData.message, {
+              variant: "info",
+            });
+            break;
+
+          case WS_STATUS_LET_IT_REMAIN_BETWEEN_US: // Dejarlo entre nosotros
+            dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
+            dispatch(setFase(fase.resultado));
+            enqueueSnackbar(parsedData.message, {
+              variant: "info",
+            });
+            break;
+          
+          case WS_STATUS_UPS: // Ups
             dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
             dispatch(setFase(fase.resultado));
             enqueueSnackbar(parsedData.message, {

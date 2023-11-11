@@ -82,8 +82,8 @@ export const jugadorSlice = createSlice({
     },
     setJugadores: (state, action) => {
       const me_player = action.payload.filter(player => (player.id === state.id))[0];
-      state.posicion = me_player.turn;
-      state.vivo = me_player.alive;
+      state.posicion = me_player ? me_player.turn : -1;
+      state.vivo = me_player ? me_player.alive : true;
       state.jugadores = action.payload;
     },
     setTurnoPartida: (state, action) => {

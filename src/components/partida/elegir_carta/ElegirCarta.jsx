@@ -1,7 +1,7 @@
 import "./ElegirCarta.css";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { tirarCarta, setFase, limpiarSelector, setCartasPublicas, setIntercambiante, robarCarta, limpiarAtacante, setOpcionesDefensivas } from "../../../store/jugadorSlice";
+import { tirarCarta, setFase, limpiarSelector, setCartasPublicas, setIntercambiante, robarCarta, limpiarAtacante, setOpcionesDefensivas, seleccionar } from "../../../store/jugadorSlice";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -18,6 +18,7 @@ function ElegirCarta() {
 
   const [hasTarget, setHasTaget] = useState(false);
   const [hasPlayed, setHasPlayed] = useState(false);
+  const cartasPanico = jugador.cartas.filter(carta => carta.type === "Panico");
 
   useEffect(() => {
     console.log("SetHasPlayed: False")
@@ -62,7 +63,10 @@ function ElegirCarta() {
 
   const check_carta = () => {
     setHasPlayed(true);
-    if (carta_nombre === "Vigila_tus_espaldas" || carta_nombre === "Whisky") {
+    if (cartasPanico.length){
+      dispatch(seleccionar(cartasPanico[0]));
+    }
+    if (carta_nombre === "Vigila_tus_espaldas" || carta_nombre === "Whisky" || carta_nombre === "Ups!") {
       //Sin Objetivo
       jugar_carta(0);
     } else {
@@ -217,6 +221,9 @@ function ElegirCarta() {
     <div className="botones_juego">
       {jugador.seleccion !== -1 && jugador.seleccionType !== typecard.lacosa && <div>
         {jugador.fase === fase.juego && !hasPlayed &&
+        <div>
+          {cartasPanico.length ? 
+          <button className="opcion_verde" onClick={() => check_carta()}>Pánico!!!!</button> :
           <div>
             <button
               className="opcion_rojo" onClick={() => descartar_carta()}>
@@ -226,7 +233,8 @@ function ElegirCarta() {
               <button className="opcion_verde" onClick={() => check_carta()}>
                 Jugar
               </button>}
-          </div>
+          </div>}
+        </div>
         }
         {jugador.fase === fase.defensa && !hasPlayed &&
           <div>
