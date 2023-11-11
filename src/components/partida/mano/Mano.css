@@ -2,7 +2,7 @@
   position: absolute;
   width: 100%;
   left: 50%;
-  top: 50%;
+  bottom: 5%;
   transform: translate(-50%, 10%);
   justify-content: center;
   text-align: center;

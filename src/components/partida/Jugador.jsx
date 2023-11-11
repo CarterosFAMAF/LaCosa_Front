@@ -23,6 +23,7 @@ function Jugador() {
   if (jugador.rol === rol.infectado &&
     jugador.fase === fase.intercambio && !jugador.intercambiante &&
     jugador.turnoPartida === jugador.posicion) {
+    console.log("Entra busca")
     const urlNextPlayer = `http://127.0.0.1:8000/matches/${jugador.partidaId}/next_player`;
     axios
       .get(urlNextPlayer)
