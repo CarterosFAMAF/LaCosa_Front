@@ -21,6 +21,7 @@ function ElegirCarta() {
   const cartasPanico = jugador.cartas.filter(carta => carta.type === "Panico");
 
   useEffect(() => {
+    console.log("SetHasPlayed: False")
     setHasPlayed(false);
   }, [jugador.fase]);
 
@@ -129,9 +130,8 @@ function ElegirCarta() {
         if (Array.isArray(response.data) && response.data.length) {
           dispatch(setCartasPublicas(response.data)); // Carta: {id, image, name, type}
           dispatch(setFase(fase.resultado)); // Ver Efecto
-        }
-        else {
-          dispatch(setFase(fase.espera)); // No es tu turno.
+        } else {
+          dispatch(setFase(fase.robo));
         }
 
         const urlRobarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/get_card`;
@@ -160,7 +160,7 @@ function ElegirCarta() {
       const output = [];
       objetivos.forEach((player) => {
         output.push(
-          <li key={player.id}>
+          <li key={player.id} className="column">
             <button
               className="opcion_verde"
               onClick={() => jugar_carta(player.id)}
@@ -201,7 +201,7 @@ function ElegirCarta() {
       const output = [];
       adyacentes.forEach((player) => {
         output.push(
-          <li key={player.id}>
+          <li key={player.id} className="column">
             <button
               className="opcion_verde"
               onClick={() => jugar_carta(player.id)}

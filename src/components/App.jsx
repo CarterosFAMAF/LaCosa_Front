@@ -7,7 +7,8 @@ import useWebSocket from "react-use-websocket";
 import {
   salirPartida, iniciarPartida, setTurnoPartida, pedirMano, setJugadores, setFase,
   setCartasPublicas, setMensajeFinalizar, setIntercambiante, robarCarta, setAtacante,
-  setOpcionesDefensivas, setInfectado, limpiarSelector} from "../store/jugadorSlice";
+  setOpcionesDefensivas, setInfectado, limpiarSelector
+} from "../store/jugadorSlice";
 import AppRoutes from "./AppRoutes";
 
 //Web Socket Status
@@ -160,9 +161,7 @@ function App() {
             break;
 
           case WS_STATUS_NEW_TURN: // Turno Nuevo
-            if (parsedData.player_id === jugador.id) {
-              dispatch(setFase(fase.robo));
-            }
+            dispatch(setFase(fase.robo));
             dispatch(setTurnoPartida(parsedData.turn_game));
             dispatch(limpiarSelector());
             break;

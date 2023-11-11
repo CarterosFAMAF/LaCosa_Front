@@ -3,11 +3,12 @@ import { useSelector } from "react-redux";
 
 function Tracker() {
   const jugador = useSelector((state) => state.jugador);
+  const rol = useSelector((state) => state.rol);
   const jugador_en_turno = jugador.jugadores.filter(player => (player.turn === jugador.turnoPartida))[0];
 
   const output = [];
   jugador.jugadores.map((player) => {
-    const yo_style = (jugador.id === player.id) ? { color: 'blue' } : {};
+    const yo_style = (jugador.id === player.id) ? ((jugador.rol === rol.infectado || jugador.rol === rol.lacosa) ? {color: 'rgb(0, 100, 0)'} : { color: 'blue' }) : {};
     const turno_style = jugador_en_turno ? (jugador_en_turno.id === player.id ? { border: `5px double green` } : {}) : {}
     const muertos_style = (player.alive === false) ? { color: 'grey', fontWeight: 'normal'} : {};
 

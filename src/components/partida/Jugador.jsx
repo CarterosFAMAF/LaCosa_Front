@@ -6,38 +6,61 @@ import ElegirCarta from "./elegir_carta/ElegirCarta";
 import FinalizarPartida from "./finalizar_partida/FinalizarPartida";
 import Tracker from "./tracker/Tracker";
 import BotonFinalizar from "./boton_finalizar/BotonFinalizar";
-import { setCartasPublicas, setFase } from "../../store/jugadorSlice";
+import { setCartasPublicas, setFase, setIntercambiante } from "../../store/jugadorSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
+import axios from "axios";
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
   const fase = useSelector((state) => state.fase);
+  const rol = useSelector((state) => state.rol);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
   const [endedMatch, setEndedMatch] = useState(false);
 
   console.log(jugador); //Borrar
-  if(jugador.rol === "La_Cosa" && !jugador.vivo && endedMatch){
+
+  // La Cosa avisa cuando muere
+  if (jugador.rol === "La_Cosa" && !jugador.vivo && endedMatch) {
     const urlBotonFinalizar = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/declare_end`;
     axios
-      .put(urlBotonFinalizar, {match_id: jugador.partidaId})
+      .put(urlBotonFinalizar, { match_id: jugador.partidaId })
       .then(function (response) {
+        setEndedMatch(true);
       })
       .catch(function (response) {
         enqueueSnackbar(`error: ${response.message}`, {
           variant: "error",
         });
       });
-    setEndedMatch(true);
   }
+
+
+  //Infectado revisa si el intercambiante es LaCosa
+  if (jugador.rol === rol.infectado &&
+    jugador.fase === fase.intercambio && !jugador.intercambiante &&
+    jugador.turnoPartida === jugador.posicion) {
+    const urlNextPlayer = `http://127.0.0.1:8000/matches/${jugador.partidaId}/next_player`;
+    axios
+      .get(urlNextPlayer)
+      .then(function (response) {
+        dispatch(setIntercambiante(response.data.next_player_id));
+      })
+      .catch(function (response) {
+        enqueueSnackbar(`error: ${response.message}`, {
+          variant: "error",
+        });
+      });
+  }
+
   const terminar_checkeo = () => {
     if (jugador.posicion === jugador.turnoPartida) {
       dispatch(setFase(fase.intercambio)); // Ir a Intercambio
     }
     else {
-      dispatch(setFase(fase.robo)); // No es tu turno
+      dispatch(setFase(fase.espera)); // No es tu turno
     }
     dispatch(setCartasPublicas([]))
   }
