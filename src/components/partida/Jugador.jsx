@@ -9,7 +9,6 @@ import BotonFinalizar from "./boton_finalizar/BotonFinalizar";
 import { setCartasPublicas, setFase, setIntercambiante } from "../../store/jugadorSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
-import { useState } from "react";
 import Chat from "../chat/chat";
 
 function Jugador() {
@@ -18,7 +17,6 @@ function Jugador() {
   const rol = useSelector((state) => state.rol);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const [endedMatch, setEndedMatch] = useState(false);
 
   console.log(jugador); //Borrar
 
@@ -26,6 +24,7 @@ function Jugador() {
   if (jugador.rol === rol.infectado &&
     jugador.fase === fase.intercambio && !jugador.intercambiante &&
     jugador.turnoPartida === jugador.posicion) {
+    console.log("Entra busca")
     const urlNextPlayer = `http://127.0.0.1:8000/matches/${jugador.partidaId}/next_player`;
     axios
       .get(urlNextPlayer)
@@ -40,11 +39,22 @@ function Jugador() {
   }
 
   const terminar_checkeo = () => {
-    if (jugador.posicion === jugador.turnoPartida) {
+    if (jugador.posicion === jugador.turnoPartida && !jugador.intercambiante) {
+      // Jugué una Carta en mi turno y me mostró algo.
+      // Análisis, Sospecha.
+      /*
+        NOTA: Si otro jugador puede ponerme en fase.resultado estando fuera de turno,
+        (defensa o intercambio) entonces debería volver a la fase en la que estaba justo
+        antes de que me pusieran en fase.resultado y no siempre a intercambio.
+        Habría que cambiarlo.  
+      */
       dispatch(setFase(fase.intercambio)); // Ir a Intercambio
     }
     else {
-      dispatch(setFase(fase.espera)); // No es tu turno
+      // Me quieren mostrar algo fuera de mi turno.
+      // Aterrador, Whisky
+      dispatch(setFase(fase.robo));
+      dispatch(setIntercambiante(0));
     }
     dispatch(setCartasPublicas([]))
   }

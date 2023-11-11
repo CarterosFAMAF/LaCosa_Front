@@ -1,7 +1,10 @@
 import "./ElegirCarta.css";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
-import { tirarCarta, setFase, limpiarSelector, setCartasPublicas, setIntercambiante, robarCarta, limpiarAtacante, setOpcionesDefensivas, seleccionar } from "../../../store/jugadorSlice";
+import {
+  tirarCarta, setFase, limpiarSelector, setCartasPublicas, setIntercambiante,
+  robarCarta, limpiarAtacante, setOpcionesDefensivas, seleccionar
+} from "../../../store/jugadorSlice";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -34,10 +37,14 @@ function ElegirCarta() {
         dispatch(tirarCarta(jugador.seleccion));
         dispatch(limpiarSelector());
         if (Array.isArray(response.data) && response.data.length) {
-          dispatch(setCartasPublicas(response.data)); // Carta: {id, image, name, type}
+          dispatch(setCartasPublicas(response.data));
+          /* Hay resultado.
+          Cartas: Analisis, Sospecha
+          */
           dispatch(setFase(fase.resultado)); // Ver Efecto
         }
         else {
+          // No hay resultado.
           dispatch(setFase(fase.intercambio)); // Ir a Intercambio
         }
       })
@@ -62,7 +69,7 @@ function ElegirCarta() {
 
   const check_carta = () => {
     setHasPlayed(true);
-    if (cartasPanico.length){
+    if (cartasPanico.length) {
       dispatch(seleccionar(cartasPanico[0]));
     }
     if (carta_nombre === "Vigila_tus_espaldas" || carta_nombre === "Whisky" || carta_nombre === "Ups!") {
@@ -128,8 +135,14 @@ function ElegirCarta() {
 
         if (Array.isArray(response.data) && response.data.length) {
           dispatch(setCartasPublicas(response.data)); // Carta: {id, image, name, type}
-          dispatch(setFase(fase.resultado)); // Ver Efecto
+          /* Hay resultado.
+          Cartas: Aterrador
+          */
+          dispatch(setFase(fase.resultado));
         } else {
+          /* No hay resultado.
+          Cartas: Nada de Barbacoas, Aqui estoy Bien, No Gracias, Fallaste
+          */ 
           dispatch(setFase(fase.robo));
         }
 
@@ -220,20 +233,20 @@ function ElegirCarta() {
     <div className="botones_juego">
       {jugador.seleccion !== -1 && jugador.seleccionType !== typecard.lacosa && <div>
         {jugador.fase === fase.juego && !hasPlayed &&
-        <div>
-          {cartasPanico.length ? 
-          <button className="opcion_verde" onClick={() => check_carta()}>Pánico!!!!</button> :
           <div>
-            <button
-              className="opcion_rojo" onClick={() => descartar_carta()}>
-              Descartar
-            </button>
-            {jugador.seleccionType === typecard.accion &&
-              <button className="opcion_verde" onClick={() => check_carta()}>
-                Jugar
-              </button>}
-          </div>}
-        </div>
+            {cartasPanico.length ?
+              <button className="opcion_verde" onClick={() => check_carta()}>Pánico!!!!</button> :
+              <div>
+                <button
+                  className="opcion_rojo" onClick={() => descartar_carta()}>
+                  Descartar
+                </button>
+                {jugador.seleccionType === typecard.accion &&
+                  <button className="opcion_verde" onClick={() => check_carta()}>
+                    Jugar
+                  </button>}
+              </div>}
+          </div>
         }
         {jugador.fase === fase.defensa && !hasPlayed &&
           <div>

@@ -1,14 +1,27 @@
-body {
-  height: 100vh;
-  background: var(--color-background-gradient);
+body, html {
+  /* The image used */
+  background-image: linear-gradient(
+      rgba(100, 100, 100, 0),
+      rgba(200, 200, 200, 0)
+    ),
+    url("/Wallpaper-LaCosa.jpg");
+
+  /* Full height */
+  height: 100%;
+  width: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .check_fase {
   position: absolute;
   width: 100%;
-  left: 50%;
-  top: 0%;
-  transform: translate(-50%, 0%);
+  top: 38%;
+  left: 0%;
+  transform: translate(0%, -60%);
   justify-content: center;
   text-align: center;
 }
@@ -17,7 +30,7 @@ body {
   position: absolute;
   width: 100px;
   height: 30px;
-  transform: translate(-50%, 970%);
+  transform: translate(-50%, 200%);
   font-size: large;
   background-color: var(--color-bottom-game-positive);
   border-radius: 5px;

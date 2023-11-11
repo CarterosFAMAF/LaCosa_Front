@@ -2,9 +2,26 @@
   margin: 0px;
 }
 
-body {
-  height: 100vh;
-  background: var(--color-background-gradient);
+:root {
+  background-color: black;
+}
+
+body, html {
+  /* The image used */
+  background-image: linear-gradient(
+      rgba(100, 100, 100, 0),
+      rgba(200, 200, 200, 0)
+    ),
+    url("/Wallpaper-LaCosa.jpg");
+
+  /* Full height */
+  height: 100%;
+  width: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .titulo {
