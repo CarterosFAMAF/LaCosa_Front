@@ -1,8 +1,8 @@
 .boton_finalizar {
   position: fixed;
   bottom: 10px;
-  left: 10px; /* Cambiado de right a left */
-  width: 150px;
+  left: 3px; /* Cambiado de right a left */
+  width: 140px;
   height: 45px;
   font-size: large;
   background-color: var(--color-bottom-game-positive);

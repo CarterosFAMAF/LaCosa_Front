@@ -95,12 +95,10 @@ function App() {
             break;
 
           case WS_CARD: // Recibir Carta del Intercambio
-            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: false}));
             dispatch(robarCarta(parsedData.card));
             break;
 
           case WS_STATUS_DEFENSE_PRIVATE_MSG: // Mensaje de que puedes defenderte
-            dispatch(addMessage({owner: "Sistema", text: parsedData.message, infeccion: false}));
             dispatch(setOpcionesDefensivas(parsedData.data_for_defense.defensive_options_id));
             dispatch(setAtacante(parsedData.data_for_defense));
             if (jugador.fase !== fase.intercambio) {
