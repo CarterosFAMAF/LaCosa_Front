@@ -53,6 +53,7 @@ const WS_CARD = 505
 function App() {
   const jugador = useSelector((state) => state.jugador);
   const fase = useSelector((state) => state.fase);
+  const rol = useSelector((state) => state.rol);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const socketUrl = `ws://localhost:8000/ws/matches/${jugador.partidaId}/${jugador.id}`;
