@@ -18,6 +18,7 @@ export const jugadorSlice = createSlice({
     rol: "",
     posicion: -1,
     fase: 0,
+    faseTemp: 0,
     cartas: [],
     cartasPublicas: [],
     turnoPartida: 0,
@@ -65,6 +66,7 @@ export const jugadorSlice = createSlice({
       state.rol = "";
       state.posicion = -1;
       state.fase = 0;
+      state.faseTemp = 0;
       state.cartas = [];
       state.cartasPublicas = [];
       state.turnoPartida = 0;
@@ -126,6 +128,9 @@ export const jugadorSlice = createSlice({
       */
       state.fase = action.payload;
     },
+    setFaseTemp: (state, action) => {
+      state.faseTemp = action.payload;
+    },
     setCartasPublicas: (state, action) => {
       state.cartasPublicas = action.payload;
     },
@@ -151,7 +156,7 @@ export const jugadorSlice = createSlice({
 
 export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores,
   setTurnoPartida, setInfectado, pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector,
-  setFase, setCartasPublicas, setIntercambiante, setMensajeFinalizar, setAtacante, limpiarAtacante,
-  setOpcionesDefensivas } = jugadorSlice.actions;
+  setFase, setFaseTemp, setCartasPublicas, setIntercambiante, setMensajeFinalizar, setAtacante,
+  limpiarAtacante, setOpcionesDefensivas } = jugadorSlice.actions;
 
 export default jugadorSlice;

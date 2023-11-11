@@ -102,7 +102,7 @@ function App() {
             }
             break;
 
-          case WS_STATUS_NOPE_THANKS: // Cancelación de Intercambio: "No Gracias"
+          case WS_STATUS_NOPE_THANKS: // No Gracias: Cancela intercambio
             dispatch(setIntercambiante(0));
             break;
 
@@ -111,8 +111,10 @@ function App() {
             break;
 
           case WS_STATUS_WHISKY: // Whisky
-            dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
-            dispatch(setFase(fase.resultado));
+            if (parsedData.player_id !== jugador.id) {
+              dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
+              dispatch(setFase(fase.resultado));
+            }
             enqueueSnackbar(parsedData.message, {
               variant: "info",
             });
@@ -143,6 +145,15 @@ function App() {
             }
             break;
 
+          case WS_STATUS_YOU_FAILED: // Fallaste
+            if (jugador.id === parsedData.player_fallaste) {
+              dispatch(setIntercambiante(0));
+            } else if (jugador.id === parsedData.player_target) {
+              dispatch(setIntercambiante(parsedData.player_main_id));
+              dispatch(setFase(fase.intercambio));
+            }
+            break;
+
           case WS_STATUS_MATCH_STARTED: // Iniciar Partida
             axios
               .get(urlPedirMano)
@@ -167,11 +178,7 @@ function App() {
             dispatch(limpiarSelector());
             break;
 
-          case WS_STATUS_MATCH_ENDED: // Terminó Partida (Desconexion)
-            dispatch(salirPartida());
-            break;
-
-          case WS_STATUS_PLAYER_BURNED:
+          case WS_STATUS_PLAYER_BURNED: // Muere alguien (Cosa Check)
             if (jugador.rol === rol.lacosa && jugador.id === parsedData.player_target_id) {
               const urlBotonFinalizar = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/declare_end`;
               axios
@@ -184,6 +191,10 @@ function App() {
                   });
                 });
             }
+            break;
+
+          case WS_STATUS_MATCH_ENDED: // Terminó Partida (Desconexion)
+            dispatch(salirPartida());
             break;
 
           default:
