@@ -10,7 +10,6 @@ import { setCartasPublicas, setFase, setIntercambiante } from "../../store/jugad
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
-import axios from "axios";
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
@@ -36,7 +35,6 @@ function Jugador() {
         });
       });
   }
-
 
   //Infectado revisa si el intercambiante es LaCosa
   if (jugador.rol === rol.infectado &&

@@ -27,7 +27,7 @@ function FinalizarPartida() {
             <Typography className='body2'>
               {jugador.mensaje_finalizar}
             </Typography>
-            {ganadores.length && 
+            {ganadores.length > 0 && 
               <Typography className='body3'>
                 Ganadores: {ganadores}
               </Typography>
