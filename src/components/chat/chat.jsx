@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import { IconButton } from '@mui/material';
 
-const Chat = () => {
+function Chat () {
   const [isOpen, setIsOpen] = useState(true);
 
   const openChat = () => {
@@ -31,8 +31,8 @@ const Chat = () => {
         }} 
         onClick={openChat}> 
         <ChatIcon
-          color="white" 
-          sx={{ fontSize: 40 }}
+          color="secondary"
+          sx={{ fontSize: 40, color: 'white' }}
         /> 
       </IconButton>
       <Modal
@@ -56,13 +56,15 @@ const Chat = () => {
             className="cerrar_chat"
             color="primary"
             style={{ 
-              marginTop: "10px" , 
+              marginTop: "5px" , 
               position: "fixed", 
               width: "50px", 
               height: "50px"
             }} 
             onClick={closeChat}> 
-            <CloseIcon /> 
+            <CloseIcon 
+              sx={{ color: 'black' }}
+            /> 
           </IconButton>
           <div className="chat">
           </div>
@@ -90,7 +92,9 @@ const Chat = () => {
                 height: "50px"
               }} 
               >
-              <SendOutlinedIcon />
+              <SendOutlinedIcon 
+                sx={{ color: 'black' }}
+              />
             </IconButton>
         </div>
       </Modal>

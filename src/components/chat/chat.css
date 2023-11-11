@@ -14,7 +14,7 @@
     top: 0px;
     right: 0px;
     bottom: 0px;
-    width: 20%;
+    width: 21%;
     height: 99.2%;
     background-color: white;
     border-radius: 20px;
@@ -47,8 +47,8 @@
 .chat{
     border: 2px solid black;
     height: 520px;
-    width: 91%;
-    margin-left: 10px;
+    width: 95%;
+    margin-left: 5px;
     border-radius: 20px;
     margin-right: 20px;
     margin-top: 15px;
