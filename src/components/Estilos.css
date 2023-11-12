@@ -11,5 +11,5 @@
     --color-bottom-game-negative: #a72727;
     --color-bottom-game-defense: #2e4f8d;
     --color-bottom-game-panic: #6f2486;
-    --color-bottom-game-obstacle: #817b22;
+    --color-bottom-game-obstacle: rgb(150, 136, 8);
 }
