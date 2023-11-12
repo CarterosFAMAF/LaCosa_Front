@@ -46,13 +46,13 @@ function Chat() {
     if (msg.owner === 'Sistema') {
       return (
         <div style={msg.infeccion ? { color: "green" } : { color: "rgb(155, 155, 155)" }}>
-          <p key={index}> {">"} {msg.text} </p>
+          <p key={index}> {">"}{msg.text.concat(".")} </p>
         </div>
       );
     } else {
       return (
         <div>
-          <p key={index}> {msg.owner}: {msg.text.concat(".")} </p>
+          <p key={index}> {msg.owner}: {msg.text} </p>
         </div>
       );
     }
