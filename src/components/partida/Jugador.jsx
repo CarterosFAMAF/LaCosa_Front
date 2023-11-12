@@ -94,7 +94,7 @@ function Jugador() {
           </div>
           : <div className="muerto">
             <h1 className="muerto_mensaje">Estás Muerto</h1>
-            <img className="white_skull" src={("../../../public/LaCosaNostra.png")} />
+            <img className="white_skull" src={("/LaCosaNostra.png")} />
           </div> 
       }
     </div>
