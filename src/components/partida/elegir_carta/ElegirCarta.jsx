@@ -127,7 +127,7 @@ function ElegirCarta() {
   }
 
   const defender_carta = (id_card_defense) => {
-
+    setHasPlayed(true);
     const urlDefender = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/play_card_defense`;
 
     const formatoDefensa = {
