@@ -2,6 +2,8 @@ import "./Chat.css";
 import ChatIcon from '@mui/icons-material/Chat';
 import CloseIcon from '@mui/icons-material/Close';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
+import ToggleOnIcon from '@mui/icons-material/ToggleOn';
+import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import { IconButton, Box } from '@mui/material';
@@ -15,6 +17,7 @@ function Chat() {
   const {enqueueSnackbar} = useSnackbar();
   const [showChat, setShowChat] = useState(true);
   const [mensaje, setMensaje] = useState("");
+  const [showSystem, setShowSystem] = useState(false);
 
   const handleChange = (event) => {
     setMensaje(event.target.value);
@@ -42,10 +45,10 @@ function Chat() {
     }
   }
 
-  const chat = jugador.chat.map((msg, index) => {
+  const chat = jugador.chat.filter(msg => showSystem ? msg.owner === 'Sistema' : true).map((msg, index) => {
     if (msg.owner === 'Sistema') {
       return (
-        <div style={msg.infeccion ? { color: "green" } : { color: "rgb(155, 155, 155)" }}>
+        <div style={msg.infeccion ? { color: "green" } : { color: "rgb(120, 120, 120)" }}>
           <p key={index}> {">"}{msg.text.concat(".")} </p>
         </div>
       );
@@ -101,6 +104,30 @@ function Chat() {
               sx={{ color: 'black' }}
             />
           </IconButton>
+          {!showSystem && <IconButton
+            className="filtro_sistema"
+            color="primary"
+            style={{
+              width: "50px",
+              top: "-28px",
+            }}
+            onClick={() => setShowSystem(true)}>
+            <ToggleOnIcon
+              sx={{ color: 'black' }}
+            />
+          </IconButton>}
+          {showSystem && <IconButton
+            className="filtro_sistema"
+            color="primary"
+            style={{
+              width: "50px",
+              top: "-28px",
+            }}
+            onClick={() => setShowSystem(false)}>
+            <ToggleOffIcon
+              sx={{ color: 'black' }}
+            />
+          </IconButton>}
           <div className="chat">
             <div className="mensajes">
               {chat}
@@ -119,7 +146,7 @@ function Chat() {
               marginTop: "7px",
               marginLeft: "20px",
               width: "75%",
-              height: "50px"
+              height: "30%"
             }}
             value={mensaje}
             onChange={handleChange}
