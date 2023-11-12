@@ -243,7 +243,9 @@ function ElegirCarta() {
                 </button>
                 {(jugador.seleccionType === typecard.accion ||
                   jugador.seleccionType === typecard.obstaculo) &&
-                  <button className="opcion_verde" onClick={() => check_carta()}>
+                  <button
+                    className={jugador.seleccionType === typecard.accion ? "opcion_verde" : "opcion_amarillo"}
+                    onClick={() => check_carta()}>
                     Jugar
                   </button>}
               </div>}
