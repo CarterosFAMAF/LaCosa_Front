@@ -1,4 +1,4 @@
-import "./chat.css";
+import "./Chat.css";
 import ChatIcon from '@mui/icons-material/Chat';
 import CloseIcon from '@mui/icons-material/Close';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';

@@ -9,7 +9,7 @@ import BotonFinalizar from "./boton_finalizar/BotonFinalizar";
 import { setCartasPublicas, setFase, setIntercambiante } from "../../store/jugadorSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
-import Chat from "../chat/chat";
+import Chat from "../chat/Chat";
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
