@@ -9,11 +9,12 @@ function Tracker() {
   const output = [];
   jugador.jugadores.map((player) => {
     const yo_style = (jugador.id === player.id) ? ((jugador.rol === rol.infectado || jugador.rol === rol.lacosa) ? {color: 'green'} : { color: 'blue' }) : {};
-    const turno_style = jugador_en_turno ? (jugador_en_turno.id === player.id ? { border: `5px double green` } : {}) : {}
+    const turnoPartida_style = jugador_en_turno ? (jugador_en_turno.id === player.id ? { border: `5px double green` } : {}) : {}
     const muertos_style = (player.alive === false) ? { color: 'grey', fontWeight: 'normal'} : {};
+    const cuarentena_style = (player.quarantine > 0) ? { backgroundColor: 'yellow'} : {};
 
     output.push(
-      <li key={player.id} style={Object.assign(yo_style, turno_style, muertos_style)}>
+      <li key={player.id} style={Object.assign(yo_style, turnoPartida_style, muertos_style, cuarentena_style)}>
         {player.name}
         {player.alive}
       </li>

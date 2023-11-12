@@ -61,6 +61,9 @@ function ElegirCarta() {
   }
 
   const jugar_carta = (objetivo_id) => {
+    if (jugador.seleccionName === SEDUCCION_STR) {
+      dispatch(setIntercambiante(objetivo_id));
+    }
     setHasTaget(true);
     const urlJugarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${objetivo_id}/${jugador.seleccion}/play_card`;
     enviar_carta(urlJugarCarta);
@@ -179,12 +182,14 @@ function ElegirCarta() {
       objetivos.forEach((player) => {
         output.push(
           <li key={player.id} className="column">
-            {(player.quarantine > 0 && jugador.seleccionName === MAS_VALE_QUE_CORRAS_STR) ?
+            {(player.quarantine > 0 && 
+              (jugador.seleccionName === MAS_VALE_QUE_CORRAS_STR ||
+              jugador.seleccionName === SEDUCCION_STR)) ?
               <button
                 className="opcion_rojo"
                 onClick={() => descartar_carta()}
               >
-                {player.name}: Descartar
+                {player.name} (Descartar)
               </button> :
               <button
               className="opcion_verde"
@@ -228,7 +233,7 @@ function ElegirCarta() {
       adyacentes.forEach((player) => {
         output.push(
           <li key={player.id} className="column">
-            {(player.quarantine > 0 && jugador.seleccionName === "CAMBIO_DE_LUGAR_STR")?
+            {(player.quarantine > 0 && jugador.seleccionName === CAMBIO_DE_LUGAR_STR)?
               <button
                 className="opcion_rojo"
                 onClick={() => descartar_carta()}
@@ -278,7 +283,7 @@ function ElegirCarta() {
                   <button
                     className={jugador.seleccionType === typecard.accion ? "opcion_verde" : "opcion_amarillo"}
                     onClick={() => check_carta()}>
-                    Jugar
+                    {jugador.seleccionType === typecard.accion ? "Jugar" : "Bloquear"}
                   </button>}
               </div>}
           </div>

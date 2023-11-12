@@ -35,6 +35,7 @@ const WS_STATUS_CARD_SHOWN = 106
 const WS_STATUS_ANALYSIS = 107
 const WS_STATUS_WHISKY = 108
 const WS_STATUS_SEDUCCION = 109
+const WS_STATUS_AXE = 111
 //Defensa
 const WS_STATUS_HERE_IM_FINE = 201
 const WS_STATUS_NOTHING_BARBECUE = 202
@@ -46,14 +47,12 @@ const WS_STATUS_LET_IT_REMAIN_BETWEEN_US = 401
 const WS_STATUS_UPS = 402
 const WS_STATUS_BLIND_DATE = 403
 const WS_STATUS_REVELATIONS = 404
-
 // Carta de Intercambio Ws
 const WS_CARD = 505
 // Mensaje Chat Ws
 const WS_STATUS_CHAT_MESSAGE = 600
 
 // Obstaculo
-const WS_STATUS_AXE = 801
 const WS_STATUS_QUARANTINE = 802
 const WS_STATUS_LOCKED_DOOR = 803
 const WS_STATUS_DISCARD_QUARANTINE = 804
@@ -94,6 +93,7 @@ function App() {
         switch (parsedData.status) {
 
           case WS_STATUS_EXCHANGE_REQUEST: // Solicitar Intercambio
+          case WS_STATUS_EXCHANGE_REQUEST_QUARANTINE:
             if (parsedData.player_target_id === jugador.id) {
               dispatch(setIntercambiante(parsedData.player_id))
               dispatch(setFase(fase.intercambio))
@@ -101,6 +101,7 @@ function App() {
             break;
 
           case WS_STATUS_EXCHANGE: // Intercambio Extioso
+          case WS_STATUS_EXCHANGE_QUARANTINE:
             dispatch(setFase(fase.espera))
             dispatch(setIntercambiante(0));
             break;

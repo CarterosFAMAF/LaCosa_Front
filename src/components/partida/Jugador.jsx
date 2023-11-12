@@ -14,7 +14,6 @@ import Chat from "../chat/Chat";
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
   const fase = useSelector((state) => state.fase);
-  const rol = useSelector((state) => state.rol);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
@@ -23,12 +22,25 @@ function Jugador() {
   // Obtiene el id del intercambiante
   if (jugador.fase === fase.intercambio && !jugador.intercambiante &&
     jugador.turnoPartida === jugador.posicion) {
+    dispatch(setIntercambiante(jugador.id));
     console.log("Entra busca");
     const urlNextPlayer = `http://127.0.0.1:8000/matches/${jugador.partidaId}/next_player`;
+    const urlNextTurn = `http://127.0.0.1:8000/matches/${jugador.partidaId}/next_turn`;
     axios
       .get(urlNextPlayer)
       .then(function (response) {
         dispatch(setIntercambiante(response.data.next_player_id));
+        if (jugador.jugadores.find(player => (player.id === response.data.next_player_id && player.quarantine > 0))) {
+          axios
+            .put(urlNextTurn)
+            .then(function () {
+            })
+            .catch(function (response) {
+              enqueueSnackbar(`error: ${response.message}`, {
+                variant: "error",
+              });
+            });
+        }
       })
       .catch(function (response) {
         enqueueSnackbar(`error: ${response.message}`, {
