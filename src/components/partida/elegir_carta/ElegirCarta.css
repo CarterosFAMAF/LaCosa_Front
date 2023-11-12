@@ -44,6 +44,16 @@
   margin-right: 10px;
 }
 
+.opcion_rosa {
+  width: 180px;
+  height: 45px;
+  font-size: large;
+  background-color: var(--color-bottom-game-panic);
+  border-radius: 5px;
+  float: left;
+  margin-right: 10px;
+}
+
 .column {
   float: left;
   width: 180px;

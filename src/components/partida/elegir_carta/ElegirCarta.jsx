@@ -142,7 +142,7 @@ function ElegirCarta() {
         } else {
           /* No hay resultado.
           Cartas: Nada de Barbacoas, Aqui estoy Bien, No Gracias, Fallaste
-          */ 
+          */
           dispatch(setFase(fase.robo));
         }
 
@@ -235,13 +235,14 @@ function ElegirCarta() {
         {jugador.fase === fase.juego && !hasPlayed &&
           <div>
             {cartasPanico.length ?
-              <button className="opcion_verde" onClick={() => check_carta()}>Pánico!!!!</button> :
+              <button className="opcion_rosa" onClick={() => check_carta()}>Pánico!!!!</button> :
               <div>
                 <button
                   className="opcion_rojo" onClick={() => descartar_carta()}>
                   Descartar
                 </button>
-                {jugador.seleccionType === typecard.accion &&
+                {(jugador.seleccionType === typecard.accion ||
+                  jugador.seleccionType === typecard.obstaculo) &&
                   <button className="opcion_verde" onClick={() => check_carta()}>
                     Jugar
                   </button>}

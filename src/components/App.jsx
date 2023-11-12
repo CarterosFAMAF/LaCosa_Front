@@ -174,6 +174,7 @@ function App() {
 
           case WS_STATUS_NEW_TURN: // Turno Nuevo
             dispatch(setFase(fase.robo));
+            dispatch(setJugadores(parsedData.players));
             dispatch(setTurnoPartida(parsedData.turn_game));
             dispatch(limpiarSelector());
             break;
