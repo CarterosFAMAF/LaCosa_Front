@@ -1,7 +1,7 @@
 .botones_juego {
   position: absolute;
   width: 70%;
-  left: 50%;
+  left: 46%;
   bottom: 45%;
   transform: translate(-50%, 0%);
   justify-content: center;
@@ -47,5 +47,5 @@
 .column {
   float: left;
   width: 180px;
-  margin: 5px;
+  margin: 4px;
 }

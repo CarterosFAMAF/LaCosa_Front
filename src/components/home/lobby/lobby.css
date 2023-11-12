@@ -1,9 +1,11 @@
 .boton_iniciar{
   width: 35%;
+  background-image: var(--color-bottom-action);
 }
 
 .boton_abandonar{
   width: 35%;
+  background-image: var(--color-bottom-action);
 }
 
 .listajugadores {
