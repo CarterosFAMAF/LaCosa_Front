@@ -7,7 +7,7 @@ import useWebSocket from "react-use-websocket";
 import {
   salirPartida, iniciarPartida, setTurnoPartida, pedirMano, setJugadores, setFase,
   setCartasPublicas, setMensajeFinalizar, setIntercambiante, robarCarta, setAtacante,
-  setOpcionesDefensivas, setInfectado, limpiarSelector, addMessage
+  setOpcionesDefensivas, setInfectado, limpiarSelector, addMessage, setCitaCiega, setFallaste
 } from "../store/jugadorSlice";
 import AppRoutes from "./AppRoutes";
 
@@ -51,7 +51,6 @@ const WS_STATUS_REVELATIONS = 404
 const WS_CARD = 505
 // Mensaje Chat Ws
 const WS_STATUS_CHAT_MESSAGE = 600
-
 // Obstaculo
 const WS_STATUS_QUARANTINE = 802
 const WS_STATUS_LOCKED_DOOR = 803
@@ -128,6 +127,7 @@ function App() {
             break;
 
           case WS_STATUS_WHISKY: // Whisky
+          case WS_STATUS_UPS: // Ups
             if (parsedData.player_id !== jugador.id) {
               dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
               dispatch(setFase(fase.resultado));
@@ -135,13 +135,15 @@ function App() {
             break;
 
           case WS_STATUS_LET_IT_REMAIN_BETWEEN_US: // Dejarlo entre nosotros
-            dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
-            dispatch(setFase(fase.resultado));
+            if (parsedData.player_target_id === jugador.id) {
+              dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
+              dispatch(setFase(fase.resultado));
+            }
             break;
 
-          case WS_STATUS_UPS: // Ups
-            dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
-            dispatch(setFase(fase.resultado));
+          case WS_STATUS_BLIND_DATE: // Cita a ciegas
+            dispatch(setCitaCiega(true));
+            console.log("CITA CIEGA TRUE SET")
             break;
 
           case WS_STATUS_SEDUCCION: // Seducción
@@ -159,6 +161,7 @@ function App() {
             } else if (jugador.id === parsedData.player_target) {
               dispatch(setIntercambiante(parsedData.player_main_id));
               dispatch(setFase(fase.intercambio));
+              dispatch(setFallaste(true));
             }
             break;
 

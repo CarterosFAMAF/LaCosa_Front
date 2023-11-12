@@ -12,8 +12,8 @@ function RobarCarta() {
   const { enqueueSnackbar } = useSnackbar();
 
   const [gotCard, setGotCard] = useState(false);
-  const urlRobarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/get_card`;
-
+  const urlRobarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${true}/get_card`;
+  
   const robar_carta = () => {
     setGotCard(true);
     axios
