@@ -85,7 +85,8 @@ function App() {
           dispatch(setMensajeFinalizar(parsedData.message));
         }
 
-        if (!(parsedData.status === WS_STATUS_INFECTED || parsedData.status === WS_STATUS_CHAT_MESSAGE)) {
+        if (!(parsedData.status === WS_STATUS_INFECTED || parsedData.status === WS_STATUS_CHAT_MESSAGE ||
+          parsedData.status === WS_STATUS_DEFENSE_PRIVATE_MSG || parsedData.status === WS_CARD)) {
           dispatch(addMessage({ owner: "Sistema", text: parsedData.message, infeccion: false }));
         }
 
@@ -142,8 +143,9 @@ function App() {
             break;
 
           case WS_STATUS_BLIND_DATE: // Cita a ciegas
-            dispatch(setCitaCiega(true));
-            console.log("CITA CIEGA TRUE SET")
+            if (parsedData.player_id === jugador.id) {
+              dispatch(setCitaCiega(true));
+            }
             break;
 
           case WS_STATUS_SEDUCCION: // Seducción
@@ -211,6 +213,7 @@ function App() {
                   });
                 });
             }
+            dispatch(setJugadores(parsedData.players));
             break;
 
           case WS_STATUS_MATCH_ENDED: // Terminó Partida (Desconexion)

@@ -137,7 +137,6 @@ function ElegirCarta() {
       card_target_id: jugador.atacanteCardId,
       player_target_id: jugador.atacanteId,
     }
-    console.log(formatoDefensa);
 
     axios
       .put(urlDefender, formatoDefensa)
