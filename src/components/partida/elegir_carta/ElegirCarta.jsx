@@ -179,7 +179,7 @@ function ElegirCarta() {
       objetivos.forEach((player) => {
         output.push(
           <li key={player.id} className="column">
-            {(player.quarantine && jugador.seleccionName === MAS_VALE_QUE_CORRAS_STR) ?
+            {(player.quarantine > 0 && jugador.seleccionName === MAS_VALE_QUE_CORRAS_STR) ?
               <button
                 className="opcion_rojo"
                 onClick={() => descartar_carta()}
@@ -228,12 +228,12 @@ function ElegirCarta() {
       adyacentes.forEach((player) => {
         output.push(
           <li key={player.id} className="column">
-            {(player.quarantine && jugador.seleccionName === "CAMBIO_DE_LUGAR_STR")?
+            {(player.quarantine > 0 && jugador.seleccionName === "CAMBIO_DE_LUGAR_STR")?
               <button
                 className="opcion_rojo"
                 onClick={() => descartar_carta()}
               >
-                {player.name}: Descartar
+                {player.name} (Descartar)
               </button> :
               <button
               className="opcion_verde"
@@ -267,7 +267,7 @@ function ElegirCarta() {
                   // Debe ser Acción u Obstáculo
                   (jugador.seleccionType === typecard.accion || jugador.seleccionType === typecard.obstaculo)
                   && // Si estoy en cuarentena
-                  !(jugador.jugadores.find(player => player.id === jugador.id).quarantine &&
+                  !(jugador.jugadores.find(player => player.id === jugador.id).quarantine > 0 &&
                     (
                       jugador.seleccionName === LANZALLAMAS_STR ||
                       jugador.seleccionName === CAMBIO_DE_LUGAR_STR ||
