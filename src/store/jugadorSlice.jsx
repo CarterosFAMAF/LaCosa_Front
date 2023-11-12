@@ -23,13 +23,14 @@ export const jugadorSlice = createSlice({
     cartasPublicas: [],
     turnoPartida: 0,
     seleccion: -1,
+    seleccionName: "",
     seleccionType: "",
     jugadores: [],
     intercambiante: 0,
     cosaId: 0,
     atacanteId: 0,
-    opcionesDefensivas: [],
     atacanteCardId: 0,
+    opcionesDefensivas: [],
     maxJugadores: 14,
     minJugadores: 4,
     mensaje_finalizar: "No hubo ganadores!",
@@ -71,13 +72,14 @@ export const jugadorSlice = createSlice({
       state.cartasPublicas = [];
       state.turnoPartida = 0;
       state.seleccion = -1;
+      state.seleccionName = "";
       state.seleccionType = "";
       state.jugadores = [];
       state.intercambiante = 0;
       state.cosaId = 0;
       state.atacanteId = 0;
-      state.opcionesDefensivas = [];
       state.atacanteCardId = 0;
+      state.opcionesDefensivas = [];
       state.maxJugadores = 14;
       state.minJugadores = 4;
       state.mensaje_finalizar = "No hubo ganadores!";
@@ -108,10 +110,12 @@ export const jugadorSlice = createSlice({
     },
     seleccionar: (state, action) => {
       state.seleccion = action.payload.id;
+      state.seleccionName = action.payload.name;
       state.seleccionType = action.payload.type;
     },
     limpiarSelector: (state) => {
       state.seleccion = -1;
+      state.seleccionName = "";
       state.seleccionType = "";
     },
     tirarCarta: (state, action) => {

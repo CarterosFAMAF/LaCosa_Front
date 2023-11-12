@@ -46,9 +46,18 @@ const WS_STATUS_LET_IT_REMAIN_BETWEEN_US = 401
 const WS_STATUS_UPS = 402
 const WS_STATUS_BLIND_DATE = 403
 const WS_STATUS_REVELATIONS = 404
+
 // Carta de Intercambio Ws
 const WS_CARD = 505
 
+// Obstaculo
+const WS_STATUS_AXE = 801
+const WS_STATUS_QUARANTINE = 802
+const WS_STATUS_LOCKED_DOOR = 803
+const WS_STATUS_DISCARD_QUARANTINE = 804
+const WS_STATUS_DRAW = 805
+const WS_STATUS_EXCHANGE_REQUEST_QUARANTINE = 806
+const WS_STATUS_EXCHANGE_QUARANTINE = 807
 
 function App() {
   const jugador = useSelector((state) => state.jugador);

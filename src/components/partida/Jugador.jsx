@@ -19,11 +19,10 @@ function Jugador() {
 
   console.log(jugador); //Borrar
 
-  //Infectado revisa si el intercambiante es LaCosa
-  if (jugador.rol === rol.infectado &&
-    jugador.fase === fase.intercambio && !jugador.intercambiante &&
+  // Obtiene el id del intercambiante
+  if (jugador.fase === fase.intercambio && !jugador.intercambiante &&
     jugador.turnoPartida === jugador.posicion) {
-    console.log("Entra busca")
+    console.log("Entra busca");
     const urlNextPlayer = `http://127.0.0.1:8000/matches/${jugador.partidaId}/next_player`;
     axios
       .get(urlNextPlayer)
