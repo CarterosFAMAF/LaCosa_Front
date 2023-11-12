@@ -8,7 +8,6 @@ const mockStore = configureStore([]);
 
 describe("ElegirCarta Test", () => {
   test("Renderiza ElegirCarta", () => {
-
     const initialState = {
       jugador: {
         cartas: [
@@ -33,6 +32,18 @@ describe("ElegirCarta Test", () => {
         defensa: 3,
         resultado: 4,
         intercambio: 5,
+      },
+      typecard: {
+        accion: "Accion",
+        defensa: "Defensa",
+        panico: "Panico",
+        lacosa: "La_Cosa",
+        infectado: "Infectado",
+      },
+      rol: {
+        lacosa: "La_Cosa",
+        humano: "Humano",
+        infectado: "Infectado",
       }
     };
 
