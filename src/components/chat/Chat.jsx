@@ -7,10 +7,12 @@ import { useState } from 'react';
 import { IconButton, Box } from '@mui/material';
 import { useSelector } from 'react-redux';
 import axios from "axios";
+import { useSnackbar } from "notistack";
 
 function Chat() {
 
   const jugador = useSelector((state) => state.jugador);
+  const {enqueueSnackbar} = useSnackbar();
   const [showChat, setShowChat] = useState(true);
   const [mensaje, setMensaje] = useState("");
 
@@ -40,21 +42,26 @@ function Chat() {
     }
   }
 
-  const chat = jugador.chat.map((msg) => {
+  const chat = jugador.chat.map((msg, index) => {
     if (msg.owner === 'Sistema') {
       return (
-        <div style={msg.infeccion ? { color: "green" } : { color: "black" }}>
-          <p> {msg.text} </p>
+        <div style={msg.infeccion ? { color: "green" } : { color: "rgb(155, 155, 155)" }}>
+          <p key={index}> {">"} {msg.text} </p>
         </div>
       );
     } else {
       return (
         <div>
-          <p> {msg.owner}: {msg.text} </p>
+          <p key={index}> {msg.owner}: {msg.text.concat(".")} </p>
         </div>
       );
     }
   });
+  
+  const chatContainer = document.querySelector('.chat');
+  if (chatContainer !== null){
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
 
   return (
     <div>
@@ -95,12 +102,19 @@ function Chat() {
             />
           </IconButton>
           <div className="chat">
-            {chat}
+            <div className="mensajes">
+              {chat}
+            </div>
           </div>
           <TextField
             label="Escribe un mensaje"
             name="mensaje"
             display="flex"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                enviar_mensaje();
+              }
+            }}
             style={{
               marginTop: "7px",
               marginLeft: "20px",
