@@ -39,3 +39,44 @@ body, html {
   justify-content: center;
   text-align: center;
 }
+
+.muerto{
+  position: absolute;
+  width: 100%;
+  top: 40%;
+  left: 0%;
+  transform: translate(0%, -60%);
+  justify-content: center;
+  text-align: center;
+}
+
+.muerto_mensaje{
+  color: white;
+}
+
+.white_skull{
+  margin-top: 10px;
+  width: 18.5%;
+  height: 20%;
+  filter: invert(80%);
+}
+
+.boton_muerto{
+  padding-top: 5px;
+  position: absolute;
+  width: 9%;
+  height: 12%;
+  left: 45.3%;
+  top: 0%;
+  z-index: 100;
+  transform: translate(0%, 280%);
+  font-size: large;
+  background-color: black;
+  color: white;
+  filter: invert(60%);
+  border-radius: 5px;
+  border: solid 2px white;
+  font-weight: bold;
+  justify-content: center;
+  text-align: center;
+}

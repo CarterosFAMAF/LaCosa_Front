@@ -10,12 +10,14 @@ import { setCartasPublicas, setFase, setIntercambiante } from "../../store/jugad
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import Chat from "../chat/Chat";
+import { useNavigate } from "react-router-dom";
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
   const fase = useSelector((state) => state.fase);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   console.log(jugador); //Borrar
 
@@ -90,7 +92,10 @@ function Jugador() {
               </div>
             }
           </div>
-          : <h1>Estás Muerto</h1>
+          : <div className="muerto">
+            <h1 className="muerto_mensaje">Estás Muerto</h1>
+            <img className="white_skull" src={("../../../public/LaCosaNostra.png")} />
+          </div> 
       }
     </div>
   );
