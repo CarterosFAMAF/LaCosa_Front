@@ -9,6 +9,7 @@ import BotonFinalizar from "./boton_finalizar/BotonFinalizar";
 import { setCartasPublicas, setFase, setIntercambiante } from "../../store/jugadorSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
+import Chat from "../chat/Chat";
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
@@ -42,9 +43,9 @@ function Jugador() {
       // Análisis, Sospecha.
       /*
         NOTA: Si otro jugador puede ponerme en fase.resultado estando fuera de turno,
-        (defensa o intercambio) entonces debería volver a la fase en la que estaba justo
-        antes de que me pusieran en fase.resultado y no siempre a intercambio.
-        Habría que cambiarlo.  
+        (durante su defensa o intercambio) entonces debería volver a la fase en la que
+        estaba justo antes de que me pusieran en fase.resultado y no siempre a intercambio.
+        En ese caso habría que cambiarlo.
       */
       dispatch(setFase(fase.intercambio)); // Ir a Intercambio
     }
@@ -63,6 +64,7 @@ function Jugador() {
         <FinalizarPartida /> :
         (jugador.vivo) ?
           <div>
+            <Chat />
             <Tracker />
             <Mano cartas={jugador.cartas} />
             <BotonFinalizar />
