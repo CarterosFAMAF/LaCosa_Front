@@ -88,9 +88,8 @@ describe("Lobby Test", () => {
     const button = screen.queryByText("Iniciar Partida");
     expect(button.disabled).toBeFalsy();  
     await userEvent.click(button);
-    const alerta = screen.findByRole("alert");
+    const alerta = screen.queryByText("error: undefined");
     expect(alerta).toBeTruthy();
-    
 });
 
   test("Render", async () => {
