@@ -45,7 +45,7 @@ function Chat() {
     }
   }
 
-  const colors = ["black", "rgb(120, 120, 120)", "green", "blue", "orange"];
+  const colors = ["black", "rgb(120, 120, 120)", "green", "blue", "orange", "purple"];
 
   const chat = jugador.chat.filter(msg => showSystem ? msg.type != typemessage.user : true).map((msg, index) => {
     if (msg.type == typemessage.user) {

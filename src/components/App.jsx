@@ -7,7 +7,7 @@ import useWebSocket from "react-use-websocket";
 import {
   salirPartida, iniciarPartida, setTurnoPartida, pedirMano, setJugadores, setFase,
   setCartasPublicas, setMensajeFinalizar, setIntercambiante, robarCarta, setAtacante,
-  setOpcionesDefensivas, setInfectado, limpiarSelector, addMessage, setCitaCiega, setFallaste
+  setOpcionesDefensivas, setInfectado, addMessage, setCitaCiega, setFallaste, setAterrado, setEspera
 } from "../store/jugadorSlice";
 import AppRoutes from "./AppRoutes";
 
@@ -88,13 +88,20 @@ function App() {
           dispatch(setMensajeFinalizar(parsedData.message));
         }
 
-        if (!(parsedData.status === WS_STATUS_PLAYER_JOINED || parsedData.status === WS_STATUS_MATCH_STARTED ||
-          parsedData.status === WS_STATUS_PLAYER_WELCOME || parsedData.status === WS_CARD ||
-          parsedData.status === WS_STATUS_INFECTED || parsedData.status === WS_STATUS_CHAT_MESSAGE ||
-          parsedData.status === WS_STATUS_DEFENSE_PRIVATE_MSG || parsedData.status === WS_CARD ||
-          parsedData.status === WS_STATUS_EXCHANGE_QUARANTINE || parsedData.status === WS_STATUS_DRAW ||
-          parsedData.status === WS_STATUS_EXCHANGE_REQUEST_QUARANTINE || parsedData.status === WS_STATUS_DISCARD_QUARANTINE ||
-          parsedData.status === WS_STATUS_EVENTS_CARDS)) {
+        dispatch(setEspera(false));
+        if (
+          // Not Showing
+          !(parsedData.status === WS_STATUS_PLAYER_JOINED || parsedData.status === WS_STATUS_MATCH_STARTED ||
+            parsedData.status === WS_STATUS_PLAYER_WELCOME || parsedData.status === 300 ||
+            parsedData.status === 301 || parsedData.status === 302 ||
+            // Matched switch
+            parsedData.status === WS_CARD || parsedData.status === WS_STATUS_INFECTED ||
+            parsedData.status === WS_STATUS_CHAT_MESSAGE || parsedData.status === WS_STATUS_DEFENSE_PRIVATE_MSG ||
+            parsedData.status === WS_STATUS_EXCHANGE_QUARANTINE || parsedData.status === WS_STATUS_DRAW ||
+            parsedData.status === WS_STATUS_EXCHANGE_REQUEST_QUARANTINE || parsedData.status === WS_STATUS_DISCARD_QUARANTINE ||
+            parsedData.status === WS_STATUS_EVENTS_CARDS || parsedData.status === WS_STATUS_LET_IT_REMAIN_BETWEEN_US ||
+            parsedData.status === WS_STATUS_UPS || parsedData.status === WS_STATUS_BLIND_DATE)) {
+          // All rest
           dispatch(addMessage({ owner: "", text: parsedData.message, type: typemessage.system }));
         }
 
@@ -107,9 +114,11 @@ function App() {
             }
             break;
 
-          case WS_STATUS_EXCHANGE: // Intercambio Extioso
-            dispatch(setFase(fase.espera))
-            dispatch(setIntercambiante(0));
+          case WS_STATUS_EXCHANGE: // Intercambio Exitoso
+            if (parsedData.player_target_id === jugador.id || parsedData.player_id === jugador.id) {
+              dispatch(setFase(fase.espera))
+              dispatch(setIntercambiante(0));
+            }
             break;
 
           case WS_CARD: // Recibir Carta del Intercambio
@@ -123,9 +132,9 @@ function App() {
               type: typemessage.defense
             }));
             dispatch(setOpcionesDefensivas(parsedData.data_for_defense.defensive_options_id));
-            dispatch(setAtacante(parsedData.data_for_defense));
             if (jugador.fase !== fase.intercambio) {
               dispatch(setFase(fase.defensa));
+              dispatch(setAtacante(parsedData.data_for_defense));
             }
             break;
 
@@ -134,18 +143,69 @@ function App() {
             break;
 
           case WS_STATUS_INFECTED: // Infección
-            dispatch(addMessage({ owner: "", text: parsedData.message, type: typemessage.infeccion }));
+            dispatch(addMessage({
+              owner: "",
+              text: parsedData.message,
+              type: typemessage.infeccion
+            }));
             dispatch(setInfectado(parsedData.player_id));
             break;
 
+          case WS_STATUS_REVERSE_POSITION: // Cambia el sentido de la ronda
+            if (parsedData.player_id === jugador.id) {
+              // Get Next Player Status
+              const urlNextPlayer = `http://127.0.0.1:8000/matches/${jugador.partidaId}/next_player`;
+              axios
+                .get(urlNextPlayer)
+                .then(function (response) {
+                  dispatch(setIntercambiante(response.data.next_player_id));
+                })
+                .catch(function (response) {
+                  enqueueSnackbar(`error: ${response.message}`, {
+                    variant: "error",
+                  });
+                });
+            }
+            break;
+
           case WS_STATUS_CHANGED_OF_PLACES: // Hubo cambio de lugar
-            dispatch(setIntercambiante(0));
-            dispatch(setTurnoPartida(parsedData.turn_game));
-            dispatch(setJugadores(parsedData.players));
+            if (parsedData.player_id === jugador.id) {
+              // Get Next Player Status
+              const urlNextPlayer = `http://127.0.0.1:8000/matches/${jugador.partidaId}/next_player`;
+              axios
+                .get(urlNextPlayer)
+                .then(function (response) {
+                  dispatch(setIntercambiante(response.data.next_player_id));
+
+                  // Update Game State
+                  dispatch(setJugadores(parsedData.players));
+                  dispatch(setTurnoPartida(parsedData.turn_game));
+                })
+                .catch(function (response) {
+                  enqueueSnackbar(`error: ${response.message}`, {
+                    variant: "error",
+                  });
+                });
+            } else {
+              // Update Game State
+              dispatch(setJugadores(parsedData.players));
+              dispatch(setTurnoPartida(parsedData.turn_game));
+            }
             break;
 
           case WS_STATUS_WHISKY: // Whisky
+            if (parsedData.player_id != jugador.id) {
+              dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
+              dispatch(setFase(fase.resultado));
+            }
+            break;
+
           case WS_STATUS_UPS: // Ups
+            dispatch(addMessage({
+              owner: "",
+              text: parsedData.message,
+              type: typemessage.panico
+            }));
             if (parsedData.player_id != jugador.id) {
               dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
               dispatch(setFase(fase.resultado));
@@ -153,6 +213,11 @@ function App() {
             break;
 
           case WS_STATUS_LET_IT_REMAIN_BETWEEN_US: // Dejarlo entre nosotros
+            dispatch(addMessage({
+              owner: "",
+              text: parsedData.message,
+              type: typemessage.panico
+            }));
             if (parsedData.player_target_id === jugador.id) {
               dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
               dispatch(setFase(fase.resultado));
@@ -160,6 +225,11 @@ function App() {
             break;
 
           case WS_STATUS_BLIND_DATE: // Cita a ciegas
+            dispatch(addMessage({
+              owner: "",
+              text: parsedData.message,
+              type: typemessage.panico
+            }));
             if (parsedData.player_id === jugador.id) {
               dispatch(setCitaCiega(true));
             }
@@ -203,10 +273,34 @@ function App() {
             break;
 
           case WS_STATUS_NEW_TURN: // Turno Nuevo
-            dispatch(setFase(fase.robo));
-            dispatch(setJugadores(parsedData.players));
-            dispatch(setTurnoPartida(parsedData.turn_game));
-            dispatch(limpiarSelector());
+            if (parsedData.player_id === jugador.id) {
+              // Get Next Player Status
+              const urlNextPlayer = `http://127.0.0.1:8000/matches/${jugador.partidaId}/next_player`;
+              axios
+                .get(urlNextPlayer)
+                .then(function (response) {
+                  dispatch(setIntercambiante(response.data.next_player_id));
+
+                  // Update Game State
+                  dispatch(setJugadores(parsedData.players));
+                  dispatch(setTurnoPartida(parsedData.turn_game));
+                  if (!jugador.aterrado) {
+                    dispatch(setFase(fase.robo));
+                  }
+                })
+                .catch(function (response) {
+                  enqueueSnackbar(`error: ${response.message}`, {
+                    variant: "error",
+                  });
+                });
+            } else {
+              // TODO: quitarlo si es innecesario, pero asegura orden
+              dispatch(setIntercambiante(0));
+              // Update Game State
+              dispatch(setJugadores(parsedData.players));
+              dispatch(setFase(fase.robo));
+              dispatch(setTurnoPartida(parsedData.turn_game));
+            }
             break;
 
           case WS_STATUS_CHAT_MESSAGE: // Mensaje Chat
@@ -217,18 +311,8 @@ function App() {
             }));
             break;
 
-          // Cuarentena:
-          case WS_STATUS_EXCHANGE_QUARANTINE: // Solicitar Intercambio (Cuarentena)
-            dispatch(addMessage({
-              owner: "",
-              text: parsedData.message,
-              type: typemessage.quarantine
-            }));
-            dispatch(setFase(fase.espera))
-            dispatch(setIntercambiante(0));
-            break;
-
-          case WS_STATUS_EXCHANGE_REQUEST_QUARANTINE: // Intercambio Exitoso (Cuarentena)
+          // Cuarentena Mensajes:
+          case WS_STATUS_EXCHANGE_REQUEST_QUARANTINE: // Solicitar Intercambio (Cuarentena)
             dispatch(addMessage({
               owner: "",
               text: parsedData.message,
@@ -240,7 +324,19 @@ function App() {
             }
             break;
 
-          case WS_STATUS_DRAW:
+          case WS_STATUS_EXCHANGE_QUARANTINE: // Intercambio Exitoso (Cuarentena)
+            dispatch(addMessage({
+              owner: "",
+              text: parsedData.message,
+              type: typemessage.quarantine
+            }));
+            if (parsedData.player_target_id === jugador.id || parsedData.player_id === jugador.id) {
+              dispatch(setFase(fase.espera))
+              dispatch(setIntercambiante(0));
+            }
+            break;
+
+          case WS_STATUS_DRAW: // Robar Carta (Cuarentena)
             dispatch(addMessage({
               owner: "",
               text: parsedData.message,
@@ -248,7 +344,7 @@ function App() {
             }));
             break;
 
-          case WS_STATUS_DISCARD_QUARANTINE:
+          case WS_STATUS_DISCARD_QUARANTINE: // Descartar Carta (Cuarentena)
             dispatch(addMessage({
               owner: "",
               text: parsedData.message,
@@ -256,9 +352,19 @@ function App() {
             }));
             break;
 
-          // Aviso de intento de juego
-          case WS_STATUS_EVENTS_CARDS:
-            dispatch(addMessage({ owner: "", text: parsedData.message, type: typemessage.system }));
+          case WS_STATUS_EVENTS_CARDS: // Aviso de intento de juego
+            dispatch(setEspera(true));
+            dispatch(addMessage({
+              owner: "",
+              text: parsedData.message,
+              type: typemessage.system
+            }));
+            break;
+
+          case WS_STATUS_SCARY: // Aterrador: Resuelve condición de Carrera
+            if (parsedData.player_id === jugador.id) {
+              dispatch(setAterrado(true));
+            }
             break;
 
           case WS_STATUS_PLAYER_BURNED: // Muere alguien (Cosa Check)
@@ -267,6 +373,20 @@ function App() {
               axios
                 .put(urlBotonFinalizar, { match_id: jugador.partidaId })
                 .then(function (response) {
+                })
+                .catch(function (response) {
+                  enqueueSnackbar(`error: ${response.message}`, {
+                    variant: "error",
+                  });
+                });
+            }
+            if (parsedData.player_id === jugador.id) {
+              // Get Next Player Status
+              const urlNextPlayer = `http://127.0.0.1:8000/matches/${jugador.partidaId}/next_player`;
+              axios
+                .get(urlNextPlayer)
+                .then(function (response) {
+                  dispatch(setIntercambiante(response.data.next_player_id));
                 })
                 .catch(function (response) {
                   enqueueSnackbar(`error: ${response.message}`, {
