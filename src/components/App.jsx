@@ -93,7 +93,8 @@ function App() {
           parsedData.status === WS_STATUS_INFECTED || parsedData.status === WS_STATUS_CHAT_MESSAGE ||
           parsedData.status === WS_STATUS_DEFENSE_PRIVATE_MSG || parsedData.status === WS_CARD ||
           parsedData.status === WS_STATUS_EXCHANGE_QUARANTINE || parsedData.status === WS_STATUS_DRAW ||
-          parsedData.status === WS_STATUS_EXCHANGE_REQUEST_QUARANTINE || parsedData.status === WS_STATUS_DISCARD_QUARANTINE)) {
+          parsedData.status === WS_STATUS_EXCHANGE_REQUEST_QUARANTINE || parsedData.status === WS_STATUS_DISCARD_QUARANTINE ||
+          parsedData.status === WS_STATUS_EVENTS_CARDS)) {
           dispatch(addMessage({ owner: "", text: parsedData.message, type: typemessage.system }));
         }
 
@@ -253,6 +254,11 @@ function App() {
               text: parsedData.message,
               type: typemessage.quarantine
             }));
+            break;
+
+          // Aviso de intento de juego
+          case WS_STATUS_EVENTS_CARDS:
+            dispatch(addMessage({ owner: "", text: parsedData.message, type: typemessage.system }));
             break;
 
           case WS_STATUS_PLAYER_BURNED: // Muere alguien (Cosa Check)
