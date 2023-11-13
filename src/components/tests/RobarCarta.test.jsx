@@ -1,7 +1,5 @@
-import TestRenderer from "react-test-renderer";
 import { Provider } from "react-redux";
-import store from "../../store/store"
-import { describe, expect, test, vi} from "vitest";
+import { describe, expect, test, vi, afterEach} from "vitest";
 import {render, screen, cleanup, waitFor } from '@testing-library/react';
 import {userEvent} from "@testing-library/user-event"
 import { SnackbarProvider } from "notistack";
@@ -14,6 +12,11 @@ import RobarCarta from "../partida/robar/RobarCarta";
 const mockStore = configureStore([]);
 describe("RobarCarta Test", () => {
 
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.resetAllMocks();
+    cleanup();
+  })
 
   test("Should render an alert displaying an error", async () => {
     const initialState = {
@@ -47,8 +50,6 @@ describe("RobarCarta Test", () => {
   await userEvent.click(button);
   const alerta = screen.findByRole("alert");
   expect(alerta).toBeTruthy();
-
-  cleanup();
   });
 
   test("Should be working", async () => {
@@ -91,8 +92,6 @@ describe("RobarCarta Test", () => {
     expect(alerta).toBeTruthy();
     
     expect(screen.queryByRole('button')).toBeFalsy();
-
-    cleanup();
   });
 
   

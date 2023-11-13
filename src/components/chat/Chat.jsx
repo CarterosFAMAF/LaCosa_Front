@@ -80,7 +80,9 @@ function Chat() {
           width: "30px",
           height: "19px"
         }}
-        onClick={() => setShowChat(true)}>
+        onClick={() => setShowChat(true)}
+        data-testid="abrir_chat"
+        >
         <ChatIcon
           color="secondary"
           sx={{ fontSize: 40, color: 'white' }}
@@ -89,6 +91,7 @@ function Chat() {
       <Box
         className={showChat ? "modal_chat" : "hidden"}
         component="div"
+        data-testid="chat"
       >
         <div>
           <h2 className="titulo_chat"> Chat </h2>
@@ -101,7 +104,9 @@ function Chat() {
               width: "50px",
               height: "50px"
             }}
-            onClick={() => setShowChat(false)}>
+            onClick={() => setShowChat(false)}
+            data-testid="cerrar_chat"
+            >
             <CloseIcon
               sx={{ color: 'black' }}
             />
@@ -113,7 +118,9 @@ function Chat() {
               width: "50px",
               top: "-28px",
             }}
-            onClick={() => setShowSystem(true)}>
+            onClick={() => setShowSystem(true)}
+            data-testid="filtro2"
+            >
             <ToggleOnIcon
               sx={{ color: 'black' }}
             />
@@ -125,7 +132,9 @@ function Chat() {
               width: "50px",
               top: "-28px",
             }}
-            onClick={() => setShowSystem(false)}>
+            onClick={() => setShowSystem(false)}
+            data-testid="filtro1"
+            >
             <ToggleOffIcon
               sx={{ color: 'black' }}
             />
@@ -166,6 +175,7 @@ function Chat() {
               height: "50px"
             }}
             onClick={() => enviar_mensaje()}
+            data-testid="enviar_mensaje"
           >
             <SendOutlinedIcon
               sx={{ color: 'black' }}

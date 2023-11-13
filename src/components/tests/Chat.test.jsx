@@ -1,13 +1,8 @@
-import TestRenderer from "react-test-renderer";
 import { Provider } from "react-redux";
-import store from "../../store/store"
 import Chat from "../chat/Chat";
-
-
 import { describe, expect, test, vi, afterEach} from "vitest";
-import {render, screen, cleanup, waitFor } from '@testing-library/react';
+import {render, screen, cleanup } from '@testing-library/react';
 import {userEvent} from "@testing-library/user-event"
-import { SnackbarProvider } from "notistack";
 import axios from 'axios';
 import configureStore from "redux-mock-store";
 

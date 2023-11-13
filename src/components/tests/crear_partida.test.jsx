@@ -2,8 +2,7 @@ import { Provider } from "react-redux";
 import store from "../../store/store"
 import CrearPartida from "../home/crear_partida/crear_partida";
 import { describe, expect, test, vi, afterEach  } from "vitest";
-import {fireEvent, render, screen, cleanup, waitFor, within } from '@testing-library/react';
-import { Container, TextField, Button } from "@mui/material";
+import {render, screen, cleanup } from '@testing-library/react';
 import {userEvent} from "@testing-library/user-event"
 import { SnackbarProvider } from "notistack";
 import axios from 'axios';

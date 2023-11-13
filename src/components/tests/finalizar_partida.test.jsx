@@ -1,13 +1,9 @@
 import { Provider } from "react-redux";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter} from "react-router-dom";
 import FinalizarPartida from "../partida/finalizar_partida/FinalizarPartida";
-
-
-import { describe, expect, test, vi, afterEach} from "vitest";
+import { describe, expect, test} from "vitest";
 import {render, screen, cleanup} from '@testing-library/react';
-import {userEvent} from "@testing-library/user-event"
 import configureStore from "redux-mock-store";
-import axios from 'axios';
 
 
 

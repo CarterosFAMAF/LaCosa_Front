@@ -16,9 +16,6 @@ function Jugador() {
   const fase = useSelector((state) => state.fase);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-
-  console.log(jugador); //Borrar
-
   // Obtiene el id del intercambiante
   if (jugador.fase === fase.intercambio && !jugador.intercambiante &&
     jugador.turnoPartida === jugador.posicion) {
