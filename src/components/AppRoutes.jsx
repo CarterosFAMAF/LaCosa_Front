@@ -2,11 +2,8 @@ import Home from "./home/Home";
 import "./Estilos.css";
 import Jugador from "./partida/Jugador";
 import { Route, Routes } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 function AppRoutes() {
-  const jugador = useSelector((state) => state.jugador);
-
    return (
       <Routes>
         <Route path="/" Component={Home} />

@@ -143,11 +143,6 @@ function ElegirCarta() {
     axios
       .put(urlDefender, formatoDefensa)
       .then(function (response) {
-        dispatch(tirarCarta(jugador.seleccion));
-        dispatch(limpiarSelector());
-        dispatch(limpiarAtacante());
-        dispatch(setOpcionesDefensivas([]));
-
         if (Array.isArray(response.data) && response.data.length) {
           dispatch(setCartasPublicas(response.data)); // Carta: {id, image, name, type}
           /* Hay resultado.
@@ -162,6 +157,7 @@ function ElegirCarta() {
         }
 
         if (id_card_defense > 0) {
+          dispatch(tirarCarta(jugador.seleccion));
           const urlRobarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${false}/get_card`;
           axios
             .get(urlRobarCarta)
@@ -174,6 +170,9 @@ function ElegirCarta() {
               });
             });
         }
+        dispatch(limpiarSelector());
+        dispatch(limpiarAtacante());
+        dispatch(setOpcionesDefensivas([]));
       })
       .catch(function (response) {
         enqueueSnackbar(`error: ${response.message}`, {
