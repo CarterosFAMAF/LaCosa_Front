@@ -10,14 +10,12 @@ import { setCartasPublicas, setFase, setIntercambiante } from "../../store/jugad
 import { useSelector, useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import Chat from "../chat/Chat";
-import { useNavigate } from "react-router-dom";
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
   const fase = useSelector((state) => state.fase);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   console.log(jugador); //Borrar
 

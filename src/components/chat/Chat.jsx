@@ -45,14 +45,14 @@ function Chat() {
   const chat = jugador.chat.map((msg, index) => {
     if (msg.owner === 'Sistema') {
       return (
-        <div style={msg.infeccion ? { color: "green" } : { color: "rgb(155, 155, 155)" }}>
-          <p key={index}> {">"}{msg.text.concat(".")} </p>
+        <div key={index} style={msg.infeccion ? { color: "green" } : { color: "rgb(120, 120, 120)" }}>
+          <p> {">"}{msg.text.concat(".")} </p>
         </div>
       );
     } else {
       return (
-        <div>
-          <p key={index}> {msg.owner}: {msg.text} </p>
+        <div key={index}>
+          <p> {msg.owner}: {msg.text} </p>
         </div>
       );
     }

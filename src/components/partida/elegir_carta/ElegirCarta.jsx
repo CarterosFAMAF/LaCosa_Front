@@ -9,7 +9,7 @@ import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { useEffect } from "react";
 
-const MAS_VALE_QUE_CORRAS_STR = "Mas_Vale_Que_Corras";
+const MAS_VALE_QUE_CORRAS_STR = "Mas_vale_que_corras";
 const LANZALLAMAS_STR = "lanzallamas";
 const CAMBIO_DE_LUGAR_STR = "Cambio_de_lugar";
 const SEDUCCION_STR = "Seduccion";
@@ -63,9 +63,11 @@ function ElegirCarta() {
   }
 
   const jugar_carta = (objetivo_id) => {
+    /*
     if (jugador.seleccionName === SEDUCCION_STR) {
       dispatch(setIntercambiante(objetivo_id));
     }
+    */
     setHasTaget(true);
     const urlJugarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${objetivo_id}/${jugador.seleccion}/play_card`;
     enviar_carta(urlJugarCarta);
@@ -112,7 +114,6 @@ function ElegirCarta() {
       .then(function (response) {
         dispatch(tirarCarta(jugador.seleccion));
         dispatch(limpiarSelector());
-        dispatch(setIntercambiante(0));
         dispatch(limpiarAtacante());
         dispatch(setOpcionesDefensivas([]));
       })

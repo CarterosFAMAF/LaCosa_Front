@@ -25,6 +25,7 @@ const WS_STATUS_EXCHANGE_REQUEST = 12
 const WS_STATUS_EXCHANGE = 13
 const WS_STATUS_INFECTED = 14
 const WS_STATUS_DEFENSE_PRIVATE_MSG = 15
+const WS_STATUS_EVENTS_CARDS = 19
 //Accion
 const WS_STATUS_PLAYER_BURNED = 101
 const WS_STATUS_CHANGED_OF_PLACES = 102
@@ -85,7 +86,9 @@ function App() {
           dispatch(setMensajeFinalizar(parsedData.message));
         }
 
-        if (!(parsedData.status === WS_STATUS_INFECTED || parsedData.status === WS_STATUS_CHAT_MESSAGE ||
+        if (!(parsedData.status === WS_STATUS_PLAYER_JOINED || parsedData.status === WS_STATUS_MATCH_STARTED ||
+          parsedData.status === WS_STATUS_PLAYER_WELCOME || parsedData.status === WS_CARD ||
+          parsedData.status === WS_STATUS_INFECTED || parsedData.status === WS_STATUS_CHAT_MESSAGE ||
           parsedData.status === WS_STATUS_DEFENSE_PRIVATE_MSG || parsedData.status === WS_CARD)) {
           dispatch(addMessage({ owner: "Sistema", text: parsedData.message, infeccion: false }));
         }
@@ -96,6 +99,9 @@ function App() {
           case WS_STATUS_EXCHANGE_REQUEST_QUARANTINE:
             if (parsedData.player_target_id === jugador.id) {
               dispatch(setIntercambiante(parsedData.player_id))
+              dispatch(setFase(fase.intercambio))
+            } else if (parsedData.player_id === jugador.id) {
+              dispatch(setIntercambiante(parsedData.player_target_id))
               dispatch(setFase(fase.intercambio))
             }
             break;
@@ -129,7 +135,7 @@ function App() {
 
           case WS_STATUS_WHISKY: // Whisky
           case WS_STATUS_UPS: // Ups
-            if (parsedData.player_id !== jugador.id) {
+            if (parsedData.player_id != jugador.id) {
               dispatch(setCartasPublicas(parsedData.players[jugador.turnoPartida].revealed_cards));
               dispatch(setFase(fase.resultado));
             }
