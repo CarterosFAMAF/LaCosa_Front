@@ -21,19 +21,23 @@ export const jugadorSlice = createSlice({
     fase: 0,
     jugadores: [],
     cartas: [],
+    cartasPanico: [],
     seleccion: -1,
+    seleccionName: "",
     seleccionType: "",
     cartasPublicas: [],
     intercambiante: 0,
     cosaId: 0,
-    opcionesDefensivas: [],
     atacanteId: 0,
     atacanteCardId: 0,
+    opcionesDefensivas: [],
     cuarentenas: [],
     chat: [],
     mensaje_finalizar: "No hubo ganadores!",
     maxJugadores: 12,
     minJugadores: 4,
+    fallaste: false,
+    citaCiega: false,
   },
   reducers: {
     partidaDef: (state, action) => {
@@ -70,7 +74,9 @@ export const jugadorSlice = createSlice({
       state.fase = 0;
       state.jugadores = [];
       state.cartas = [];
+      state.cartasPanico = [];
       state.seleccion = -1;
+      state.seleccionName = "";
       state.seleccionType = "";
       state.cartasPublicas = [];
       state.intercambiante = 0;
@@ -83,6 +89,8 @@ export const jugadorSlice = createSlice({
       state.mensaje_finalizar = "No hubo ganadores!";
       state.maxJugadores = 12;
       state.minJugadores = 4;
+      state.fallaste = false;
+      state.citaCiega = false;
     },
     setJugadores: (state, action) => {
       const me_player = action.payload.filter(player => (player.id === state.id))[0];
@@ -114,6 +122,7 @@ export const jugadorSlice = createSlice({
     },
     seleccionar: (state, action) => {
       state.seleccion = action.payload.id;
+      state.seleccionName = action.payload.name;
       state.seleccionType = action.payload.type;
     },
     tirarCarta: (state, action) => {
@@ -121,10 +130,20 @@ export const jugadorSlice = createSlice({
     },
     robarCarta: (state, action) => {
       state.cartas.push(action.payload);
+      if (action.payload.type === "Panico") {
+        state.cartasPanico = [action.payload];
+        state.seleccion = action.payload.id;
+        state.seleccionName = action.payload.name;
+        state.seleccionType = action.payload.type;
+      }
     },
     limpiarSelector: (state) => {
       state.seleccion = -1;
+      state.seleccionName = "";
       state.seleccionType = "";
+    },
+    limpiarPanico: (state) => {
+      state.cartasPanico = [];
     },
     setIntercambiante: (state, action) => {
       state.intercambiante = action.payload;
@@ -153,12 +172,18 @@ export const jugadorSlice = createSlice({
     setMensajeFinalizar: (state, action) => {
       state.mensaje_finalizar = action.payload;
     },
+    setCitaCiega: (state, action) => {
+      state.citaCiega = action.payload;
+    },
+    setFallaste: (state, action) => {
+      state.fallaste = action.payload;
+    },
   },
 });
 
 export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores,
   setTurnoPartida, setInfectado, pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector,
-  setFase, setCartasPublicas, setIntercambiante, setMensajeFinalizar, setAtacante,
-  limpiarAtacante, setOpcionesDefensivas, addMessage } = jugadorSlice.actions;
+  setFase, setCartasPublicas, setIntercambiante, setMensajeFinalizar, setAtacante, setFallaste,
+  limpiarAtacante, setOpcionesDefensivas, addMessage, limpiarPanico, setCitaCiega } = jugadorSlice.actions;
 
 export default jugadorSlice;

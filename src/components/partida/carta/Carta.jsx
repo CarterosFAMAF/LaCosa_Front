@@ -11,7 +11,7 @@ function Carta({ carta }) { // Carta = {id, name, image, type}
     (carta.id === jugador.seleccion) ? { border: `6px solid rgba(0, 100, 0, 0.6)` } : {};
 
   const selector = () => {
-    if (jugador.fase === fase.juego || jugador.fase === fase.defensa
+    if ((jugador.fase === fase.juego && !jugador.cartasPanico.length) || jugador.fase === fase.defensa
       || jugador.fase === fase.intercambio) {
       dispatch(seleccionar(carta))
     }

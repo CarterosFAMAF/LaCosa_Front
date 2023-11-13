@@ -21,7 +21,7 @@
     bottom: 0px;
     width: 20.5%;
     height: 99.2%;
-    background-color: rgba(190, 190, 190);
+    background-color: rgb(235, 235, 235);
     border-radius: 20px;
     border: 2px solid black;
     overflow: 'auto';
@@ -51,10 +51,32 @@
 
 .chat{
     border: 2px solid black;
-    height: 520px;
+    height: 79vh;
     width: 95%;
     margin-left: 5px;
     border-radius: 20px;
     margin-right: 20px;
-    margin-top: 15px;
+    margin-top: -20px;
+    overflow-y: scroll;    
+}
+
+.mensajes{
+    margin: 5px;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Para WebKit (Google Chrome, Safari) */
+::-webkit-scrollbar {
+  width: 8px; /* Ancho de la barra de desplazamiento */
+  border-radius: 5px; /* Radio de borde de la barra de desplazamiento */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color de la barra de desplazamiento */
+  border-radius: 5px; /* Radio de borde de la barra de desplazamiento */
+}
+
+/* Agrega un color de fondo a la pista de la barra de desplazamiento (opcional) */
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
 }

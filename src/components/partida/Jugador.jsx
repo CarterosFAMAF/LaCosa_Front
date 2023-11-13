@@ -14,22 +14,32 @@ import Chat from "../chat/Chat";
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
   const fase = useSelector((state) => state.fase);
-  const rol = useSelector((state) => state.rol);
   const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
   console.log(jugador); //Borrar
 
-  //Infectado revisa si el intercambiante es LaCosa
-  if (jugador.rol === rol.infectado &&
-    jugador.fase === fase.intercambio && !jugador.intercambiante &&
+  // Obtiene el id del intercambiante
+  if (jugador.fase === fase.intercambio && !jugador.intercambiante &&
     jugador.turnoPartida === jugador.posicion) {
-    console.log("Entra busca")
+    dispatch(setIntercambiante(jugador.id));
     const urlNextPlayer = `http://127.0.0.1:8000/matches/${jugador.partidaId}/next_player`;
+    const urlNextTurn = `http://127.0.0.1:8000/matches/${jugador.partidaId}/next_turn`;
     axios
       .get(urlNextPlayer)
       .then(function (response) {
         dispatch(setIntercambiante(response.data.next_player_id));
+        if (jugador.jugadores.find(player => (player.id === response.data.next_player_id && player.quarantine > 0))) {
+          axios
+            .put(urlNextTurn)
+            .then(function () {
+            })
+            .catch(function (response) {
+              enqueueSnackbar(`error: ${response.message}`, {
+                variant: "error",
+              });
+            });
+        }
       })
       .catch(function (response) {
         enqueueSnackbar(`error: ${response.message}`, {
@@ -80,7 +90,10 @@ function Jugador() {
               </div>
             }
           </div>
-          : <h1>Estás Muerto</h1>
+          : <div className="muerto">
+            <h1 className="muerto_mensaje">Estás Muerto</h1>
+            <img className="white_skull" src={("/LaCosaNostra.png")} />
+          </div> 
       }
     </div>
   );

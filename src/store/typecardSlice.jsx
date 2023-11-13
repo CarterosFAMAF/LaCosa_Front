@@ -8,6 +8,7 @@ export const typecardSlice = createSlice({
     panico: "Panico",
     lacosa: "La_Cosa",
     infectado: "Infectado",
+    obstaculo: "Obstaculo",
   },
   reducers: {
   },

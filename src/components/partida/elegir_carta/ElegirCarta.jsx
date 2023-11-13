@@ -3,11 +3,20 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import {
   tirarCarta, setFase, limpiarSelector, setCartasPublicas, setIntercambiante,
-  robarCarta, limpiarAtacante, setOpcionesDefensivas, seleccionar
+  robarCarta, limpiarAtacante, setOpcionesDefensivas, limpiarPanico, setCitaCiega, setFallaste
 } from "../../../store/jugadorSlice";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import { useEffect } from "react";
+
+const MAS_VALE_QUE_CORRAS_STR = "Mas_vale_que_corras";
+const LANZALLAMAS_STR = "lanzallamas";
+const CAMBIO_DE_LUGAR_STR = "Cambio_de_lugar";
+const SEDUCCION_STR = "Seduccion";
+const VIGILA_TUS_ESPALDAS_STR = "Vigila_tus_espaldas";
+const WHISKY_STR = "Whisky";
+const UPS_STR = "Ups!";
+const CITA_A_CIEGAS_STR = "Cita_a_ciegas";
 
 function ElegirCarta() {
   const jugador = useSelector((state) => state.jugador);
@@ -21,16 +30,14 @@ function ElegirCarta() {
 
   const [hasTarget, setHasTaget] = useState(false);
   const [hasPlayed, setHasPlayed] = useState(false);
-  const cartasPanico = jugador.cartas.filter(carta => carta.type === "Panico");
+  const [hasPanicked, setHasPanicked] = useState(false);
 
   useEffect(() => {
     setHasPlayed(false);
   }, [jugador.fase]);
 
-  const filtered_cards = jugador.cartas.filter(carta => (carta.id === jugador.seleccion))[0];
-  const carta_nombre = filtered_cards ? filtered_cards.name : "";
-
   const enviar_carta = (urlEnviarCarta) => {
+    dispatch(limpiarPanico());
     axios
       .put(urlEnviarCarta)
       .then(function (response) {
@@ -56,6 +63,11 @@ function ElegirCarta() {
   }
 
   const jugar_carta = (objetivo_id) => {
+    /*
+    if (jugador.seleccionName === SEDUCCION_STR) {
+      dispatch(setIntercambiante(objetivo_id));
+    }
+    */
     setHasTaget(true);
     const urlJugarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${objetivo_id}/${jugador.seleccion}/play_card`;
     enviar_carta(urlJugarCarta);
@@ -69,10 +81,11 @@ function ElegirCarta() {
 
   const check_carta = () => {
     setHasPlayed(true);
-    if (cartasPanico.length) {
-      dispatch(seleccionar(cartasPanico[0]));
-    }
-    if (carta_nombre === "Vigila_tus_espaldas" || carta_nombre === "Whisky" || carta_nombre === "Ups!") {
+    setHasPanicked(true);
+    if (jugador.seleccionName === VIGILA_TUS_ESPALDAS_STR ||
+      jugador.seleccionName === WHISKY_STR ||
+      jugador.seleccionName === UPS_STR ||
+      jugador.seleccionName === CITA_A_CIEGAS_STR) {
       //Sin Objetivo
       jugar_carta(0);
     } else {
@@ -85,23 +98,22 @@ function ElegirCarta() {
     setHasPlayed(true);
     const urlIntercambiarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/exchange_cards`;
 
-    console.log("Intercambiante")
-    console.log(jugador.intercambiante)
-
     const endpoint_params_intercambiar = {
       match_id: jugador.partidaId,
       player_id: jugador.id,
       player_target_id: jugador.intercambiante,
       card_id: jugador.seleccion,
-      is_you_failed: false
+      is_you_failed: jugador.fallaste,
+      blind_date: jugador.citaCiega,
     };
+    
+    console.log(endpoint_params_intercambiar);
 
     axios
       .put(urlIntercambiarCarta, endpoint_params_intercambiar)
       .then(function (response) {
         dispatch(tirarCarta(jugador.seleccion));
         dispatch(limpiarSelector());
-        dispatch(setIntercambiante(0));
         dispatch(limpiarAtacante());
         dispatch(setOpcionesDefensivas([]));
       })
@@ -110,10 +122,13 @@ function ElegirCarta() {
           variant: "error",
         });
       });
+
+    dispatch(setCitaCiega(false));
+    dispatch(setFallaste(false));
   }
 
   const defender_carta = (id_card_defense) => {
-
+    setHasPlayed(true);
     const urlDefender = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/play_card_defense`;
 
     const formatoDefensa = {
@@ -123,7 +138,6 @@ function ElegirCarta() {
       card_target_id: jugador.atacanteCardId,
       player_target_id: jugador.atacanteId,
     }
-    console.log(formatoDefensa);
 
     axios
       .put(urlDefender, formatoDefensa)
@@ -142,11 +156,11 @@ function ElegirCarta() {
         } else {
           /* No hay resultado.
           Cartas: Nada de Barbacoas, Aqui estoy Bien, No Gracias, Fallaste
-          */ 
+          */
           dispatch(setFase(fase.robo));
         }
 
-        const urlRobarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/get_card`;
+        const urlRobarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${false}/get_card`;
         axios
           .get(urlRobarCarta)
           .then(function (response) {
@@ -166,19 +180,31 @@ function ElegirCarta() {
   }
 
   const obtenerObjetivos = () => {
-    if (carta_nombre === "Mas_Vale_Que_Corras" || carta_nombre === "Seduccion") {
+    if (jugador.seleccionName === MAS_VALE_QUE_CORRAS_STR ||
+      jugador.seleccionName === SEDUCCION_STR) {
       //Objetivo Cualquiera
-      const objetivos = jugador.jugadores.filter(player => (player.alive === true && player.id != jugador.id))
+      const objetivos = jugador.jugadores.filter(player => (player.alive && player.id != jugador.id))
+
       const output = [];
       objetivos.forEach((player) => {
         output.push(
           <li key={player.id} className="column">
-            <button
-              className="opcion_verde"
-              onClick={() => jugar_carta(player.id)}
-            >
-              {player.name}
-            </button>
+            {(player.quarantine > 0 &&
+              (jugador.seleccionName === MAS_VALE_QUE_CORRAS_STR ||
+                jugador.seleccionName === SEDUCCION_STR)) ?
+              <button
+                className="opcion_rojo"
+                onClick={() => descartar_carta()}
+              >
+                {player.name} (Descartar)
+              </button> :
+              <button
+                className="opcion_verde"
+                onClick={() => jugar_carta(player.id)}
+              >
+                {player.name}
+              </button>
+            }
           </li>
         );
       });
@@ -214,12 +240,20 @@ function ElegirCarta() {
       adyacentes.forEach((player) => {
         output.push(
           <li key={player.id} className="column">
-            <button
-              className="opcion_verde"
-              onClick={() => jugar_carta(player.id)}
-            >
-              {player.name}
-            </button>
+            {(player.quarantine > 0 && jugador.seleccionName === CAMBIO_DE_LUGAR_STR) ?
+              <button
+                className="opcion_rojo"
+                onClick={() => descartar_carta()}
+              >
+                {player.name} (Descartar)
+              </button> :
+              <button
+                className="opcion_verde"
+                onClick={() => jugar_carta(player.id)}
+              >
+                {player.name}
+              </button>
+            }
           </li>
         );
       });
@@ -231,57 +265,72 @@ function ElegirCarta() {
 
   return (
     <div className="botones_juego">
-      {jugador.seleccion !== -1 && jugador.seleccionType !== typecard.lacosa && <div>
-        {jugador.fase === fase.juego && !hasPlayed &&
-          <div>
-            {cartasPanico.length ?
-              <button className="opcion_verde" onClick={() => check_carta()}>Pánico!!!!</button> :
+      {jugador.cartasPanico.length && !hasPanicked ?
+        <button className="opcion_rosa" onClick={() => check_carta()}>Pánico!!!!</button> :
+        <div>
+          {jugador.fase === fase.objetivo && !hasTarget && objetivosJugadores}
+          {jugador.seleccion !== -1 && jugador.seleccionType !== typecard.lacosa && <div>
+            {jugador.fase === fase.juego && !hasPlayed &&
+              <div>
+                <div>
+                  <button
+                    className="opcion_rojo" onClick={() => descartar_carta()}>
+                    Descartar
+                  </button>
+                  {(
+                    // Debe ser Acción u Obstáculo
+                    (jugador.seleccionType === typecard.accion || jugador.seleccionType === typecard.obstaculo)
+                    && // Si estoy en cuarentena
+                    !(jugador.jugadores.find(player => player.id === jugador.id).quarantine > 0 &&
+                      (
+                        jugador.seleccionName === LANZALLAMAS_STR ||
+                        jugador.seleccionName === CAMBIO_DE_LUGAR_STR ||
+                        jugador.seleccionName === MAS_VALE_QUE_CORRAS_STR
+                      )
+                    ))
+                    &&
+                    <button
+                      className={jugador.seleccionType === typecard.accion ? "opcion_verde" : "opcion_amarillo"}
+                      onClick={() => check_carta()}>
+                      {jugador.seleccionType === typecard.accion ? "Jugar" : "Bloquear"}
+                    </button>}
+                </div>
+              </div>
+            }
+            {jugador.fase === fase.defensa && !hasPlayed &&
               <div>
                 <button
-                  className="opcion_rojo" onClick={() => descartar_carta()}>
-                  Descartar
+                  className="opcion_rojo" onClick={() => defender_carta(0)}>
+                  No Defender
                 </button>
-                {jugador.seleccionType === typecard.accion &&
-                  <button className="opcion_verde" onClick={() => check_carta()}>
-                    Jugar
-                  </button>}
-              </div>}
-          </div>
-        }
-        {jugador.fase === fase.defensa && !hasPlayed &&
-          <div>
-            <button
-              className="opcion_rojo" onClick={() => defender_carta(0)}>
-              No Defender
-            </button>
-            {jugador.opcionesDefensivas.some(id => jugador.seleccion === id) &&
-              <button className="opcion_azul" onClick={() => defender_carta(jugador.seleccion)}>
-                Defender
-              </button>
+                {jugador.opcionesDefensivas.some(id => jugador.seleccion === id) &&
+                  <button className="opcion_azul" onClick={() => defender_carta(jugador.seleccion)}>
+                    Defender
+                  </button>
+                }
+              </div>
             }
-          </div>
-        }
-        {jugador.fase === fase.intercambio && !hasPlayed &&
-          <div>
-            {(jugador.seleccionType !== typecard.infectado || jugador.rol === typecard.lacosa ||
-              (jugador.rol === rol.infectado &&
-                jugador.cartas.filter(card => card.type === typecard.infectado).length > 1 &&
-                jugador.intercambiante === jugador.cosaId))
-              &&
-              <button
-                className="opcion_verde" onClick={() => intercambiar_carta()}>
-                Intercambiar
-              </button>
+            {jugador.fase === fase.intercambio && !hasPlayed &&
+              <div>
+                {(jugador.seleccionType !== typecard.infectado || jugador.rol === typecard.lacosa ||
+                  (jugador.rol === rol.infectado &&
+                    jugador.cartas.filter(card => card.type === typecard.infectado).length > 1 &&
+                    jugador.intercambiante === jugador.cosaId))
+                  &&
+                  <button
+                    className="opcion_verde" onClick={() => intercambiar_carta()}>
+                    Intercambiar
+                  </button>
+                }
+                {jugador.opcionesDefensivas.some(id => jugador.seleccion === id) &&
+                  <button className="opcion_azul" onClick={() => defender_carta(jugador.seleccion)}>
+                    Defender
+                  </button>
+                }
+              </div>
             }
-            {jugador.opcionesDefensivas.some(id => jugador.seleccion === id) &&
-              <button className="opcion_azul" onClick={() => defender_carta(jugador.seleccion)}>
-                Defender
-              </button>
-            }
-          </div>
-        }
-      </div>}
-      {jugador.fase === fase.objetivo && !hasTarget && objetivosJugadores}
+          </div>}
+        </div>}
     </div>
   );
 }

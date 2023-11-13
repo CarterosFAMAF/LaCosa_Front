@@ -2,17 +2,22 @@ import "./Chat.css";
 import ChatIcon from '@mui/icons-material/Chat';
 import CloseIcon from '@mui/icons-material/Close';
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined';
+import ToggleOnIcon from '@mui/icons-material/ToggleOn';
+import ToggleOffIcon from '@mui/icons-material/ToggleOff';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
 import { IconButton, Box } from '@mui/material';
 import { useSelector } from 'react-redux';
 import axios from "axios";
+import { useSnackbar } from "notistack";
 
 function Chat() {
 
   const jugador = useSelector((state) => state.jugador);
+  const {enqueueSnackbar} = useSnackbar();
   const [showChat, setShowChat] = useState(true);
   const [mensaje, setMensaje] = useState("");
+  const [showSystem, setShowSystem] = useState(false);
 
   const handleChange = (event) => {
     setMensaje(event.target.value);
@@ -40,21 +45,26 @@ function Chat() {
     }
   }
 
-  const chat = jugador.chat.map((msg) => {
+  const chat = jugador.chat.filter(msg => showSystem ? msg.owner === 'Sistema' : true).map((msg, index) => {
     if (msg.owner === 'Sistema') {
       return (
-        <div style={msg.infeccion ? { color: "green" } : { color: "black" }}>
-          <p> {msg.text} </p>
+        <div style={msg.infeccion ? { color: "green" } : { color: "rgb(120, 120, 120)" }}>
+          <p key={index}> {">"}{msg.text.concat(".")} </p>
         </div>
       );
     } else {
       return (
-        <div>
+        <div key={index}>
           <p> {msg.owner}: {msg.text} </p>
         </div>
       );
     }
   });
+  
+  const chatContainer = document.querySelector('.chat');
+  if (chatContainer !== null){
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
 
   return (
     <div>
@@ -94,18 +104,49 @@ function Chat() {
               sx={{ color: 'black' }}
             />
           </IconButton>
+          {!showSystem && <IconButton
+            className="filtro_sistema"
+            color="primary"
+            style={{
+              width: "50px",
+              top: "-28px",
+            }}
+            onClick={() => setShowSystem(true)}>
+            <ToggleOnIcon
+              sx={{ color: 'black' }}
+            />
+          </IconButton>}
+          {showSystem && <IconButton
+            className="filtro_sistema"
+            color="primary"
+            style={{
+              width: "50px",
+              top: "-28px",
+            }}
+            onClick={() => setShowSystem(false)}>
+            <ToggleOffIcon
+              sx={{ color: 'black' }}
+            />
+          </IconButton>}
           <div className="chat">
-            {chat}
+            <div className="mensajes">
+              {chat}
+            </div>
           </div>
           <TextField
             label="Escribe un mensaje"
             name="mensaje"
             display="flex"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                enviar_mensaje();
+              }
+            }}
             style={{
               marginTop: "7px",
               marginLeft: "20px",
               width: "75%",
-              height: "50px"
+              height: "30%"
             }}
             value={mensaje}
             onChange={handleChange}
