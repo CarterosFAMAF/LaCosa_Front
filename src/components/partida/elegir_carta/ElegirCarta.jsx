@@ -3,7 +3,8 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import {
   tirarCarta, setFase, limpiarSelector, setCartasPublicas, setIntercambiante,
-  robarCarta, limpiarAtacante, setOpcionesDefensivas, limpiarPanico, setCitaCiega, setFallaste
+  robarCarta, limpiarAtacante, setOpcionesDefensivas, limpiarPanico, setCitaCiega,
+  setFallaste
 } from "../../../store/jugadorSlice";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
@@ -37,12 +38,12 @@ function ElegirCarta() {
   }, [jugador.fase]);
 
   const enviar_carta = (urlEnviarCarta) => {
+    dispatch(tirarCarta(jugador.seleccion));
+    dispatch(limpiarSelector());
     dispatch(limpiarPanico());
     axios
       .put(urlEnviarCarta)
       .then(function (response) {
-        dispatch(tirarCarta(jugador.seleccion));
-        dispatch(limpiarSelector());
         if (Array.isArray(response.data) && response.data.length) {
           dispatch(setCartasPublicas(response.data));
           /* Hay resultado.
@@ -63,11 +64,6 @@ function ElegirCarta() {
   }
 
   const jugar_carta = (objetivo_id) => {
-    /*
-    if (jugador.seleccionName === SEDUCCION_STR) {
-      dispatch(setIntercambiante(objetivo_id));
-    }
-    */
     setHasTaget(true);
     const urlJugarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${objetivo_id}/${jugador.seleccion}/play_card`;
     enviar_carta(urlJugarCarta);
@@ -97,7 +93,6 @@ function ElegirCarta() {
   const intercambiar_carta = () => {
     setHasPlayed(true);
     dispatch(setFase(fase.espera));
-    const urlIntercambiarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/exchange_cards`;
 
     const endpoint_params_intercambiar = {
       match_id: jugador.partidaId,
@@ -108,15 +103,10 @@ function ElegirCarta() {
       blind_date: jugador.citaCiega,
     };
 
-    console.log(endpoint_params_intercambiar);
-
+    const urlIntercambiarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/exchange_cards`;
     axios
       .put(urlIntercambiarCarta, endpoint_params_intercambiar)
       .then(function (response) {
-        dispatch(tirarCarta(jugador.seleccion));
-        dispatch(limpiarSelector());
-        dispatch(limpiarAtacante());
-        dispatch(setOpcionesDefensivas([]));
       })
       .catch(function (response) {
         enqueueSnackbar(`error: ${response.message}`, {
@@ -126,38 +116,32 @@ function ElegirCarta() {
 
     dispatch(setCitaCiega(false));
     dispatch(setFallaste(false));
+    dispatch(setOpcionesDefensivas([]));
+    dispatch(tirarCarta(jugador.seleccion));
+    dispatch(limpiarSelector());
   }
 
   const defender_carta = (id_card_defense) => {
     setHasPlayed(true);
-    const urlDefender = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/play_card_defense`;
+    dispatch(tirarCarta(id_card_defense));
+    dispatch(limpiarSelector());
+    dispatch(setOpcionesDefensivas([]));
 
     const formatoDefensa = {
       player_main_id: jugador.id,
       match_id: jugador.partidaId,
       card_main_id: id_card_defense,
       card_target_id: jugador.atacanteCardId,
-      player_target_id: jugador.atacanteId,
+      // Si defendés de intercambio o de juego
+      player_target_id: jugador.fase === fase.intercambio ? jugador.intercambiante : jugador.atacanteId,
     }
 
+    const urlDefender = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/play_card_defense`;
     axios
       .put(urlDefender, formatoDefensa)
       .then(function (response) {
-        if (Array.isArray(response.data) && response.data.length) {
-          dispatch(setCartasPublicas(response.data)); // Carta: {id, image, name, type}
-          /* Hay resultado.
-          Cartas: Aterrador
-          */
-          dispatch(setFase(fase.resultado));
-        } else {
-          /* No hay resultado.
-          Cartas: Nada de Barbacoas, Aqui estoy Bien, No Gracias, Fallaste
-          */
-          dispatch(setFase(fase.robo));
-        }
-
-        if (id_card_defense > 0) {
-          dispatch(tirarCarta(jugador.seleccion));
+        dispatch(limpiarAtacante());
+        if (id_card_defense) { // Si defendiste, pedir carta nueva
           const urlRobarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${false}/get_card`;
           axios
             .get(urlRobarCarta)
@@ -170,9 +154,37 @@ function ElegirCarta() {
               });
             });
         }
-        dispatch(limpiarSelector());
-        dispatch(limpiarAtacante());
-        dispatch(setOpcionesDefensivas([]));
+        if (Array.isArray(response.data) && response.data.length) {
+          dispatch(setCartasPublicas(response.data));
+          /* Hay resultado.
+          Cartas: Aterrador
+          */
+          dispatch(setFase(fase.resultado));
+        } else {
+          /* No hay resultado.
+          Cartas: Nada de Barbacoas, Aqui estoy Bien, No Gracias, Fallaste
+          */
+          dispatch(setFase(fase.robo));
+        }
+      })
+      .catch(function (response) {
+        enqueueSnackbar(`error: ${response.message}`, {
+          variant: "error",
+        });
+      });
+
+    if (jugador.fase === fase.intercambio) {
+      // Si defendiste de un intercambio
+      dispatch(setIntercambiante(0));
+    }
+  }
+
+  const saltear_turno = () => {
+    dispatch(limpiarSelector());
+    const urlNextTurn = `http://127.0.0.1:8000/matches/${jugador.partidaId}/next_turn`;
+    axios
+      .put(urlNextTurn)
+      .then(function (response) {
       })
       .catch(function (response) {
         enqueueSnackbar(`error: ${response.message}`, {
@@ -314,20 +326,27 @@ function ElegirCarta() {
             }
             {jugador.fase === fase.intercambio && !hasPlayed &&
               <div>
-                {(jugador.seleccionType !== typecard.infectado || jugador.rol === typecard.lacosa ||
-                  (jugador.rol === rol.infectado &&
-                    jugador.cartas.filter(card => card.type === typecard.infectado).length > 1 &&
-                    jugador.intercambiante === jugador.cosaId))
-                  &&
-                  <button
-                    className="opcion_verde" onClick={() => intercambiar_carta()}>
-                    Intercambiar
-                  </button>
-                }
-                {jugador.opcionesDefensivas.some(id => jugador.seleccion === id) &&
-                  <button className="opcion_azul" onClick={() => defender_carta(jugador.seleccion)}>
-                    Defender
-                  </button>
+                {(jugador.jugadores.find(player => (player.id === jugador.intercambiante && player.quarantine > 0)) && jugador.posicion === jugador.turnoPartida) ?
+                  <button className="opcion_amarillo" onClick={() => saltear_turno()}>
+                    Terminar!
+                  </button> :
+                  <div>
+                    {(jugador.seleccionType !== typecard.infectado || jugador.rol === typecard.lacosa ||
+                      (jugador.rol === rol.infectado &&
+                        jugador.cartas.filter(card => card.type === typecard.infectado).length > 1 &&
+                        jugador.intercambiante === jugador.cosaId))
+                      &&
+                      <button
+                        className="opcion_verde" onClick={() => intercambiar_carta()}>
+                        Intercambiar
+                      </button>
+                    }
+                    {jugador.opcionesDefensivas.some(id => jugador.seleccion === id) &&
+                      <button className="opcion_azul" onClick={() => defender_carta(jugador.seleccion)}>
+                        Defender
+                      </button>
+                    }
+                  </div>
                 }
               </div>
             }

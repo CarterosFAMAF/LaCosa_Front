@@ -31,13 +31,14 @@ export const jugadorSlice = createSlice({
     atacanteId: 0,
     atacanteCardId: 0,
     opcionesDefensivas: [],
-    cuarentenas: [],
     chat: [],
     mensaje_finalizar: "No hubo ganadores!",
     maxJugadores: 12,
     minJugadores: 4,
     fallaste: false,
     citaCiega: false,
+    aterrado: false,
+    espera: false,
   },
   reducers: {
     partidaDef: (state, action) => {
@@ -84,13 +85,14 @@ export const jugadorSlice = createSlice({
       state.opcionesDefensivas = [];
       state.atacanteId = 0;
       state.atacanteCardId = 0;
-      state.cuarentenas = [];
       state.chat = [];
       state.mensaje_finalizar = "No hubo ganadores!";
       state.maxJugadores = 12;
       state.minJugadores = 4;
       state.fallaste = false;
       state.citaCiega = false;
+      state.aterrado = false;
+      state.espera = false;
     },
     setJugadores: (state, action) => {
       const me_player = action.payload.filter(player => (player.id === state.id))[0];
@@ -178,12 +180,19 @@ export const jugadorSlice = createSlice({
     setFallaste: (state, action) => {
       state.fallaste = action.payload;
     },
+    setAterrado: (state, action) => {
+      state.aterrado = action.payload;
+    },
+    setEspera: (state, action) => {
+      state.espera = action.payload;
+    },
   },
 });
 
 export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores,
   setTurnoPartida, setInfectado, pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector,
   setFase, setCartasPublicas, setIntercambiante, setMensajeFinalizar, setAtacante, setFallaste,
-  limpiarAtacante, setOpcionesDefensivas, addMessage, limpiarPanico, setCitaCiega } = jugadorSlice.actions;
+  limpiarAtacante, setOpcionesDefensivas, addMessage, limpiarPanico, setCitaCiega, setEspera,
+  setAterrado } = jugadorSlice.actions;
 
 export default jugadorSlice;

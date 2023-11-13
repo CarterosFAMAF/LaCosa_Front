@@ -7,7 +7,8 @@ export const typemessageSlice = createSlice({
     system: 1,
     infeccion: 2,
     defense: 3,
-    quarantine: 4
+    quarantine: 4,
+    panico: 5,
   },
   reducers: {
   },

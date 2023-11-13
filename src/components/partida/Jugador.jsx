@@ -1,55 +1,23 @@
 import "./Jugador.css";
-import axios from "axios";
 import Mano from "./mano/Mano";
 import RobarCarta from "./robar/RobarCarta";
 import ElegirCarta from "./elegir_carta/ElegirCarta";
 import FinalizarPartida from "./finalizar_partida/FinalizarPartida";
 import Tracker from "./tracker/Tracker";
 import BotonFinalizar from "./boton_finalizar/BotonFinalizar";
-import { setCartasPublicas, setFase, setIntercambiante } from "../../store/jugadorSlice";
+import { setCartasPublicas, setFase, setAterrado } from "../../store/jugadorSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { useSnackbar } from "notistack";
 import Chat from "../chat/Chat";
 
 function Jugador() {
   const jugador = useSelector((state) => state.jugador);
   const fase = useSelector((state) => state.fase);
-  const { enqueueSnackbar } = useSnackbar();
   const dispatch = useDispatch();
 
   console.log(jugador); //Borrar
 
-  // Obtiene el id del intercambiante
-  if (jugador.fase === fase.intercambio && !jugador.intercambiante &&
-    jugador.turnoPartida === jugador.posicion) {
-    dispatch(setIntercambiante(jugador.id));
-    const urlNextPlayer = `http://127.0.0.1:8000/matches/${jugador.partidaId}/next_player`;
-    const urlNextTurn = `http://127.0.0.1:8000/matches/${jugador.partidaId}/next_turn`;
-    axios
-      .get(urlNextPlayer)
-      .then(function (response) {
-        dispatch(setIntercambiante(response.data.next_player_id));
-        if (jugador.jugadores.find(player => (player.id === response.data.next_player_id && player.quarantine > 0))) {
-          axios
-            .put(urlNextTurn)
-            .then(function () {
-            })
-            .catch(function (response) {
-              enqueueSnackbar(`error: ${response.message}`, {
-                variant: "error",
-              });
-            });
-        }
-      })
-      .catch(function (response) {
-        enqueueSnackbar(`error: ${response.message}`, {
-          variant: "error",
-        });
-      });
-  }
-
   const terminar_checkeo = () => {
-    if (jugador.posicion === jugador.turnoPartida && !jugador.intercambiante) {
+    if (jugador.posicion === jugador.turnoPartida && !jugador.aterrado) {
       // Jugué una Carta en mi turno y me mostró algo.
       // Análisis, Sospecha.
       /*
@@ -64,7 +32,7 @@ function Jugador() {
       // Me quieren mostrar algo fuera de mi turno.
       // Aterrador, Whisky
       dispatch(setFase(fase.robo));
-      dispatch(setIntercambiante(0));
+      dispatch(setAterrado(false))
     }
     dispatch(setCartasPublicas([]))
   }
@@ -76,9 +44,9 @@ function Jugador() {
         (jugador.vivo) ?
           <div>
             <Chat />
-            <Tracker />
             <Mano cartas={jugador.cartas} />
             <BotonFinalizar />
+            <Tracker />
 
             {(jugador.posicion === jugador.turnoPartida && jugador.fase === fase.robo) && <RobarCarta />}
             {(jugador.fase === fase.juego || jugador.fase === fase.objetivo ||
@@ -93,7 +61,7 @@ function Jugador() {
           : <div className="muerto">
             <h1 className="muerto_mensaje">Estás Muerto</h1>
             <img className="white_skull" src={("/LaCosaNostra.png")} />
-          </div> 
+          </div>
       }
     </div>
   );
