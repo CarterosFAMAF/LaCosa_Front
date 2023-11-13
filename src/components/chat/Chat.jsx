@@ -47,18 +47,18 @@ function Chat() {
 
   const colors = ["black", "rgb(120, 120, 120)", "green", "blue", "orange"];
 
-  const chat = jugador.chat.filter(msg => showSystem ? msg.type != typemessage.user : true).map(msg => {
+  const chat = jugador.chat.filter(msg => showSystem ? msg.type != typemessage.user : true).map((msg, index) => {
     if (msg.type == typemessage.user) {
       return (
-        <div style={{color: colors[msg.type]}}>
+        <li style={{color: colors[msg.type]}} key={index}>
           <p> {msg.owner}: {msg.text} </p>
-        </div>
+        </li>
       );
     } else {
       return (
-        <div style={{color: colors[msg.type]}}>
+        <li style={{color: colors[msg.type]}} key={index}>
           <p> {">"}{msg.text} </p>
-        </div>
+        </li>
       );
     }
   });
