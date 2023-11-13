@@ -12,9 +12,9 @@ import axios from "axios";
 import { useSnackbar } from "notistack";
 
 function Chat() {
-
   const jugador = useSelector((state) => state.jugador);
-  const {enqueueSnackbar} = useSnackbar();
+  const typemessage = useSelector((state) => state.typemessage);
+  const { enqueueSnackbar } = useSnackbar();
   const [showChat, setShowChat] = useState(true);
   const [mensaje, setMensaje] = useState("");
   const [showSystem, setShowSystem] = useState(false);
@@ -45,24 +45,26 @@ function Chat() {
     }
   }
 
-  const chat = jugador.chat.filter(msg => showSystem ? msg.owner === 'Sistema' : true).map((msg, index) => {
-    if (msg.owner === 'Sistema') {
+  const colors = ["black", "rgb(120, 120, 120)", "green", "blue", "orange"];
+
+  const chat = jugador.chat.filter(msg => showSystem ? msg.type != typemessage.user : true).map(msg => {
+    if (msg.type == typemessage.user) {
       return (
-        <div style={msg.infeccion ? { color: "green" } : { color: "rgb(120, 120, 120)" }}>
-          <p key={index}> {">"}{msg.text.concat(".")} </p>
+        <div style={{color: colors[msg.type]}}>
+          <p> {msg.owner}: {msg.text} </p>
         </div>
       );
     } else {
       return (
-        <div key={index}>
-          <p> {msg.owner}: {msg.text} </p>
+        <div style={{color: colors[msg.type]}}>
+          <p> {">"}{msg.text} </p>
         </div>
       );
     }
   });
-  
+
   const chatContainer = document.querySelector('.chat');
-  if (chatContainer !== null){
+  if (chatContainer !== null) {
     chatContainer.scrollTop = chatContainer.scrollHeight;
   }
 

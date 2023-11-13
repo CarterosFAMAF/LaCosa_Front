@@ -3,6 +3,7 @@ import jugadorSlice from "./jugadorSlice";
 import faseSlice from "./faseSlice";
 import typecardSlice from "./typecardSlice";
 import rolSlice from "./rolesSlice";
+import typemessageSlice from "./typemessageSlice";
 
 export default configureStore({
   reducer: {
@@ -10,5 +11,6 @@ export default configureStore({
     fase: faseSlice.reducer,
     typecard: typecardSlice.reducer,
     rol: rolSlice.reducer,
+    typemessage: typemessageSlice.reducer,
   },
 });
