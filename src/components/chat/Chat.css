@@ -51,12 +51,12 @@
 
 .chat{
     border: 2px solid black;
-    height: 520px;
+    height: 79vh;
     width: 95%;
     margin-left: 5px;
     border-radius: 20px;
     margin-right: 20px;
-    margin-top: 15px;
+    margin-top: -20px;
     overflow-y: scroll;    
 }
 
