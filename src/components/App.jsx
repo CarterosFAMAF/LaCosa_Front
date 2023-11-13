@@ -64,6 +64,8 @@ function App() {
   const jugador = useSelector((state) => state.jugador);
   const fase = useSelector((state) => state.fase);
   const rol = useSelector((state) => state.rol);
+  const typemessage = useSelector((state) => state.typemessage);
+
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const socketUrl = `ws://localhost:8000/ws/matches/${jugador.partidaId}/${jugador.id}`;
@@ -89,25 +91,22 @@ function App() {
         if (!(parsedData.status === WS_STATUS_PLAYER_JOINED || parsedData.status === WS_STATUS_MATCH_STARTED ||
           parsedData.status === WS_STATUS_PLAYER_WELCOME || parsedData.status === WS_CARD ||
           parsedData.status === WS_STATUS_INFECTED || parsedData.status === WS_STATUS_CHAT_MESSAGE ||
-          parsedData.status === WS_STATUS_DEFENSE_PRIVATE_MSG || parsedData.status === WS_CARD)) {
-          dispatch(addMessage({ owner: "Sistema", text: parsedData.message, infeccion: false }));
+          parsedData.status === WS_STATUS_DEFENSE_PRIVATE_MSG || parsedData.status === WS_CARD ||
+          parsedData.status === WS_STATUS_EXCHANGE_QUARANTINE || parsedData.status === WS_STATUS_DRAW ||
+          parsedData.status === WS_STATUS_EXCHANGE_REQUEST_QUARANTINE || parsedData.status === WS_STATUS_DISCARD_QUARANTINE)) {
+          dispatch(addMessage({ owner: "", text: parsedData.message, type: typemessage.system }));
         }
 
         switch (parsedData.status) {
 
           case WS_STATUS_EXCHANGE_REQUEST: // Solicitar Intercambio
-          case WS_STATUS_EXCHANGE_REQUEST_QUARANTINE:
             if (parsedData.player_target_id === jugador.id) {
               dispatch(setIntercambiante(parsedData.player_id))
-              dispatch(setFase(fase.intercambio))
-            } else if (parsedData.player_id === jugador.id) {
-              dispatch(setIntercambiante(parsedData.player_target_id))
               dispatch(setFase(fase.intercambio))
             }
             break;
 
           case WS_STATUS_EXCHANGE: // Intercambio Extioso
-          case WS_STATUS_EXCHANGE_QUARANTINE:
             dispatch(setFase(fase.espera))
             dispatch(setIntercambiante(0));
             break;
@@ -117,6 +116,11 @@ function App() {
             break;
 
           case WS_STATUS_DEFENSE_PRIVATE_MSG: // Mensaje de que puedes defenderte
+            dispatch(addMessage({
+              owner: "",
+              text: "Puedes defenderte",
+              type: typemessage.defense
+            }));
             dispatch(setOpcionesDefensivas(parsedData.data_for_defense.defensive_options_id));
             dispatch(setAtacante(parsedData.data_for_defense));
             if (jugador.fase !== fase.intercambio) {
@@ -129,8 +133,14 @@ function App() {
             break;
 
           case WS_STATUS_INFECTED: // Infección
-            dispatch(addMessage({ owner: "Sistema", text: parsedData.message, infeccion: true }));
+            dispatch(addMessage({ owner: "", text: parsedData.message, type: typemessage.infeccion }));
             dispatch(setInfectado(parsedData.player_id));
+            break;
+
+          case WS_STATUS_CHANGED_OF_PLACES: // Hubo cambio de lugar
+            dispatch(setIntercambiante(0));
+            dispatch(setTurnoPartida(parsedData.turn_game));
+            dispatch(setJugadores(parsedData.players));
             break;
 
           case WS_STATUS_WHISKY: // Whisky
@@ -202,7 +212,46 @@ function App() {
             dispatch(addMessage({
               owner: parsedData.msg.owner,
               text: parsedData.msg.text,
-              infeccion: false
+              type: typemessage.user
+            }));
+            break;
+
+          // Cuarentena:
+          case WS_STATUS_EXCHANGE_QUARANTINE: // Solicitar Intercambio (Cuarentena)
+            dispatch(addMessage({
+              owner: "",
+              text: parsedData.message,
+              type: typemessage.quarantine
+            }));
+            dispatch(setFase(fase.espera))
+            dispatch(setIntercambiante(0));
+            break;
+
+          case WS_STATUS_EXCHANGE_REQUEST_QUARANTINE: // Intercambio Exitoso (Cuarentena)
+            dispatch(addMessage({
+              owner: "",
+              text: parsedData.message,
+              type: typemessage.quarantine
+            }));
+            if (parsedData.player_target_id === jugador.id) {
+              dispatch(setIntercambiante(parsedData.player_id))
+              dispatch(setFase(fase.intercambio))
+            }
+            break;
+
+          case WS_STATUS_DRAW:
+            dispatch(addMessage({
+              owner: "",
+              text: parsedData.message,
+              type: typemessage.quarantine
+            }));
+            break;
+
+          case WS_STATUS_DISCARD_QUARANTINE:
+            dispatch(addMessage({
+              owner: "",
+              text: parsedData.message,
+              type: typemessage.quarantine
             }));
             break;
 

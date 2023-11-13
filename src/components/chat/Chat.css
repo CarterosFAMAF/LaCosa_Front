@@ -65,6 +65,10 @@
     font-family: 'Open Sans', sans-serif;
 }
 
+.mensajes li{
+    display: inline;
+}
+
 /* Para WebKit (Google Chrome, Safari) */
 ::-webkit-scrollbar {
   width: 8px; /* Ancho de la barra de desplazamiento */

@@ -96,6 +96,7 @@ function ElegirCarta() {
 
   const intercambiar_carta = () => {
     setHasPlayed(true);
+    dispatch(setFase(fase.espera));
     const urlIntercambiarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/exchange_cards`;
 
     const endpoint_params_intercambiar = {
@@ -106,7 +107,7 @@ function ElegirCarta() {
       is_you_failed: jugador.fallaste,
       blind_date: jugador.citaCiega,
     };
-    
+
     console.log(endpoint_params_intercambiar);
 
     axios
@@ -160,17 +161,19 @@ function ElegirCarta() {
           dispatch(setFase(fase.robo));
         }
 
-        const urlRobarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${false}/get_card`;
-        axios
-          .get(urlRobarCarta)
-          .then(function (response) {
-            dispatch(robarCarta(response.data));
-          })
-          .catch(function (response) {
-            enqueueSnackbar(`error: ${response.message}`, {
-              variant: "error",
+        if (id_card_defense > 0) {
+          const urlRobarCarta = `http://127.0.0.1:8000/matches/${jugador.partidaId}/players/${jugador.id}/${false}/get_card`;
+          axios
+            .get(urlRobarCarta)
+            .then(function (response) {
+              dispatch(robarCarta(response.data));
+            })
+            .catch(function (response) {
+              enqueueSnackbar(`error: ${response.message}`, {
+                variant: "error",
+              });
             });
-          });
+        }
       })
       .catch(function (response) {
         enqueueSnackbar(`error: ${response.message}`, {
