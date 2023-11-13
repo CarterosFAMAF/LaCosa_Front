@@ -12,26 +12,23 @@ const initialState = {
   jugador: {
     partidaNombre: 'Fiesta',
     partidaId: 3,
-    id: 2,
+    id: 1,
     vivo: false,
+    cartas: [
+      { id: 1, name: "lanzallamas", image:"a", type: "accion" },
+      { id: 2, name: "Mas_Vale_Que_Corras", image:"a", type: "accion"},
+      { id: 3, name: "Sospecha", image:"a", type : "accion" },
+    ],
     iniciada: true,
     rol:"Humano",
-    chat:["hola"]
-},
-rol: {
-  lacosa: "La_Cosa",
-  humano: "Humano",
-  infectado: "Infectado",
-}}
-const initialState1 = {
-  jugador: {
-    partidaNombre: 'Fiesta',
-    partidaId: 3,
-    id: 2,
-    vivo: true,
-    iniciada: true,
-    rol:"Humano",
-    chat:["hola"]
+    chat:["hola"],
+    turnoPartida:1,
+    jugadores: [
+      { id: 1, name: 'Ernesto', turn: 0, alive: false, quarantine:0 },
+      { id: 6, name: 'Gustavo', turn: 1, alive: true,quarantine:0 },
+      { id: 8, name: 'Juan Carlos', turn: 2, alive: true, quarantine:0 },
+      { id: 7, name: 'Elena', turn: 3, alive: true,quarantine:0 },
+    ]
   },
   rol: {
     lacosa: "La_Cosa",
@@ -45,12 +42,19 @@ const initialState1 = {
     defensa: 4,
     resultado: 5,
     intercambio: 6,
-}}
+},
+"typemessage": {
+    user: 0,
+    system: 1,
+    infeccion: 2,
+    defense: 3,
+    quarantine: 4
+  }}
 
 const mockStore = configureStore([]);
 
 describe("Jugador Test", () => {
-/*  test("Muerto", () => {
+test("Muerto", () => {
     const store = mockStore(initialState);
 
     render(
@@ -59,22 +63,6 @@ describe("Jugador Test", () => {
           <Jugador/>
         </BrowserRouter>
       </Provider>);
-    console.log(screen.debug())
     expect(screen.queryByText("Estás Muerto")).toBeTruthy()
   });
-*/
-
-  test("Muerto", () => {
-    /*
-    const store = mockStore(initialState1);
-
-    render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <Jugador/>
-        </BrowserRouter>
-      </Provider>);
-    console.log(screen.debug())
-    expect(screen.queryByText("Estás Muerto")).toBeTruthy()*/
-  });
-});
+})

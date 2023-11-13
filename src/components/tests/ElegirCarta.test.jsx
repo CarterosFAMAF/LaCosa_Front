@@ -7,22 +7,24 @@ import {userEvent} from "@testing-library/user-event"
 import axios from 'axios';
 
 
-const generateInitialState = (customCartas, fase, opcionesDefensivas) => ({
+const generateInitialState = (customCartas, fase, opcionesDefensivas, cartaspanico) => ({
   jugador: {
     cartas: customCartas,
     opcionesDefensivas : opcionesDefensivas,
     turnoPartida: 0,
     fase: fase,
     partidaId: 2,
-    jugadorid: 1,
+    id: 1,
     seleccion: 1,
     seleccionType: "Accion",
+    cuarentenas: [],
     jugadores: [
-      { id: 5, name: 'Ernesto', turn: 0, alive: true },
-      { id: 6, name: 'Gustavo', turn: 1, alive: true },
-      { id: 8, name: 'Juan Carlos', turn: 2, alive: true },
-      { id: 7, name: 'Elena', turn: 3, alive: true },
+      { id: 1, name: 'Ernesto', turn: 0, alive: true, quarantine:0 },
+      { id: 6, name: 'Gustavo', turn: 1, alive: true,quarantine:0 },
+      { id: 8, name: 'Juan Carlos', turn: 2, alive: true, quarantine:0 },
+      { id: 7, name: 'Elena', turn: 3, alive: true,quarantine:0 },
     ],
+    cartasPanico: cartaspanico
   },
   fase: {
     robo: 1,
@@ -44,6 +46,13 @@ const generateInitialState = (customCartas, fase, opcionesDefensivas) => ({
     humano: "Humano",
     infectado: "Infectado",
   },
+  typemessage: {
+    user: 0,
+    system: 1,
+    infeccion: 2,
+    defense: 3,
+    quarantine: 4
+   }
 });
 
 const mockStore = configureStore([]);
@@ -62,7 +71,7 @@ describe("ElegirCarta Test", () => {
       { id: 1, name: "lanzallamas", image:"a", type: "accion" },
       { id: 2, name: "Mas_Vale_Que_Corras", image:"a", type: "accion"},
       { id: 3, name: "Sospecha", image:"a", type : "accion" },
-    ], 2, []);
+    ], 2, [], []);
     const store = mockStore(initialState);
 
     render(
@@ -88,7 +97,7 @@ describe("ElegirCarta Test", () => {
       { id: 1, name: "panico", image:"a", type: "Panico" },
       { id: 2, name: "Mas_Vale_Que_Corras", image:"a", type: "accion"},
       { id: 3, name: "Sospecha", image:"a", type : "accion" },
-    ], 2, []);
+    ], 1, [], [{ id: 1, name: "panico", image:"a", type: "Panico" }]);
     const store = mockStore(initialState);
 
     render(
@@ -120,7 +129,7 @@ describe("ElegirCarta Test", () => {
       { id: 1, name: "Defensa", image:"a", type: "Defensa" },
       { id: 2, name: "Mas_Vale_Que_Corras", image:"a", type: "accion"},
       { id: 3, name: "Sospecha", image:"a", type : "accion" },
-    ], 4, [1]);
+    ], 4, [1], [] );
     const store = mockStore(initialState);
 
     render(
@@ -149,7 +158,7 @@ describe("ElegirCarta Test", () => {
       { id: 1, name: "lanzallamas", image:"a", type: "accion" },
       { id: 2, name: "Mas_Vale_Que_Corras", image:"a", type: "accion"},
       { id: 3, name: "Sospecha", image:"a", type : "accion" },
-    ], 3, []);
+    ], 3, [], []);
     const store = mockStore(initialState);
 
     render(
