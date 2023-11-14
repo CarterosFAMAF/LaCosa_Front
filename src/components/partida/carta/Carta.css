@@ -1,4 +1,5 @@
 .carta {
-  width: 200px;
+  width: 170px;
   border-radius: 7%;
+  border: solid 1px grey;
 }

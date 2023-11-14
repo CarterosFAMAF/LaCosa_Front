@@ -1,0 +1,15 @@
+:root{
+    --color-background-no-gradient: rgb(24, 75, 45);
+    --color-background-gradient: linear-gradient(to bottom, #2e48be, #778ece);
+    --color-bottom-action: linear-gradient(
+        to right,
+        rgb(28, 85, 52) 0%,
+        rgb(28, 156, 77) 50%,
+        rgb(28, 85, 52) 100%
+    );
+    --color-bottom-game-positive: #335300;
+    --color-bottom-game-negative: #a72727;
+    --color-bottom-game-defense: #2e4f8d;
+    --color-bottom-game-panic: #6f2486;
+    --color-bottom-game-obstacle: rgb(150, 136, 8);
+}

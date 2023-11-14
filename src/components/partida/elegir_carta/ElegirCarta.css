@@ -1,0 +1,71 @@
+.botones_juego {
+  position: absolute;
+  width: 70%;
+  left: 46%;
+  bottom: 45%;
+  transform: translate(-50%, 0%);
+  justify-content: center;
+  text-align: center;
+  list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.opcion_rojo {
+  width: 180px;
+  height: 45px;
+  font-size: large;
+  background-color: var(--color-bottom-game-negative);
+  border-radius: 5px;
+  float: left;
+  margin-right: 10px;
+}
+
+.opcion_verde {
+  width: 180px;
+  height: 45px;
+  font-size: large;
+  background-color: var(--color-bottom-game-positive);
+  border-radius: 5px;
+  float: left;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+.opcion_azul {
+  width: 180px;
+  height: 45px;
+  font-size: large;
+  background-color: var(--color-bottom-game-defense);
+  border-radius: 5px;
+  float: left;
+  margin-right: 10px;
+}
+
+.opcion_rosa {
+  width: 180px;
+  height: 45px;
+  font-size: large;
+  background-color: var(--color-bottom-game-panic);
+  border-radius: 5px;
+  float: left;
+  margin-right: 10px;
+}
+
+.opcion_amarillo {
+  width: 180px;
+  height: 45px;
+  font-size: large;
+  background-color: var(--color-bottom-game-obstacle);
+  border-radius: 5px;
+  float: left;
+  margin-right: 10px;
+}
+
+.column {
+  float: left;
+  width: 180px;
+  margin: 4px;
+}

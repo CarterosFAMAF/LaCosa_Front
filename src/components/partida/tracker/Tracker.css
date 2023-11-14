@@ -1,0 +1,19 @@
+.tracker {
+  position: absolute;
+  width: 100px;
+  left: 3px;
+  top: 3px;
+  background-color: white;
+  border: solid 1px black;
+  overflow: hidden;
+  font-weight: bold;
+  border: solid 1px white;
+}
+
+.tracker li {
+  display: flex;
+  border: solid 1px gray;
+  padding-left: 1px;
+  padding: 1px;
+  color: black;
+}

@@ -31,7 +31,10 @@ function ListadoPartidas() {
             <Typography className="jugadores">
               {"Jugadores: (" + partidaElem.player_count + "/" + partidaElem.player_max + ")"}
             </Typography>
-            <Button variant="contained" onClick={() => handler(true, partidaElem.match_id,partidaElem.match_name)} className="boton_unirse">
+            <Button 
+              variant="contained"
+              onClick={() => handler(true, partidaElem.match_id,partidaElem.match_name)} 
+              className="boton_unirse">
               unirse
             </Button>
             <br></br>
@@ -64,7 +67,7 @@ function ListadoPartidas() {
         </Button>
       </div>
       {output}
-      <Modal open={jugador.partidaId != -1 && open}>
+      <Modal open={jugador.partidaId != -1 && open && !jugador.unido}>
         <Box className="modal_partida">
           <UnirJugador/>
           <Button variant="contained" onClick={() => handler(false,-1,"")} className="boton_cancelar"> cancelar </Button>

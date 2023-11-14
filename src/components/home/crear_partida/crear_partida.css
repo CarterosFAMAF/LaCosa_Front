@@ -11,10 +11,5 @@
   height: 5%;
   width: 20%;
   color: rgb(255, 255, 255);
-  background-image: linear-gradient(
-    to right,
-    rgb(28, 110, 164) 0%,
-    rgb(35, 136, 203) 50%,
-    rgb(20, 78, 117) 100%
-  );
+  background-image: var(--color-bottom-action);
 }

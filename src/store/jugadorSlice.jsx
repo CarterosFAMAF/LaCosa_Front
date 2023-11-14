@@ -1,4 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+// Deben ser iguales a los strings en rolesSlice
+const COSA_STR = "La_Cosa";
+const HUMANO_STR = "Humano";
+const INFECCION_STR = "Infectado";
 
 export const jugadorSlice = createSlice({
   name: "jugador",
@@ -11,17 +15,36 @@ export const jugadorSlice = createSlice({
     creador: false,
     iniciada: false,
     vivo: true,
+    rol: "",
+    turnoPartida: 0,
     posicion: -1,
     fase: 0,
-    cartas: [],
-    cartasPublicas: [],
-    turnoPartida: 0,
-    seleccion: -1,
     jugadores: [],
-    maxJugadores: 14,
+    cartas: [],
+    cartasPanico: [],
+    seleccion: -1,
+    seleccionName: "",
+    seleccionType: "",
+    cartasPublicas: [],
+    intercambiante: 0,
+    cosaId: 0,
+    atacanteId: 0,
+    atacanteCardId: 0,
+    opcionesDefensivas: [],
+    chat: [],
+    mensaje_finalizar: "No hubo ganadores!",
+    maxJugadores: 12,
     minJugadores: 4,
+    fallaste: false,
+    citaCiega: false,
+    aterrado: false,
+    espera: false,
   },
   reducers: {
+    partidaDef: (state, action) => {
+      state.maxJugadores = action.payload.maxJugadores;
+      state.minJugadores = action.payload.minJugadores;
+    },
     verPartida: (state, action) => {
       state.partidaId = action.payload.partidaId;
       state.partidaNombre = action.payload.partidaNombre;
@@ -34,6 +57,9 @@ export const jugadorSlice = createSlice({
       state.unido = action.payload.unido;
       state.creador = action.payload.creador;
     },
+    iniciarPartida: (state) => {
+      state.iniciada = true;
+    },
     salirPartida: (state) => {
       state.id = "";
       state.nombre = "";
@@ -43,62 +69,130 @@ export const jugadorSlice = createSlice({
       state.creador = false;
       state.iniciada = false;
       state.vivo = true;
+      state.rol = "";
+      state.turnoPartida = 0;
       state.posicion = -1;
       state.fase = 0;
+      state.jugadores = [];
       state.cartas = [];
-      state.turnoPartida = 0;
+      state.cartasPanico = [];
       state.seleccion = -1;
-      state.maxJugadores = 14;
+      state.seleccionName = "";
+      state.seleccionType = "";
+      state.cartasPublicas = [];
+      state.intercambiante = 0;
+      state.cosaId = 0;
+      state.opcionesDefensivas = [];
+      state.atacanteId = 0;
+      state.atacanteCardId = 0;
+      state.chat = [];
+      state.mensaje_finalizar = "No hubo ganadores!";
+      state.maxJugadores = 12;
       state.minJugadores = 4;
-    },
-    partidaDef: (state, action) => {
-      state.maxJugadores = action.payload.maxJugadores;
-      state.minJugadores = action.payload.minJugadores;
-    },
-    iniciarPartida: (state) => {
-      state.iniciada = true;
+      state.fallaste = false;
+      state.citaCiega = false;
+      state.aterrado = false;
+      state.espera = false;
     },
     setJugadores: (state, action) => {
+      const me_player = action.payload.filter(player => (player.id === state.id))[0];
+      state.posicion = me_player ? me_player.turn : -1;
+      state.vivo = me_player ? me_player.alive : true;
       state.jugadores = action.payload;
     },
-    setTurno: (state, action) => {
-      state.turnoPartida = action.payload.turnoPartida;
-      state.posicion = action.payload.posicion;
-      state.vivo = action.payload.vivo;
-    },
-    pedirMano: (state, action) => {
-      state.cartas = action.payload;
-    },
-    seleccionar: (state, action) => {
-      state.seleccion = action.payload;
-    },
-    robarCarta: (state, action) => {
-      state.cartas.push(action.payload);
-      state.fase++;
-    },
-    tirarCarta: (state, action) => {
-      state.cartas = state.cartas.filter(item => item.id !== action.payload);
-    },
-    limpiarSelector: (state) => {
-      state.seleccion = -1;
+    setTurnoPartida: (state, action) => {
+      state.turnoPartida = action.payload;
     },
     setFase: (state, action) => {
       /*
       Robar Carta: Fase 0
-      Elegir Carta: Fase 1
+      Elegir Carta (Jugar): Fase 1
       Elegir Objetivo: Fase 2
-      Ver Resultado de Carta: Fase 3 
+      Elegir Carta (Defensa): Fase 3
+      Ver Resultado de Carta: Fase 4
+      Elegir Carta (Intercambio): Fase 5
       */
-      // Cuando termina turno: fase = 0.
       state.fase = action.payload;
+    },
+    pedirMano: (state, action) => {
+      state.cartas = action.payload;
+      if (action.payload.some(card => card.type === COSA_STR)) {
+        state.rol = COSA_STR;
+      } else {
+        state.rol = HUMANO_STR;
+      }
+    },
+    seleccionar: (state, action) => {
+      state.seleccion = action.payload.id;
+      state.seleccionName = action.payload.name;
+      state.seleccionType = action.payload.type;
+    },
+    tirarCarta: (state, action) => {
+      state.cartas = state.cartas.filter(item => item.id !== action.payload);
+    },
+    robarCarta: (state, action) => {
+      state.cartas.push(action.payload);
+      if (action.payload.type === "Panico") {
+        state.cartasPanico = [action.payload];
+        state.seleccion = action.payload.id;
+        state.seleccionName = action.payload.name;
+        state.seleccionType = action.payload.type;
+      }
+    },
+    limpiarSelector: (state) => {
+      state.seleccion = -1;
+      state.seleccionName = "";
+      state.seleccionType = "";
+    },
+    limpiarPanico: (state) => {
+      state.cartasPanico = [];
+    },
+    setIntercambiante: (state, action) => {
+      state.intercambiante = action.payload;
+    },
+    setInfectado: (state, action) => {
+      state.rol = INFECCION_STR;
+      state.cosaId = action.payload;
+    },
+    setOpcionesDefensivas: (state, action) => {
+      state.opcionesDefensivas = action.payload;
+    },
+    setAtacante: (state, action) => {
+      state.atacanteId = action.payload.player_id;
+      state.atacanteCardId = action.payload.card_main_id;
+    },
+    limpiarAtacante: (state) => {
+      state.atacanteId = 0;
+      state.atacanteCardId = 0;
     },
     setCartasPublicas: (state, action) => {
       state.cartasPublicas = action.payload;
     },
+    addMessage: (state, action) => {
+      state.chat.push(action.payload);
+    },
+    setMensajeFinalizar: (state, action) => {
+      state.mensaje_finalizar = action.payload;
+    },
+    setCitaCiega: (state, action) => {
+      state.citaCiega = action.payload;
+    },
+    setFallaste: (state, action) => {
+      state.fallaste = action.payload;
+    },
+    setAterrado: (state, action) => {
+      state.aterrado = action.payload;
+    },
+    setEspera: (state, action) => {
+      state.espera = action.payload;
+    },
   },
 });
 
-export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores, setTurno,
-  pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector, setFase, setCartasPublicas } = jugadorSlice.actions;
+export const { verPartida, unirPartida, salirPartida, partidaDef, iniciarPartida, setJugadores,
+  setTurnoPartida, setInfectado, pedirMano, seleccionar, robarCarta, tirarCarta, limpiarSelector,
+  setFase, setCartasPublicas, setIntercambiante, setMensajeFinalizar, setAtacante, setFallaste,
+  limpiarAtacante, setOpcionesDefensivas, addMessage, limpiarPanico, setCitaCiega, setEspera,
+  setAterrado } = jugadorSlice.actions;
 
 export default jugadorSlice;

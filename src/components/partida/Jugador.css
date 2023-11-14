@@ -1,14 +1,27 @@
-body {
-    height: 100vh;
-    background: linear-gradient(to bottom, #2e48be, #778ece);
+body, html {
+  /* The image used */
+  background-image: linear-gradient(
+      rgba(100, 100, 100, 0),
+      rgba(200, 200, 200, 0)
+    ),
+    url("/Wallpaper-LaCosa.jpg");
+
+  /* Full height */
+  height: 100%;
+  width: 100%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .check_fase {
   position: absolute;
   width: 100%;
-  left: 50%;
-  top: 0%;
-  transform: translate(-50%, 0%);
+  top: 38%;
+  left: 0%;
+  transform: translate(0%, -60%);
   justify-content: center;
   text-align: center;
 }
@@ -17,8 +30,53 @@ body {
   position: absolute;
   width: 100px;
   height: 30px;
-  transform: translate(-50%, 1030%);
+  left: 45%;
+  bottom: 5%;
+  transform: translate(-50%, 280%);
   font-size: large;
-  background-color: rgb(20, 120, 20);
+  background-color: var(--color-bottom-game-positive);
   border-radius: 5px;
+  justify-content: center;
+  text-align: center;
+}
+
+.muerto{
+  position: absolute;
+  width: 100%;
+  top: 40%;
+  left: 0%;
+  transform: translate(0%, -60%);
+  justify-content: center;
+  text-align: center;
+}
+
+.muerto_mensaje{
+  color: white;
+}
+
+.white_skull{
+  margin-top: 10px;
+  width: 18.5%;
+  height: 20%;
+  filter: invert(80%);
+}
+
+.boton_muerto{
+  padding-top: 5px;
+  position: absolute;
+  width: 9%;
+  height: 12%;
+  left: 45.3%;
+  top: 0%;
+  z-index: 100;
+  transform: translate(0%, 280%);
+  font-size: large;
+  background-color: black;
+  color: white;
+  filter: invert(60%);
+  border-radius: 5px;
+  border: solid 2px white;
+  font-weight: bold;
+  justify-content: center;
+  text-align: center;
 }

@@ -108,6 +108,7 @@ function CrearPartida() {
         fullWidth
         required
         onChange={handleChange}
+        data-testid="min-players-select"
       >
         {Array.from(
           { length: partidaInput.max_players - 3 },
@@ -124,6 +125,7 @@ function CrearPartida() {
         value={partidaInput.max_players}
         fullWidth
         onChange={handleChange}
+        data-testid="max-players-select"
       >
         {Array.from(
           { length: 12 - partidaInput.min_players + 1 },
@@ -134,7 +136,11 @@ function CrearPartida() {
           </MenuItem>
         ))}
       </Select>
-      <Button variant="contained" onClick={handleSubmit} className="miboton">
+      <Button 
+        variant="contained" 
+        style={{ marginTop: "10px" }}
+        onClick={handleSubmit} 
+        className="miboton">
         Crear Partida
       </Button>
     </Container>
