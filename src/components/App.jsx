@@ -92,15 +92,15 @@ function App() {
         if (
           // Not Showing
           !(parsedData.status === WS_STATUS_PLAYER_JOINED || parsedData.status === WS_STATUS_MATCH_STARTED ||
-            parsedData.status === WS_STATUS_PLAYER_WELCOME || parsedData.status === 300 ||
-            parsedData.status === 301 || parsedData.status === 302 ||
-            // Matched switch
-            parsedData.status === WS_CARD || parsedData.status === WS_STATUS_INFECTED ||
-            parsedData.status === WS_STATUS_CHAT_MESSAGE || parsedData.status === WS_STATUS_DEFENSE_PRIVATE_MSG ||
+            parsedData.status === WS_STATUS_PLAYER_WELCOME || parsedData.status === WS_STATUS_PLAYER_LEFT ||
+            parsedData.status === WS_STATUS_MATCH_ENDED || parsedData.status === WS_CARD ||
+            parsedData.status === 300 || parsedData.status === 301 || parsedData.status === 302 ||
+            // Matched switch (Special Cases)
+            parsedData.status === WS_STATUS_INFECTED || parsedData.status === WS_STATUS_DEFENSE_PRIVATE_MSG ||
             parsedData.status === WS_STATUS_EXCHANGE_QUARANTINE || parsedData.status === WS_STATUS_DRAW ||
             parsedData.status === WS_STATUS_EXCHANGE_REQUEST_QUARANTINE || parsedData.status === WS_STATUS_DISCARD_QUARANTINE ||
-            parsedData.status === WS_STATUS_EVENTS_CARDS || parsedData.status === WS_STATUS_LET_IT_REMAIN_BETWEEN_US ||
-            parsedData.status === WS_STATUS_UPS || parsedData.status === WS_STATUS_BLIND_DATE)) {
+            parsedData.status === WS_STATUS_LET_IT_REMAIN_BETWEEN_US || parsedData.status === WS_STATUS_UPS ||
+            parsedData.status === WS_STATUS_BLIND_DATE || parsedData.status === WS_STATUS_CHAT_MESSAGE)) {
           // All rest
           dispatch(addMessage({ owner: "", text: parsedData.message, type: typemessage.system }));
         }
@@ -354,11 +354,6 @@ function App() {
 
           case WS_STATUS_EVENTS_CARDS: // Aviso de intento de juego
             dispatch(setEspera(true));
-            dispatch(addMessage({
-              owner: "",
-              text: parsedData.message,
-              type: typemessage.system
-            }));
             break;
 
           case WS_STATUS_SCARY: // Aterrador: Resuelve condición de Carrera
